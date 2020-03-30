@@ -22,6 +22,7 @@ Plug 'altercation/vim-colors-solarized' " used by prose mode
 Plug 'bluz71/vim-moonfly-colors'
 Plug 'itchyny/lightline.vim'
 Plug 'w0rp/ale' " Asynchronous Linting Engine
+Plug 'maximbaz/lightline-ale'
 " Initialize plugin system
 call plug#end()
 
@@ -38,6 +39,9 @@ set clipboard=unamedplus
 " Open new split panes to right and buttom
 set splitbelow
 set splitright
+
+set noshowmode " lightline shows the mode already
+set laststatus=2 " to have colors within lightline status bar
 
 set relativenumber
 set number
@@ -76,8 +80,8 @@ nmap <Leader>a :Ag<CR>
 nmap <Leader>c :Colors<CR>
 
 " ALE
-let g:ale_sign_warning = '▲'
-let g:ale_sign_error = '✗'
+let g:lightline#ale#indicator_warnings = '▲'
+let g:lightline#ale#indicator_errors = '✗'
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
 nmap ]w :ALENextWrap<CR>
@@ -88,8 +92,30 @@ augroup VimDiff
     autocmd VimEnter,FilterWritePre * if &diff | ALEDisable | endif
 augroup END
 
-" LIGHTLINE
-let g:lightline = { 'colorscheme': 'moonfly' }
+" Lightline
+let g:lightline = {
+            \ 'colorscheme': 'moonfly',
+            \ 'active': {
+            \   'left': [['mode', 'paste'], ['filename', 'modified']],
+            \   'right': [['lineinfo'], ['percent'], ['readonly',
+            \       'linter_warnings', 'linter_errors', 'linter_checking',
+            \       'linter_infos']]
+            \ },
+            \ 'component_expand': {
+            \   'linter_warnings': 'lightline#ale#warnings',
+            \   'linter_errors': 'lightline#ale#errors',
+            \   'linter_ok': 'lightline#ale#ok',
+            \   'linter_checking': 'lightline#ale#checking',
+            \   'linter_infos': 'lightline#ale#infos'
+            \ },
+            \ 'component_type': {
+            \   'readonly': 'error',
+            \   'linter_warnings': 'warning',
+            \   'linter_errors': 'error',
+            \   'linter_infos': 'right',
+            \   'linter_checking': 'right'
+            \ },
+            \ }
 
 " Prose Mode for distraction free writing
 " FIXME: does not switch to solarized light theme
