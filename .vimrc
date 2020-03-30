@@ -72,7 +72,7 @@ endif
 nmap ; :Buffers<CR>
 nmap <Leader>r :Tags<CR>
 nmap <Leader>t :Files<CR>
-nmap <Leader>a :Rg!<CR>
+nmap <Leader>a :Ag<CR>
 nmap <Leader>c :Colors<CR>
 
 " ALE
