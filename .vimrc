@@ -3,6 +3,8 @@ set nocompatible
 " Basti's VIMRC
 "
 let mapleader = " "
+nnoremap <silent> \g :GitGutterToggle<CR>
+nnoremap <silent> \p :ProseMode<CR>
 
 filetype plugin indent on
 inoremap jk <ESC>
@@ -16,6 +18,7 @@ Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
+Plug 'tpope/vim-fugitive'
 Plug 'junegunn/goyo.vim' " Prose Mode
 Plug 'tomasr/molokai' " color scheme
 Plug 'altercation/vim-colors-solarized' " used by prose mode
@@ -23,6 +26,8 @@ Plug 'bluz71/vim-moonfly-colors'
 Plug 'itchyny/lightline.vim'
 Plug 'w0rp/ale' " Asynchronous Linting Engine
 Plug 'maximbaz/lightline-ale'
+Plug 'airblade/vim-gitgutter'
+Plug 'pbogut/fzf-mru.vim' " most recently used files
 " Initialize plugin system
 call plug#end()
 
@@ -72,21 +77,29 @@ if executable('ag')
               \ --hidden -g ""'
 endif
 
+let g:fzf_commits_log_options = '--graph --color=always
+  \ --format="%C(yellow)%h%C(red)%d%C(reset)
+  \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
+
+nnoremap <silent> <Leader>c  :Commits<CR>
+nnoremap <silent> <Leader>bc :BCommits<CR>
+
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
-nmap ; :Buffers<CR>
-nmap <Leader>r :Tags<CR>
-nmap <Leader>t :Files<CR>
-nmap <Leader>a :Ag<CR>
-nmap <Leader>c :Colors<CR>
+nnoremap <silent> ; :Buffers<CR>
+nnoremap <silent> <Leader>r :Tags<CR>
+nnoremap <silent> <Leader>t :Files<CR>
+nnoremap <silent> <Leader>a :Ag<CR>
+nnoremap <silent> <Leader>l :Lines<CR>
+nnoremap <silent> <Leader>g :GFiles?<CR>
 
 " ALE
 let g:lightline#ale#indicator_warnings = '▲'
 let g:lightline#ale#indicator_errors = '✗'
 highlight link ALEWarningSign String
 highlight link ALEErrorSign Title
-nmap ]w :ALENextWrap<CR>
-nmap [w :ALEPreviousWrap<CR>
-nmap <Leader>f <Plug>(ale_fix)
+nnoremap <silent> ]w :ALENextWrap<CR>
+nnoremap <silent> [w :ALEPreviousWrap<CR>
+nnoremap <silent> <Leader>f <Plug>(ale_fix)
 augroup VimDiff
     autocmd!
     autocmd VimEnter,FilterWritePre * if &diff | ALEDisable | endif
@@ -127,3 +140,15 @@ function! ProseMode()
     set bg=light
 endfunction
 command! ProseMode call ProseMode()
+
+" git gutter stylin
+let g:gitgutter_sign_added = '▌'
+let g:gitgutter_sign_modified = '▌'
+let g:gitgutter_sign_removed = '▌'
+let g:gitgutter_sign_modified_removed = '∙'
+nnoremap <silent> ]g :GitGutterNextHunk<CR>
+nnoremap <silent> [g :GitGutterPrevHunk<CR>
+augroup VimDiff
+    autocmd!
+    autocmd VimEnter,FilterWritePre * if &diff | GitGutterDisable | endif
+augroup END
