@@ -5,9 +5,11 @@ set nocompatible
 let mapleader = " "
 nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
+nnoremap <silent> <Leader>m :FZFMru<CR>
 
 filetype plugin indent on
 inoremap jk <ESC>
+:command! BW :bn|:bd# " close buffer w/o closing window
 
 " Plugin mangement
 call plug#begin('~/.vim/plugged')
@@ -91,6 +93,7 @@ nnoremap <silent> <Leader>t :Files<CR>
 nnoremap <silent> <Leader>a :Ag<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>g :GFiles?<CR>
+nnoremap <silent> <Leader>h :History<CR>
 
 " ALE
 let g:lightline#ale#indicator_warnings = '▲'
