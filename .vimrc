@@ -10,6 +10,7 @@ nnoremap <silent> <Leader>m :FZFMru<CR>
 filetype plugin indent on
 inoremap jk <ESC>
 :command! BW :bn|:bd# " close buffer w/o closing window
+command! Vimrc :vs $MYVIMRC
 
 " Plugin mangement
 call plug#begin('~/.vim/plugged')
@@ -30,6 +31,7 @@ Plug 'w0rp/ale' " Asynchronous Linting Engine
 Plug 'maximbaz/lightline-ale'
 Plug 'airblade/vim-gitgutter'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
+Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
 " Initialize plugin system
 call plug#end()
 
@@ -94,6 +96,10 @@ nnoremap <silent> <Leader>a :Ag<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>g :GFiles?<CR>
 nnoremap <silent> <Leader>h :History<CR>
+" makes j and k move by wrapped line unless I had a count, in which case it
+" behaves normally
+nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
+nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
 " ALE
 let g:lightline#ale#indicator_warnings = '▲'
