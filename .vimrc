@@ -27,11 +27,14 @@ Plug 'tomasr/molokai' " color scheme
 Plug 'altercation/vim-colors-solarized' " used by prose mode
 Plug 'bluz71/vim-moonfly-colors'
 Plug 'itchyny/lightline.vim'
-Plug 'w0rp/ale' " Asynchronous Linting Engine
+Plug 'dense-analysis/ale' " Asynchronous Linting Engine
 Plug 'maximbaz/lightline-ale'
 Plug 'airblade/vim-gitgutter'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
 Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
+Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
+Plug 'arcticicestudio/nord-vim'
+
 " Initialize plugin system
 call plug#end()
 
@@ -42,7 +45,7 @@ set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 syntax on
-colorscheme moonfly
+colorscheme nord " moonfly (also adapt in lightline section)
 set clipboard=unamedplus
 
 " Open new split panes to right and buttom
@@ -56,7 +59,7 @@ set relativenumber
 set number
 
 " show existing tab with 4 spaces width
-set tabstop=4
+" set tabstop=4
 " when indenting with '>', use 4 spaces width
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
@@ -116,7 +119,7 @@ augroup END
 
 " Lightline
 let g:lightline = {
-            \ 'colorscheme': 'moonfly',
+            \ 'colorscheme': 'nord',
             \ 'active': {
             \   'left': [['mode', 'paste'], ['filename', 'modified']],
             \   'right': [['lineinfo'], ['percent'], ['readonly',
