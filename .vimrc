@@ -9,10 +9,8 @@ nnoremap <silent> <Leader>m :FZFMru<CR>
 
 filetype plugin indent on
 inoremap jk <ESC>
-:command! BW :bn|:bd# " close buffer w/o closing window
 command! Vimrc :vs $MYVIMRC
 
-" Plugin mangement
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -164,3 +162,11 @@ augroup VimDiff
     autocmd!
     autocmd VimEnter,FilterWritePre * if &diff | GitGutterDisable | endif
 augroup END
+
+call ale#handlers#shellcheck#DefineLinter('sh')
+
+" BUFFERS
+" close the current buffer and move to the previous one
+nnoremap <leader>bq :<c-u>bp<bar>bd! #<cr>
+" close all buffers except current one
+nnoremap <leader>bd :<c-u>up<bar>%bd<bar>e#<cr>
