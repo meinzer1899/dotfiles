@@ -6,6 +6,7 @@ let mapleader = " "
 nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
 nnoremap <silent> <Leader>m :FZFMru<CR>
+nnoremap <silent> <Leader>s :update<CR>
 
 filetype plugin indent on
 inoremap jk <ESC>
@@ -28,10 +29,12 @@ Plug 'itchyny/lightline.vim'
 Plug 'dense-analysis/ale' " Asynchronous Linting Engine
 Plug 'maximbaz/lightline-ale'
 Plug 'airblade/vim-gitgutter'
+" Plug 'pechorin/any-jump.vim'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
 Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
 Plug 'arcticicestudio/nord-vim'
+Plug 'mhinz/vim-startify'
 
 " Initialize plugin system
 call plug#end()
@@ -55,6 +58,9 @@ set laststatus=2 " to have colors within lightline status bar
 
 set relativenumber
 set number
+
+" Fix Vim's ridiculous line wrapping model
+set ww=<,>,[,],h,l
 
 " show existing tab with 4 spaces width
 " set tabstop=4
@@ -163,10 +169,16 @@ augroup VimDiff
     autocmd VimEnter,FilterWritePre * if &diff | GitGutterDisable | endif
 augroup END
 
-call ale#handlers#shellcheck#DefineLinter('sh')
-
 " BUFFERS
 " close the current buffer and move to the previous one
 nnoremap <leader>bq :<c-u>bp<bar>bd! #<cr>
 " close all buffers except current one
 nnoremap <leader>bd :<c-u>up<bar>%bd<bar>e#<cr>
+
+call ale#linter#Define('sh', {
+            \   'name': 'shell',
+            \   'output_stream': 'stderr',
+            \   'executable': function('ale_linters#sh#shell#GetExecutable'),
+            \   'command': function('ale_linters#sh#shell#GetCommand'),
+            \   'callback': 'ale_linters#sh#shell#Handle',
+            \})
