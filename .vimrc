@@ -7,6 +7,8 @@ nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
 nnoremap <silent> <Leader>m :FZFMru<CR>
 nnoremap <silent> <Leader>s :update<CR>
+nnoremap <silent> <Leader>gs :Git<CR>
+nnoremap <silent> <Leader>cc :Commands<CR>
 
 filetype plugin indent on
 inoremap jk <ESC>
@@ -22,9 +24,8 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
 Plug 'junegunn/goyo.vim' " Prose Mode
-Plug 'tomasr/molokai' " color scheme
 Plug 'altercation/vim-colors-solarized' " used by prose mode
-Plug 'bluz71/vim-moonfly-colors'
+" Plug 'bluz71/vim-moonfly-colors'
 Plug 'itchyny/lightline.vim'
 Plug 'dense-analysis/ale' " Asynchronous Linting Engine
 Plug 'maximbaz/lightline-ale'
@@ -33,7 +34,7 @@ Plug 'airblade/vim-gitgutter'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
 Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
-Plug 'arcticicestudio/nord-vim'
+Plug 'arcticicestudio/nord-vim' " next tops are: vim-janah and vim-moonfly-colors
 Plug 'mhinz/vim-startify'
 
 " Initialize plugin system
@@ -103,6 +104,7 @@ nnoremap <silent> <Leader>a :Ag<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>g :GFiles?<CR>
 nnoremap <silent> <Leader>h :History<CR>
+
 " makes j and k move by wrapped line unless I had a count, in which case it
 " behaves normally
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
