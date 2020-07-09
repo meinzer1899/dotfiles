@@ -9,9 +9,12 @@ nnoremap <silent> <Leader>m :FZFMru<CR>
 nnoremap <silent> <Leader>s :update<CR>
 nnoremap <silent> <Leader>gs :Git<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
+nmap     <Leader>n <Plug>CtrlSFCwordPath<CR>
+let g:ctrlsf_search_mode = 'async'
 
 filetype plugin indent on
 inoremap jk <ESC>
+inoremap jj <CR>
 command! Vimrc :vs $MYVIMRC
 
 call plug#begin('~/.vim/plugged')
@@ -36,6 +39,8 @@ Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
 Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
 Plug 'arcticicestudio/nord-vim' " next tops are: vim-janah and vim-moonfly-colors
 Plug 'mhinz/vim-startify'
+Plug 'dyng/ctrlsf.vim'
+Plug 'Pablo1107/codi.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -59,6 +64,10 @@ set laststatus=2 " to have colors within lightline status bar
 
 set relativenumber
 set number
+
+set hidden      " Allow buffer switching even if unsaved
+set wrap
+set formatoptions-=tc " Dont let Vim split long lines to separate lines
 
 " Fix Vim's ridiculous line wrapping model
 set ww=<,>,[,],h,l
@@ -85,8 +94,8 @@ if executable('ag')
   let g:ackprg = 'ag --vimgrep'
 
   " Use ag in fzf for listing files. Lightning fast and respects .gitignore
-  let $FZF_DEFAULT_COMMAND = 'ag --literal --files-with-matches --nocolor
-              \ --hidden -g ""'
+  let $FZF_DEFAULT_COMMAND = 'ag --all-types --literal --files-with-matches --nocolor
+                        \ --hidden -g ""'
 endif
 
 let g:fzf_commits_log_options = '--graph --color=always
@@ -102,6 +111,7 @@ nnoremap <silent> <Leader>r :Tags<CR>
 nnoremap <silent> <Leader>t :Files<CR>
 nnoremap <silent> <Leader>a :Ag<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
+nnoremap <silent> <Leader>bl :BLines<CR>
 nnoremap <silent> <Leader>g :GFiles?<CR>
 nnoremap <silent> <Leader>h :History<CR>
 
@@ -122,6 +132,16 @@ augroup VimDiff
     autocmd!
     autocmd VimEnter,FilterWritePre * if &diff | ALEDisable | endif
 augroup END
+
+" shellcheck
+call ale#linter#Define('sh', {
+            \   'name': 'shell',
+            \   'output_stream': 'stderr',
+            \   'executable': function('ale_linters#sh#shell#GetExecutable'),
+            \   'command': function('ale_linters#sh#shell#GetCommand'),
+            \   'callback': 'ale_linters#sh#shell#Handle',
+            \})
+
 
 " Lightline
 let g:lightline = {
@@ -177,10 +197,18 @@ nnoremap <leader>bq :<c-u>bp<bar>bd! #<cr>
 " close all buffers except current one
 nnoremap <leader>bd :<c-u>up<bar>%bd<bar>e#<cr>
 
-call ale#linter#Define('sh', {
-            \   'name': 'shell',
-            \   'output_stream': 'stderr',
-            \   'executable': function('ale_linters#sh#shell#GetExecutable'),
-            \   'command': function('ale_linters#sh#shell#GetCommand'),
-            \   'callback': 'ale_linters#sh#shell#Handle',
-            \})
+" Disable rnumbers on inactive buffers for active screen indication
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * set relativenumber
+    autocmd WinLeave * set norelativenumber
+augroup END
+
+highlight StatusLineNC cterm=bold ctermfg=white ctermbg=darkgray
+
+let g:codi#interpreters = {
+    \ 'python': {
+    \ 'bin': 'python',
+    \ 'prompt': '^\(>>>\|\.\.\.\) ',
+    \ },
+    \ }
