@@ -9,13 +9,51 @@ nnoremap <silent> <Leader>m :FZFMru<CR>
 nnoremap <silent> <Leader>s :update<CR>
 nnoremap <silent> <Leader>gs :Git<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
-nmap     <Leader>n <Plug>CtrlSFCwordPath<CR>
-let g:ctrlsf_search_mode = 'async'
 
-filetype plugin indent on
+filetype off
 inoremap jk <ESC>
 inoremap jj <CR>
 command! Vimrc :vs $MYVIMRC
+
+" Open new split panes to right and buttom
+set splitbelow
+set splitright
+
+set noshowmode " lightline shows the mode already
+set laststatus=2 " to have colors within lightline status bar
+
+set relativenumber
+set number
+
+set hidden      " Allow buffer switching even if unsaved
+set wrap
+set formatoptions-=tc " Dont let Vim split long lines to separate lines
+
+" Fix Vim's ridiculous line wrapping model
+set ww=<,>,[,],h,l
+
+" show existing tab with 4 spaces width
+" set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
+" Display extra whitespace
+set list listchars=tab:»·,trail:·,nbsp:·
+
+" --- backup and swap files ---
+"  " I save all the time, those are annoying and unnecessary...
+set nobackup
+set nowritebackup
+set noswapfile
+
+" Make it obvious where 80 characters is
+set textwidth=80
+set colorcolumn=+1
+" Searching
+set ignorecase " case insensitive
+set smartcase  " use case if any caps used
+set incsearch  " show match as search proceeds
 
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -53,40 +91,12 @@ let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 syntax on
 colorscheme nord " moonfly (also adapt in lightline section)
-set clipboard=unamedplus
+if has("macunix") || has('win32')
+    set clipboard=unnamed
+elseif has("unix")
+    set clipboard=unnamedplus
+endif
 
-" Open new split panes to right and buttom
-set splitbelow
-set splitright
-
-set noshowmode " lightline shows the mode already
-set laststatus=2 " to have colors within lightline status bar
-
-set relativenumber
-set number
-
-set hidden      " Allow buffer switching even if unsaved
-set wrap
-set formatoptions-=tc " Dont let Vim split long lines to separate lines
-
-" Fix Vim's ridiculous line wrapping model
-set ww=<,>,[,],h,l
-
-" show existing tab with 4 spaces width
-" set tabstop=4
-" when indenting with '>', use 4 spaces width
-set shiftwidth=4
-" On pressing tab, insert 4 spaces
-set expandtab
-" Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
-" Aggregate swap files in one place
-set directory^=$HOME/.vim/tmp//
-" https://vi.stackexchange.com/a/179
-
-" Make it obvious where 80 characters is
-set textwidth=80
-set colorcolumn=+1
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -212,3 +222,29 @@ let g:codi#interpreters = {
     \ 'prompt': '^\(>>>\|\.\.\.\) ',
     \ },
     \ }
+
+" CtrlSF
+let g:ctrlsf_winsize = '33%'
+let g:ctrlsf_auto_close = 0
+let g:ctrlsf_confirm_save = 0
+let g:ctrlsf_auto_focus = {
+    \ 'at': 'start',
+    \ }
+nmap     <Leader>n <Plug>CtrlSFCwordPath<CR>
+" let g:ctrlsf_search_mode = 'async'
+
+" TERMINAL
+if has('win32')
+    nmap <leader>t :tab term<CR>
+else
+    nmap <leader>t :vert term<CR>source $HOME/.bash_profile<CR>clear<CR>
+endif
+
+" opens terminal vertically, executes make demo and closes after execution
+nmap tt :vert term ++close make demo<CR>
+
+" Reload file on focus/enter. This seems to break in Windows.
+" https://stackoverflow.com/a/20418591
+if !has("win32")
+    au FocusGained,BufEnter * :silent! !
+endif
