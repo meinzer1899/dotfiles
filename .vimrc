@@ -25,6 +25,8 @@ set laststatus=2 " to have colors within lightline status bar
 set relativenumber
 set number
 
+
+
 set hidden      " Allow buffer switching even if unsaved
 set wrap
 set formatoptions-=tc " Dont let Vim split long lines to separate lines
@@ -32,12 +34,18 @@ set formatoptions-=tc " Dont let Vim split long lines to separate lines
 " Fix Vim's ridiculous line wrapping model
 set ww=<,>,[,],h,l
 
+"Tabs and spacing
 " show existing tab with 4 spaces width
 " set tabstop=4
 " when indenting with '>', use 4 spaces width
 set shiftwidth=4
 " On pressing tab, insert 4 spaces
 set expandtab
+set autoindent
+set cindent
+set tabstop=4
+set smarttab
+
 " Display extra whitespace
 set list listchars=tab:»·,trail:·,nbsp:·
 
@@ -74,15 +82,19 @@ Plug 'airblade/vim-gitgutter'
 " Plug 'pechorin/any-jump.vim'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
 Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
-Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
+" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
 Plug 'arcticicestudio/nord-vim' " next tops are: vim-janah and vim-moonfly-colors
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 Plug 'Pablo1107/codi.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 " Initialize plugin system
 call plug#end()
 
+" post plugin section
+" Also load indent files, to automatically do language-dependent indenting.
+filetype plugin indent on
 "
 " COLORS
 "
@@ -105,7 +117,7 @@ if executable('ag')
 
   " Use ag in fzf for listing files. Lightning fast and respects .gitignore
   let $FZF_DEFAULT_COMMAND = 'ag --all-types --literal --files-with-matches --nocolor
-                        \ --hidden -g ""'
+                        \ -g ""'
 endif
 
 let g:fzf_commits_log_options = '--graph --color=always
@@ -216,6 +228,7 @@ augroup END
 
 highlight StatusLineNC cterm=bold ctermfg=white ctermbg=darkgray
 
+" CODI
 let g:codi#interpreters = {
     \ 'python': {
     \ 'bin': 'python',
@@ -230,18 +243,21 @@ let g:ctrlsf_confirm_save = 0
 let g:ctrlsf_auto_focus = {
     \ 'at': 'start',
     \ }
-nmap     <Leader>n <Plug>CtrlSFCwordPath<CR>
-" let g:ctrlsf_search_mode = 'async'
+let g:ctrlsf_search_mode = 'async'
+nmap <Leader>n <Plug>CtrlSFCwordPath<CR>
 
 " TERMINAL
 if has('win32')
-    nmap <leader>t :tab term<CR>
+    noremap <leader>tn :tab term<CR>
 else
-    nmap <leader>t :vert term<CR>source $HOME/.bash_profile<CR>clear<CR>
+    noremap <leader>tn :vert term<CR>source $HOME/.bash_profile<CR>clear<CR>
 endif
-
 " opens terminal vertically, executes make demo and closes after execution
-nmap tt :vert term ++close make demo<CR>
+nmap tt :vert term python3 %<CR>
+" enter Terminal-Normal mode (for scrolling log output)
+" https://stackoverflow.com/a/46822285/8981617
+" tnoremap because we are in terminal (?)
+tnoremap <leader>te <c-\><c-n> " re-enter Terminal-Job mode by pressing i
 
 " Reload file on focus/enter. This seems to break in Windows.
 " https://stackoverflow.com/a/20418591
