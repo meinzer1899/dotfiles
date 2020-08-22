@@ -13,7 +13,7 @@ nnoremap <silent> <Leader>cc :Commands<CR>
 filetype off
 inoremap jk <ESC>
 inoremap jj <CR>
-command! Vimrc :vs $MYVIMRC
+command! EVimrc :vs $MYVIMRC
 
 " Open new split panes to right and buttom
 set splitbelow
@@ -73,6 +73,19 @@ set ignorecase " case insensitive
 set smartcase  " use case if any caps used
 set incsearch  " show match as search proceeds
 
+" Autocommand
+augroup vimrcEx
+    autocmd!
+    " When editing a file, always jump to the last known cursor position.
+    " Don't do it for commit messages, when the position is invalid, or
+    " when
+    " inside an event handler (happens when dropping a file on gvim).
+    autocmd BufReadPost *
+        \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+        \ exe "normal g`\"" |
+        \ endif
+augroup END
+
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
@@ -90,7 +103,7 @@ Plug 'itchyny/lightline.vim'
 " Plug 'dense-analysis/ale' " Asynchronous Linting Engine
 " Plug 'maximbaz/lightline-ale'
 Plug 'airblade/vim-gitgutter'
-" Plug 'pechorin/any-jump.vim'
+Plug 'pechorin/any-jump.vim'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
 Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
 " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
@@ -103,6 +116,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
 " Plug 'qpkorr/vim-bufkill'
+
 
 " Initialize plugin system
 call plug#end()
@@ -124,16 +138,25 @@ elseif has("unix")
     set clipboard=unnamedplus
 endif
 
-
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
   " Use Ag over Grep
-  let g:ackprg = 'ag --vimgrep'
+  set grepprg=ag\ --nogroup\ --nocolor
+  let g:ackprg='ag --vimgrep'
 
   " Use ag in fzf for listing files. Lightning fast and respects .gitignore
-  let $FZF_DEFAULT_COMMAND = 'ag --all-types --all-text --literal --files-with-matches --nocolor
-                        \ -g ""'
+  let $FZF_DEFAULT_COMMAND = 'ag --follow -H --literal --files-with-matches --nocolor -g ""'
+
 endif
+" " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
+" if executable('ag')
+"   " Use Ag over Grep
+"   let g:ackprg = 'ag --vimgrep'
+
+"   " Use ag in fzf for listing files. Lightning fast and respects .gitignore
+"   let $FZF_DEFAULT_COMMAND = 'ag --follow --all-types --all-text --literal --files-with-matches --nocolor
+"                         \ -g ""'
+" endif
 
 let g:fzf_commits_log_options = '--graph --color=always
   \ --format="%C(yellow)%h%C(red)%d%C(reset)
@@ -379,3 +402,20 @@ command! -nargs=? Fold :call     CocAction('fold', <f-args>)
 
 " Add `:OR` command for organize imports of the current buffer.
 command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+
+" ANY JUMP
+" Normal mode: Jump to definition under cursore
+nnoremap <leader>j :AnyJump<CR>
+" Visual mode: jump to selected text in visual mode
+xnoremap <leader>j :AnyJumpVisual<CR>
+" Normal mode: open previous opened file (after jump)
+nnoremap <leader>ab :AnyJumpBack<CR>
+" Normal mode: open last closed search window again
+nnoremap <leader>al :AnyJumpLastResults<CR>
+" Show line numbers in search rusults
+let g:any_jump_list_numbers = 0
+
+" User Defined Commands (usr_40, 40.2)
+command -nargs=? -bang Build :Dispatch<bang> -dir=build/ make -j$(nproc) <args>
+command -nargs=0 -bang Test :Dispatch<bang> -dir=build/ make -j$(nproc) tests && GTEST_COLOR=1 ctest -V
+command -nargs=? Prep :Dispatch! conan install . -g deploy --install-folder e3sdk_conandeploy --profile <args> && mkdir -p build && cd build && rm -rf ./* && conan install .. -p <args> && conan build -c .. && cd -
