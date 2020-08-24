@@ -98,7 +98,8 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-dispatch' " Asynchronous build and test dispatcher 
 Plug 'junegunn/goyo.vim' " Prose Mode
 Plug 'altercation/vim-colors-solarized' " used by prose mode
-" Plug 'bluz71/vim-moonfly-colors'
+Plug 'arcticicestudio/nord-vim' " next tops are: onedark and vim-moonfly-colors
+Plug 'joshdick/onedark.vim'
 Plug 'itchyny/lightline.vim'
 " Plug 'dense-analysis/ale' " Asynchronous Linting Engine
 " Plug 'maximbaz/lightline-ale'
@@ -107,7 +108,6 @@ Plug 'pechorin/any-jump.vim'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
 Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
 " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
-Plug 'arcticicestudio/nord-vim' " next tops are: vim-janah and vim-moonfly-colors
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 Plug 'Pablo1107/codi.vim'
@@ -131,7 +131,7 @@ set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 syntax on
-colorscheme nord " moonfly (also adapt in lightline section)
+colorscheme onedark " moonfly (also adapt in lightline section)
 if has("macunix") || has('win32')
     set clipboard=unnamed
 elseif has("unix")
@@ -148,15 +148,6 @@ if executable('ag')
   let $FZF_DEFAULT_COMMAND = 'ag --follow -H --literal --files-with-matches --nocolor -g ""'
 
 endif
-" " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
-" if executable('ag')
-"   " Use Ag over Grep
-"   let g:ackprg = 'ag --vimgrep'
-
-"   " Use ag in fzf for listing files. Lightning fast and respects .gitignore
-"   let $FZF_DEFAULT_COMMAND = 'ag --follow --all-types --all-text --literal --files-with-matches --nocolor
-"                         \ -g ""'
-" endif
 
 let g:fzf_commits_log_options = '--graph --color=always
   \ --format="%C(yellow)%h%C(red)%d%C(reset)
@@ -180,33 +171,12 @@ nnoremap <silent> <Leader>h :History<CR>
 nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
 nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 
-" " ALE
-" let g:lightline#ale#indicator_warnings = '▲'
-" let g:lightline#ale#indicator_errors = '✗'
-" highlight link ALEWarningSign String
-" highlight link ALEErrorSign Title
-" nnoremap <silent> ]w :ALENextWrap<CR>
-" nnoremap <silent> [w :ALEPreviousWrap<CR>
-" augroup VimDiff
-"     autocmd!
-"     autocmd VimEnter,FilterWritePre * if &diff | ALEDisable | endif
-" augroup END
-
-" " shellcheck
-" call ale#linter#Define('sh', {
-"             \   'name': 'shell',
-"             \   'output_stream': 'stderr',
-"             \   'executable': function('ale_linters#sh#shell#GetExecutable'),
-"             \   'command': function('ale_linters#sh#shell#GetCommand'),
-"             \   'callback': 'ale_linters#sh#shell#Handle',
-"             \})
-
 " register compoments:
 call lightline#coc#register()
 
 " Lightline
 let g:lightline = {
-             \ 'colorscheme': 'nord',
+             \ 'colorscheme': 'onedark',
              \ 'active': {
              \   'left': [['mode', 'paste'], ['filename', 'modified']],
              \   'right': [['lineinfo'], ['percent'], ['readonly',
