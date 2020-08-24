@@ -115,6 +115,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
+Plug 'stsewd/fzf-checkout.vim'
 " Plug 'qpkorr/vim-bufkill'
 
 
@@ -146,24 +147,47 @@ if executable('ag')
 
   " Use ag in fzf for listing files. Lightning fast and respects .gitignore
   let $FZF_DEFAULT_COMMAND = 'ag --follow -H --literal --files-with-matches --nocolor -g ""'
+endif
 
+if executable('rg')
+    let $FZF_DEFAULT_COMMAND='rg --files'
+    set grepprg=rg\ --vimgrep
 endif
 
 let g:fzf_commits_log_options = '--graph --color=always
   \ --format="%C(yellow)%h%C(red)%d%C(reset)
   \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
+" Always enable preview window on the right with 60% width (only if width of screen in larger than 120 columns)
+let g:fzf_preview_window = 'right:60%'
+
+" Rg command with preview window
+command! -bang -nargs=* Rg
+            \ call fzf#vim#grep(
+            \   'rg --follow --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+            \   fzf#vim#with_preview(), <bang>0)
+
+" More advances ripgrep integration (see FZF@github)
+function! RipgrepFzf(query, fullscreen)
+    let command_fmt = 'rg --follow --column --line-number --no-heading --color=always --smart-case -- %s || true'
+    let initial_command = printf(command_fmt, shellescape(a:query))
+    let reload_command = printf(command_fmt, '{q}')
+    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
+    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
+endfunction
+
+command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
 
 nnoremap <silent> <Leader>c  :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
 
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
 nnoremap <silent> ; :Buffers<CR>
-nnoremap <silent> <Leader>r :Tags<CR>
+nnoremap <silent> <Leader>r :RG<CR>
 nnoremap <silent> <Leader>t :Files<CR>
 nnoremap <silent> <Leader>a :Ag<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>bl :BLines<CR>
-nnoremap <silent> <Leader>g :GFiles?<CR>
+nnoremap <silent> <Leader>gf :GFiles?<CR>
 nnoremap <silent> <Leader>h :History<CR>
 
 " makes j and k move by wrapped line unless I had a count, in which case it
@@ -223,10 +247,9 @@ augroup END
 
 " BUFFERS
 " close the current buffer and move to the previous one
-nnoremap bq :<c-u>bp<bar>bd! #<cr>
+nnoremap <Leader>bq :<c-u>bp<bar>bd! #<cr>
 " close all buffers except current one
-nnoremap bd :<c-u>up<bar>%bd<bar>e#<cr>
-
+nnoremap <Leader>bd :<c-u>up<bar>%bd<bar>e#<bar>bd#<cr>
 " Disable rnumbers on inactive buffers for active screen indication
 augroup BgHighlight
     autocmd!
@@ -383,7 +406,11 @@ nnoremap <leader>ab :AnyJumpBack<CR>
 " Normal mode: open last closed search window again
 nnoremap <leader>al :AnyJumpLastResults<CR>
 " Show line numbers in search rusults
-let g:any_jump_list_numbers = 0
+let g:any_jump_list_numbers = 1
+
+" FZF CHECKOUT
+let g:fzf_checkout_git_options = '--sort=-committerdate'
+nnoremap <silent> <Leader>gc :GCheckout<CR>
 
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=build/ make -j$(nproc) <args>
