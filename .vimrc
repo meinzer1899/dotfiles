@@ -117,6 +117,7 @@ Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
 Plug 'stsewd/fzf-checkout.vim'
 " Plug 'qpkorr/vim-bufkill'
+Plug 'preservim/nerdtree'
 
 
 " Initialize plugin system
@@ -132,13 +133,14 @@ set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 syntax on
-colorscheme onedark " moonfly (also adapt in lightline section)
+colorscheme onedark " nord (also adapt in lightline section)
 if has("macunix") || has('win32')
     set clipboard=unnamed
 elseif has("unix")
     set clipboard=unnamedplus
 endif
 
+" FZF
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
   " Use Ag over Grep
@@ -150,45 +152,38 @@ if executable('ag')
 endif
 
 if executable('rg')
-    let $FZF_DEFAULT_COMMAND='rg --files'
+    let $FZF_DEFAULT_COMMAND='rg --files --follow'
     set grepprg=rg\ --vimgrep
 endif
 
+let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always
-  \ --format="%C(yellow)%h%C(red)%d%C(reset)
-  \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
+            \ --format="%C(yellow)%h%C(red)%d%C(reset)
+            \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 " Always enable preview window on the right with 60% width (only if width of screen in larger than 120 columns)
 let g:fzf_preview_window = 'right:60%'
 
-" Rg command with preview window
+" Call Ag and Rg to only match file content, not file names
+" https://github.com/junegunn/fzf.vim/issues/346
 command! -bang -nargs=* Rg
-            \ call fzf#vim#grep(
-            \   'rg --follow --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-            \   fzf#vim#with_preview(), <bang>0)
-
-" More advances ripgrep integration (see FZF@github)
-function! RipgrepFzf(query, fullscreen)
-    let command_fmt = 'rg --follow --column --line-number --no-heading --color=always --smart-case -- %s || true'
-    let initial_command = printf(command_fmt, shellescape(a:query))
-    let reload_command = printf(command_fmt, '{q}')
-    let spec = {'options': ['--phony', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-    call fzf#vim#grep(initial_command, 1, fzf#vim#with_preview(spec), a:fullscreen)
-endfunction
-
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 nnoremap <silent> <Leader>c  :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
 
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
 nnoremap <silent> ; :Buffers<CR>
-nnoremap <silent> <Leader>r :RG<CR>
+nnoremap <silent> <Leader>rr :Rg<CR>
 nnoremap <silent> <Leader>t :Files<CR>
-nnoremap <silent> <Leader>a :Ag<CR>
+nnoremap <silent> <Leader>aa :Ag<CR>
 nnoremap <silent> <Leader>l :Lines<CR>
 nnoremap <silent> <Leader>bl :BLines<CR>
 nnoremap <silent> <Leader>gf :GFiles?<CR>
-nnoremap <silent> <Leader>h :History<CR>
+nnoremap <silent> <Leader>h :History:<CR>
+" merge conflict commands in a 3-way-diff (1: middle, 2: left, 3: right side)
+nnoremap <Leader>gj :diffget //3<CR>
+nnoremap <Leader>gf :diffget //2<CR>
 
 " makes j and k move by wrapped line unless I had a count, in which case it
 " behaves normally
@@ -233,11 +228,6 @@ function! ProseMode()
 endfunction
 command! ProseMode call ProseMode()
 
-" git gutter stylin
-" let g:gitgutter_sign_added = '▌'
-" let g:gitgutter_sign_modified = '▌'
-" let g:gitgutter_sign_removed = '▌'
-" let g:gitgutter_sign_modified_removed = '∙'
 nnoremap <silent> ]g :GitGutterNextHunk<CR>
 nnoremap <silent> [g :GitGutterPrevHunk<CR>
 augroup VimDiff
@@ -268,7 +258,7 @@ let g:codi#interpreters = {
     \ }
 
 " CtrlSF
-let g:ctrlsf_winsize = '33%'
+let g:ctrlsf_winsize = '40%'
 let g:ctrlsf_auto_close = 0
 let g:ctrlsf_confirm_save = 0
 let g:ctrlsf_auto_focus = {
@@ -279,12 +269,12 @@ nmap <Leader>n <Plug>CtrlSFCwordPath<CR>
 
 " TERMINAL
 if has('win32')
-    noremap tn :tab term<CR>
+    noremap <Leader>p :tab term<CR>
 else
-    noremap tn :vert term<CR>source $HOME/.bash_profile<CR>clear<CR>
+    noremap <Leader>p :vert term<CR>source $HOME/.bash_profile<CR>clear<CR>
 endif
 " opens terminal vertically, executes make demo and closes after execution
-nmap tt :vert term python3 %<CR>
+nmap <Leader>pt :vert term python3 %<CR>
 " enter Terminal-Normal mode (for scrolling log output)
 " https://stackoverflow.com/a/46822285/8981617
 " Use CTRL W N to enter Terminal Normal Mode
@@ -350,8 +340,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+" xmap <leader>f  <Plug>(coc-format-selected)
+" nmap <leader>f  <Plug>(coc-format-selected)
 
 augroup mygroup
     autocmd!
@@ -360,32 +350,6 @@ augroup mygroup
     " Update signature help on jump placeholder.
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 augroup end
-
-" Applying codeAction to the selected region.
-" Example: `<leader>aap` for current paragraph
-" xmap <leader>a  <Plug>(coc-codeaction-selected)
-" nmap <leader>a  <Plug>(coc-codeaction-selected)
-
-" Remap keys for applying codeAction to the current buffer.
-nmap <leader>ac  <Plug>(coc-codeaction)
-" Apply AutoFix to problem on the current line.
-nmap <leader>qf  <Plug>(coc-fix-current)
-
-" Map function and class text objects
-" NOTE: Requires 'textDocument.documentSymbol' support from the language server.
-xmap if <Plug>(coc-funcobj-i)
-omap if <Plug>(coc-funcobj-i)
-xmap af <Plug>(coc-funcobj-a)
-omap af <Plug>(coc-funcobj-a)
-xmap ic <Plug>(coc-classobj-i)
-omap ic <Plug>(coc-classobj-i)
-xmap ac <Plug>(coc-classobj-a)
-omap ac <Plug>(coc-classobj-a)
-
-" Use CTRL-S for selections ranges.
-" Requires 'textDocument/selectionRange' support of LS, ex: coc-tsserver
-nmap <silent> <C-s> <Plug>(coc-range-select)
-xmap <silent> <C-s> <Plug>(coc-range-select)
 
 " Add `:Format` command to format current buffer.
 command! -nargs=0 Format :call CocAction('format')
@@ -412,7 +376,13 @@ let g:any_jump_list_numbers = 1
 let g:fzf_checkout_git_options = '--sort=-committerdate'
 nnoremap <silent> <Leader>gc :GCheckout<CR>
 
+" NERDTREE
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+nnoremap <silent> <Leader>o :NERDTreeFind<CR>
+
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=build/ make -j$(nproc) <args>
 command -nargs=0 -bang Test :Dispatch<bang> -dir=build/ make -j$(nproc) tests && GTEST_COLOR=1 ctest -V
 command -nargs=? Prep :Dispatch! conan install . -g deploy --install-folder e3sdk_conandeploy --profile <args> && mkdir -p build && cd build && rm -rf ./* && conan install .. -p <args> && conan build -c .. && cd -
+command -nargs=0 -bang Cover :Dispatch<bang> -dir=build/ cmake -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage -g -O0" .. && make tests -j$(nproc) && ctest && /home/e3-user/.local/bin/gcovr --exclude-unreachable-branches --exclude-throw-branches -r .. -e ../src/gen -e ../tests --html-details coverage.html
