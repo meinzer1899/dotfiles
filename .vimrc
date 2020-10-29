@@ -39,7 +39,8 @@ set signcolumn=yes " With this the left bar is broader for line numbers and lint
 
 set hidden      " Allow buffer switching even if unsaved
 set wrap
-set formatoptions-=tc " Dont let Vim split long lines to separate lines
+set fo=croq " help fo-table.  set fo=croq (only format comments, good for code), set fo=tcrq for text
+au BufRead,BufNewFile *.md setlocal textwidth=80
 
 " Fix Vim's ridiculous line wrapping model
 set ww=<,>,[,],h,l
@@ -66,7 +67,6 @@ set nowritebackup
 set noswapfile
 
 " Make it obvious where 80 characters is
-set textwidth=80
 set colorcolumn=+1
 " Searching
 set ignorecase " case insensitive
@@ -84,6 +84,14 @@ augroup vimrcEx
         \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
         \ exe "normal g`\"" |
         \ endif
+
+    " Set syntax highlighting for specific file types
+    autocmd BufRead,BufNewFile *.md set filetype=markdown
+    autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
+    autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=sh
+    autocmd BufRead,BufNewFile gitconfig.local set filetype=gitconfig
+    autocmd BufRead,BufNewFile tmux.conf.local set filetype=tmux
+    autocmd BufRead,BufNewFile vimrc.local set filetype=vim
 augroup END
 
 call plug#begin('~/.vim/plugged')
@@ -118,7 +126,8 @@ Plug 'mbbill/undotree'
 Plug 'stsewd/fzf-checkout.vim'
 " Plug 'qpkorr/vim-bufkill'
 Plug 'preservim/nerdtree'
-
+Plug 'goerz/jupytext.vim'
+Plug 'jackguo380/vim-lsp-cxx-highlight'
 
 " Initialize plugin system
 call plug#end()
@@ -162,6 +171,9 @@ let g:fzf_commits_log_options = '--graph --color=always
             \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 " Always enable preview window on the right with 60% width (only if width of screen in larger than 120 columns)
 let g:fzf_preview_window = 'right:60%'
+" Adapt fzf preview window layout (non-floating, dont push content of current
+" screen to the top (https://github.com/junegunn/fzf.vim/issues/942)
+let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.4, 'yoffset': 1, 'border': 'top' } }
 
 " Call Ag and Rg to only match file content, not file names
 " https://github.com/junegunn/fzf.vim/issues/346
@@ -294,6 +306,9 @@ function! s:check_back_space() abort
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+" Setup prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
 
 " " Use <c-space> to trigger completion.
 " if has('nvim')
