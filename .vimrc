@@ -14,6 +14,9 @@ filetype off
 inoremap jk <ESC>
 inoremap jj <CR>
 command! EVimrc :vs $MYVIMRC
+" ci( does not jump automatically to parenthesis, fix with this two lines
+nnoremap ci( f(ci(
+nnoremap ci) f)ci)
 
 " Open new split panes to right and buttom
 set splitbelow
@@ -34,6 +37,15 @@ set updatetime=300
 
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
 
 set signcolumn=yes " With this the left bar is broader for line numbers and linter symbols
 
@@ -128,6 +140,7 @@ Plug 'stsewd/fzf-checkout.vim'
 Plug 'preservim/nerdtree'
 Plug 'goerz/jupytext.vim'
 Plug 'jackguo380/vim-lsp-cxx-highlight'
+Plug 'jpalardy/vim-slime'
 
 " Initialize plugin system
 call plug#end()
@@ -209,7 +222,7 @@ call lightline#coc#register()
 let g:lightline = {
              \ 'colorscheme': 'onedark',
              \ 'active': {
-             \   'left': [['mode', 'paste'], ['filename', 'modified']],
+             \   'left': [['mode', 'paste'], ['readonly', 'filename', 'modified']],
              \   'right': [['lineinfo'], ['percent'], ['readonly',
              \       'linter_warnings', 'linter_errors', 'linter_checking',
              \       'linter_infos']]
@@ -250,8 +263,9 @@ augroup END
 " BUFFERS
 " close the current buffer and move to the previous one
 nnoremap <Leader>bq :<c-u>bp<bar>bd! #<cr>
-" close all buffers except current one
-nnoremap <Leader>bd :<c-u>up<bar>%bd<bar>e#<bar>bd#<cr>
+" close all buffers except current one (bd!# also kills RO buffers like terminal or
+" REPL
+nnoremap <Leader>bd :<c-u>up<bar>%bd<bar>e#<bar>bd!#<cr>
 " Disable rnumbers on inactive buffers for active screen indication
 augroup BgHighlight
     autocmd!
@@ -395,6 +409,12 @@ nnoremap <silent> <Leader>gc :GCheckout<CR>
 let NERDTreeMinimalUI = 1
 let NERDTreeDirArrows = 1
 nnoremap <silent> <Leader>o :NERDTreeFind<CR>
+
+" vim-slime
+let g:slime_target = "vimterminal"
+let g:slime_vimterminal_cmd = "python"
+" Send whole file to slime via C-c C-x
+nmap <c-c><c-x> :%SlimeSend<cr>
 
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=build/ make -j$(nproc) <args>
