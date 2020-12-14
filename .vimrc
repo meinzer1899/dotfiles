@@ -7,11 +7,11 @@ nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
 nnoremap <silent> <Leader>m :FZFMru<CR>
 nnoremap <silent> <Leader>s :update<CR>
-nnoremap <silent> <Leader>gs :Git<CR>
+nnoremap <silent> <Leader>gs :vertical :Gstatus <CR>:vertical resize 45<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
 
 filetype off
-inoremap jk <ESC>
+" inoremap jk <ESC> " use C-c
 inoremap jj <CR>
 command! EVimrc :vs $MYVIMRC
 " ci( does not jump automatically to parenthesis, fix with this two lines
@@ -20,7 +20,6 @@ nnoremap ci) f)ci)
 
 " Open new split panes to right and buttom
 set splitbelow
-set splitright
 
 set noshowmode " lightline shows the mode already
 set laststatus=2 " to have colors within lightline status bar
@@ -198,7 +197,7 @@ nnoremap <silent> <Leader>c  :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
 
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
-nnoremap <silent> ; :Buffers<CR>
+nnoremap ; :Buffers<CR>
 nnoremap <silent> <Leader>rr :Rg<CR>
 nnoremap <silent> <Leader>t :Files<CR>
 nnoremap <silent> <Leader>aa :Ag<CR>
@@ -219,6 +218,9 @@ nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 call lightline#coc#register()
 
 " Lightline
+function! CocCurrentFunction()
+    return get(b:, 'coc_current_function', '')
+endfunction
 let g:lightline = {
              \ 'colorscheme': 'onedark',
              \ 'active': {
@@ -263,8 +265,7 @@ augroup END
 " BUFFERS
 " close the current buffer and move to the previous one
 nnoremap <Leader>bq :<c-u>bp<bar>bd! #<cr>
-" close all buffers except current one (bd!# also kills RO buffers like terminal or
-" REPL
+" close all buffers except current one
 nnoremap <Leader>bd :<c-u>up<bar>%bd<bar>e#<bar>bd!#<cr>
 " Disable rnumbers on inactive buffers for active screen indication
 augroup BgHighlight
@@ -299,8 +300,6 @@ if has('win32')
 else
     noremap <Leader>p :vert term<CR>source $HOME/.bash_profile<CR>clear<CR>
 endif
-" opens terminal vertically, executes make demo and closes after execution
-nmap <Leader>pt :vert term python3 %<CR>
 " enter Terminal-Normal mode (for scrolling log output)
 " https://stackoverflow.com/a/46822285/8981617
 " Use CTRL W N to enter Terminal Normal Mode
