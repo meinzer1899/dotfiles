@@ -174,7 +174,9 @@ alias cmake=~/cmake-3.18.1/bin/cmake
 
 eval "$(starship init zsh)"
 
+# ZSH tab completion for cht.sh
+fpath=(~/.zsh.d/ $fpath)
+
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/developer/.sdkman"
 [[ -s "/home/developer/.sdkman/bin/sdkman-init.sh" ]] && source "/home/developer/.sdkman/bin/sdkman-init.sh"
-
