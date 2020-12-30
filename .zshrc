@@ -2,14 +2,14 @@
 # export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-  export ZSH="/home/developer/.oh-my-zsh"
+export ZSH="/home/developer/.oh-my-zsh"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time oh-my-zsh is loaded, in which case,
 # to know which specific one was loaded, run: echo $RANDOM_THEME
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-#ZSH_THEME="af-magic"
-ZSH_THEME="cordial"
+ZSH_THEME="af-magic"
+# ZSH_THEME="common"
 
 # Set list of themes to pick from when loading at random
 # Setting this variable when ZSH_THEME=random will cause zsh to load
@@ -63,7 +63,7 @@ ZSH_THEME="cordial"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git zsh-syntax-highlighting zsh-autosuggestions docker)
+plugins=(fzf-tab git zsh-syntax-highlighting zsh-autosuggestions docker)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -111,13 +111,13 @@ fcoc() {
 # # 2. zplug load --verbose
 # # 3. source /.zshrc
 # # Install plugins if there are plugins that have not been installed
-# # if ! zplug check --verbose; then
-# #     printf "Install? [y/N]: "
-# #     if read -q; then
-# #         echo; zplug install
-# #     fi
-# # fi
-# # zplug load --verbose
+# if ! zplug check --verbose; then
+#     printf "Install? [y/N]: "
+#     if read -q; then
+#         echo; zplug install
+#     fi
+# fi
+# zplug load --verbose
 
 # ZSH highlight adaptation for theme to make auto suggestion readable
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE='fg=23'
@@ -128,7 +128,12 @@ bindkey 'jk' vi-cmd-mode
 export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow -g "!{.git,node_modules}/*" 2> /dev/null'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 export FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_CTRL_R_OPTS='--sort' # automatically sort results (see https://github.com/junegunn/fzf/wiki/Configuring-shell-key-bindings section CTRL-R (toggle with Ctrl-R)
+export FZF_CTRL_T_OPTS='--preview "(highlight -O ansi -l {} 2> /dev/null || cat {} || tree -C {}) 2> /dev/null | head -200"'
+
+# accept = enter
 export FZF_DEFAULT_OPTS='
+  --bind=ctrl-l:accept
   --color fg:242,bg:236,hl:65,fg+:15,bg+:239,hl+:108
   --color info:108,prompt:109,spinner:108,pointer:168,marker:168
   '
@@ -166,6 +171,8 @@ POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs histor
 
 alias cmake=~/cmake-3.18.1/bin/cmake
 # alias shellcheck=/usr/local/bin/shellcheck # use dockerized shellcheck. slows down Vim if linting is permanently enabled significantly
+
+eval "$(starship init zsh)"
 
 #THIS MUST BE AT THE END OF THE FILE FOR SDKMAN TO WORK!!!
 export SDKMAN_DIR="/home/developer/.sdkman"
