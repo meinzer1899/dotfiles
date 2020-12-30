@@ -129,7 +129,7 @@ Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
 " Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
-Plug 'Pablo1107/codi.vim'
+Plug 'metakirby5/codi.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
@@ -140,6 +140,8 @@ Plug 'preservim/nerdtree'
 Plug 'goerz/jupytext.vim'
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'jpalardy/vim-slime'
+Plug 'ryanoasis/vim-devicons'
+Plug 'junegunn/gv.vim'
 
 " Initialize plugin system
 call plug#end()
@@ -197,7 +199,7 @@ nnoremap <silent> <Leader>c  :Commits<CR>
 nnoremap <silent> <Leader>bc :BCommits<CR>
 
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
-nnoremap ; :Buffers<CR>
+nnoremap <silent> ; :Buffers<CR>
 nnoremap <silent> <Leader>rr :Rg<CR>
 nnoremap <silent> <Leader>t :Files<CR>
 nnoremap <silent> <Leader>aa :Ag<CR>
@@ -218,9 +220,6 @@ nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
 call lightline#coc#register()
 
 " Lightline
-function! CocCurrentFunction()
-    return get(b:, 'coc_current_function', '')
-endfunction
 let g:lightline = {
              \ 'colorscheme': 'onedark',
              \ 'active': {
@@ -404,16 +403,23 @@ let g:any_jump_list_numbers = 1
 let g:fzf_checkout_git_options = '--sort=-committerdate'
 nnoremap <silent> <Leader>gc :GCheckout<CR>
 
-" NERDTREE
-let NERDTreeMinimalUI = 1
-let NERDTreeDirArrows = 1
-nnoremap <silent> <Leader>o :NERDTreeFind<CR>
+" " NERDTREE
+" let NERDTreeMinimalUI = 1
+" let NERDTreeDirArrows = 1
+" nnoremap <silent> <Leader>o :NERDTreeFind<CR>
+
+" Coc Explorer
+nnoremap <silent> <Leader>o :CocCommand explorer --no-focus --sources=buffer+,file+<CR>
 
 " vim-slime
 let g:slime_target = "vimterminal"
 let g:slime_vimterminal_cmd = "python"
 " Send whole file to slime via C-c C-x
 nmap <c-c><c-x> :%SlimeSend<cr>
+
+" coc-yank
+" show list with yanked lines
+nnoremap <silent> <leader>y  :<C-u>CocList -A --normal yank<cr>
 
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=build/ make -j$(nproc) <args>
