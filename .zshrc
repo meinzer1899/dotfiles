@@ -63,7 +63,7 @@ ZSH_THEME="af-magic"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(fzf-tab git zsh-syntax-highlighting zsh-autosuggestions docker)
+plugins=(fzf-tab git zsh-syntax-highlighting zsh-autosuggestions docker zsh-z)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -170,6 +170,7 @@ POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(dir vcs)
 POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(status root_indicator background_jobs history time)
 
 alias cmake=~/cmake-3.18.1/bin/cmake
+alias cling=~/cling/cling_2020-11-05_ROOT-ubuntu18.04/bin/cling
 # alias shellcheck=/usr/local/bin/shellcheck # use dockerized shellcheck. slows down Vim if linting is permanently enabled significantly
 
 eval "$(starship init zsh)"
