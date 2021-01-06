@@ -142,6 +142,8 @@ Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'jpalardy/vim-slime'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
+Plug 'dbeniamine/cheat.sh-vim'
+Plug 'unblevable/quick-scope'
 
 " Initialize plugin system
 call plug#end()
@@ -155,7 +157,7 @@ filetype plugin indent on
 set termguicolors
 let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
 let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
-syntax on
+syntax enable
 colorscheme onedark " nord (also adapt in lightline section)
 if has("macunix") || has('win32')
     set clipboard=unnamed
@@ -195,18 +197,18 @@ command! -bang -nargs=* Rg
   \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
-nnoremap <silent> <Leader>c  :Commits<CR>
-nnoremap <silent> <Leader>bc :BCommits<CR>
-
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
-nnoremap <silent> ; :Buffers<CR>
-nnoremap <silent> <Leader>rr :Rg<CR>
-nnoremap <silent> <Leader>t :Files<CR>
-nnoremap <silent> <Leader>aa :Ag<CR>
-nnoremap <silent> <Leader>l :Lines<CR>
-nnoremap <silent> <Leader>bl :BLines<CR>
-nnoremap <silent> <Leader>gf :GFiles?<CR>
-nnoremap <silent> <Leader>h :History:<CR>
+nnoremap <silent> <Leader>;     :Buffers<CR>
+nnoremap <silent> <Leader>rr    :Rg<CR>
+nnoremap <silent> <Leader>t     :Files<CR>
+nnoremap <silent> <Leader>aa    :Ag<CR>
+nnoremap <silent> <Leader>l     :Lines<CR>
+nnoremap <silent> <Leader>bl    :BLines<CR>
+nnoremap <silent> <Leader>gf    :GFiles?<CR>
+nnoremap <silent> <Leader>h     :History:<CR>
+nnoremap <silent> <Leader>c     :Commits<CR>
+nnoremap <silent> <Leader>bc    :BCommits<CR>
+
 " merge conflict commands in a 3-way-diff (1: middle, 2: left, 3: right side)
 nnoremap <Leader>gj :diffget //3<CR>
 nnoremap <Leader>gf :diffget //2<CR>
@@ -412,6 +414,7 @@ nnoremap <silent> <Leader>gc :GCheckout<CR>
 nnoremap <silent> <Leader>o :CocCommand explorer --no-focus --sources=buffer+,file+<CR>
 
 " vim-slime
+" spawns REPL environment
 let g:slime_target = "vimterminal"
 let g:slime_vimterminal_cmd = "python"
 " Send whole file to slime via C-c C-x
@@ -420,6 +423,10 @@ nmap <c-c><c-x> :%SlimeSend<cr>
 " coc-yank
 " show list with yanked lines
 nnoremap <silent> <leader>y  :<C-u>CocList -A --normal yank<cr>
+
+" vim-quickscope
+" Trigger a highlight in the appropriate direction when pressing these keys:
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=build/ make -j$(nproc) <args>
