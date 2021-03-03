@@ -136,7 +136,6 @@ Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
 Plug 'stsewd/fzf-checkout.vim'
 " Plug 'qpkorr/vim-bufkill'
-Plug 'preservim/nerdtree'
 Plug 'goerz/jupytext.vim'
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'jpalardy/vim-slime'
@@ -404,11 +403,6 @@ let g:any_jump_list_numbers = 1
 " FZF CHECKOUT
 let g:fzf_checkout_git_options = '--sort=-committerdate'
 nnoremap <silent> <Leader>gc :GCheckout<CR>
-
-" " NERDTREE
-" let NERDTreeMinimalUI = 1
-" let NERDTreeDirArrows = 1
-" nnoremap <silent> <Leader>o :NERDTreeFind<CR>
 
 " Coc Explorer
 nnoremap <silent> <Leader>o :CocCommand explorer --no-focus --sources=buffer+,file+<CR>
