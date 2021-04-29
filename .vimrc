@@ -34,7 +34,7 @@ set cmdheight=2
 " delays and poor user experience.
 set updatetime=300
 
-" Don't pass messages to |ins-completion-menu|.
+" Don't pass messages to |ins-completion-menu| (coc)
 set shortmess+=c
 
 " Always show the signcolumn, otherwise it would shift the text each time
@@ -143,6 +143,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
 Plug 'dbeniamine/cheat.sh-vim'
 Plug 'unblevable/quick-scope'
+Plug 'ilyachur/cmake4vim'
 
 " Initialize plugin system
 call plug#end()
@@ -306,18 +307,24 @@ endif
 " re-enter Terminal-Job mode by pressing i
 
 " COC
+" Change navigation of completion info popup
+inoremap <silent><expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
+inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
+
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
+" Pressing TAB at opened completion list triggers first item
+
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
+      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
       \ <SID>check_back_space() ? "\<TAB>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
 function! s:check_back_space() abort
-    let col = col('.') - 1
-    return !col || getline('.')[col - 1]  =~# '\s'
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
 " Setup prettier
@@ -329,6 +336,21 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " else
 "     inoremap <silent><expr> <c-@> coc#refresh()
 " endif
+
+" Make <CR> auto-select the first completion item and notify coc.nvim to
+" format on enter, <cr> could be remapped by other vim plugin
+inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
+" Remap <C-f> and <C-b> for scroll float windows or popups
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+    nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+    inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+    vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
 
 " Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
 " position. Coc only does snippet and additional edit on confirm.
