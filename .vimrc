@@ -7,7 +7,7 @@ nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
 nnoremap <silent> <Leader>m :FZFMru<CR>
 nnoremap <silent> <Leader>s :update<CR>
-nnoremap <silent> <Leader>gs :vertical :Gstatus <CR>:vertical resize 45<CR>
+nnoremap <silent> <Leader>gs :vertical :Git <CR>:vertical resize 45<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
 
 filetype off
@@ -84,6 +84,12 @@ set ignorecase " case insensitive
 set smartcase  " use case if any caps used
 set incsearch  " show match as search proceeds
 
+set diffopt=filler,context:3,iwhite,hiddenoff
+if has('nvim-0.3.2') || has("patch-8.1.0360")
+    " https://old.reddit.com/r/vim/comments/cn20tv/tip_histogrambased_diffs_using_modern_vim/
+    set diffopt+=internal,algorithm:histogram,indent-heuristic
+endif
+
 " Autocommand
 augroup vimrcEx
     autocmd!
@@ -115,9 +121,9 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-dispatch' " Asynchronous build and test dispatcher 
-Plug 'junegunn/goyo.vim' " Prose Mode
-Plug 'altercation/vim-colors-solarized' " used by prose mode
-Plug 'arcticicestudio/nord-vim' " next tops are: onedark and vim-moonfly-colors
+" Plug 'junegunn/goyo.vim' " Prose Mode
+" Plug 'altercation/vim-colors-solarized' " used by prose mode
+" Plug 'arcticicestudio/nord-vim' " next tops are: onedark and vim-moonfly-colors
 Plug 'joshdick/onedark.vim'
 Plug 'itchyny/lightline.vim'
 " Plug 'dense-analysis/ale' " Asynchronous Linting Engine
@@ -126,17 +132,16 @@ Plug 'airblade/vim-gitgutter'
 Plug 'pechorin/any-jump.vim'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
 Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
-" Plug 'SirVer/ultisnips' | Plug 'honza/vim-snippets' " A bunch of useful language related snippets (ultisnips is the engine). :Snippets for all available snippets (depends on file type)
+Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 Plug 'metakirby5/codi.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-explorer coc-json coc-docker coc-diagnostics coc-snippets coc-yank'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
 Plug 'stsewd/fzf-checkout.vim'
-" Plug 'qpkorr/vim-bufkill'
-Plug 'goerz/jupytext.vim'
+" Plug 'goerz/jupytext.vim'
 Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'jpalardy/vim-slime'
 Plug 'ryanoasis/vim-devicons'
@@ -144,6 +149,12 @@ Plug 'junegunn/gv.vim'
 Plug 'dbeniamine/cheat.sh-vim'
 Plug 'unblevable/quick-scope'
 Plug 'ilyachur/cmake4vim'
+Plug 'muellan/vim-brace-for-umlauts'
+" Plug 'cohama/lexima.vim'
+Plug 'Yggdroot/indentLine'
+Plug 'Asheq/close-buffers.vim'
+Plug 'antoinemadec/coc-fzf'
+Plug 'chaoren/vim-wordmotion'
 
 " Initialize plugin system
 call plug#end()
@@ -168,12 +179,12 @@ endif
 " FZF
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
-  " Use Ag over Grep
-  set grepprg=ag\ --nogroup\ --nocolor
-  let g:ackprg='ag --vimgrep'
+    " Use Ag over Grep
+    set grepprg=ag\ --nogroup\ --nocolor
+    let g:ackprg='ag --vimgrep'
 
-  " Use ag in fzf for listing files. Lightning fast and respects .gitignore
-  let $FZF_DEFAULT_COMMAND = 'ag --follow -H --literal --files-with-matches --nocolor -g ""'
+    " Use ag in fzf for listing files. Lightning fast and respects .gitignore
+    let $FZF_DEFAULT_COMMAND = 'ag --follow -H --literal --files-with-matches --nocolor -g ""'
 endif
 
 if executable('rg')
@@ -187,9 +198,30 @@ let g:fzf_commits_log_options = '--graph --color=always
             \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 " Always enable preview window on the right with 60% width (only if width of screen in larger than 120 columns)
 let g:fzf_preview_window = 'right:60%'
-" Adapt fzf preview window layout (non-floating, dont push content of current
-" screen to the top (https://github.com/junegunn/fzf.vim/issues/942)
-let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.4, 'yoffset': 1, 'border': 'top' } }
+
+" See `man fzf-tmux` for available options
+if exists('$TMUX')
+    " let g:fzf_layout = { 'tmux': '-p90%,60%' } 
+    let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.4, 'yoffset': 1, 'border': 'top' } }
+else
+    " Adapt fzf preview window layout (non-floating, dont push content of current
+    " screen to the top (https://github.com/junegunn/fzf.vim/issues/942)
+    let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.4, 'yoffset': 1, 'border': 'top' } }
+endif
+
+" An action can be a reference to a function that processes selected lines
+function! s:build_quickfix_list(lines)
+  call setqflist(map(copy(a:lines), '{ "filename": v:val }'))
+  copen
+  cc
+endfunction
+
+let g:fzf_action = {
+  \ 'ctrl-q': function('s:build_quickfix_list'),
+  \ 'ctrl-t': 'tab split',
+  \ 'ctrl-x': 'split',
+  \ 'ctrl-v': 'vsplit' }
+
 
 " Call Ag and Rg to only match file content, not file names
 " https://github.com/junegunn/fzf.vim/issues/346
@@ -264,10 +296,10 @@ augroup VimDiff
 augroup END
 
 " BUFFERS
-" close the current buffer and move to the previous one
-nnoremap <Leader>bq :<c-u>bp<bar>bd! #<cr>
-" close all buffers except current one
-nnoremap <Leader>bd :<c-u>up<bar>%bd<bar>e#<bar>bd!#<cr>
+" bdelete all buffers except the buffer in the current window
+nnoremap <Leader>bdo :Bdelete other<CR>
+" bdelete buffers not visible in a window
+nnoremap <Leader>bdh :Bdelete hidden<CR>
 " Disable rnumbers on inactive buffers for active screen indication
 augroup BgHighlight
     autocmd!
@@ -315,7 +347,8 @@ inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 " Pressing TAB at opened completion list triggers first item
-
+" I think coc-snippets is required
+" (https://github.com/neoclide/coc-snippets)
 inoremap <silent><expr> <TAB>
       \ pumvisible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
@@ -326,6 +359,8 @@ function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
+
+let g:coc_snippet_next = '<tab>'
 
 " Setup prettier
 command! -nargs=0 Prettier :CocCommand prettier.formatFile
@@ -368,7 +403,7 @@ nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
 nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
 nmap <silent> gi <Plug>(coc-implementation)
 nmap <silent> gr <Plug>(coc-references)
 
@@ -386,8 +421,15 @@ endfunction
 " Highlight the symbol and its references when holding the cursor.
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
-" Symbol renaming.
+" Symbol renaming and refactoring
 nmap <leader>rn <Plug>(coc-rename)
+nmap <Leader>rf <Plug>(coc-refactor)
+
+" call hierarchy
+nmap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true})<CR>
+
+" outline
+nmap <silent> go :CocFzfList outline<CR>
 
 " Formatting selected code.
 " xmap <leader>f  <Plug>(coc-format-selected)
@@ -444,8 +486,23 @@ nnoremap <silent> <leader>y  :<C-u>CocList -A --normal yank<cr>
 " Trigger a highlight in the appropriate direction when pressing these keys:
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
+" vim indentLine
+let g:indentLine_char = '▏'
+let g:indentLine_setColors = 0 "0: highlight conceal color with your colorscheme
+
+" coc-fzf
+let g:coc_fzf_preview = 'right:40%'
+
+" vim-wordmotion
+let g:wordmotion_nomap = 1
+nmap w          <Plug>WordMotion_w
+nmap b          <Plug>WordMotion_b
+nmap gE         <Plug>WordMotion_gE
+omap aW         <Plug>WordMotion_aW
+cmap <C-R><C-W> <Plug>WordMotion_<C-R><C-W>
+
 " User Defined Commands (usr_40, 40.2)
-command -nargs=? -bang Build :Dispatch<bang> -dir=build/ make -j$(nproc) <args>
-command -nargs=0 -bang Test :Dispatch<bang> -dir=build/ make -j$(nproc) tests && GTEST_COLOR=1 ctest -V
-command -nargs=? Prep :Dispatch! conan install . -g deploy --install-folder e3sdk_conandeploy --profile <args> && mkdir -p build && cd build && rm -rf ./* && conan install .. -p <args> && conan build -c .. && cd -
-command -nargs=0 -bang Cover :Dispatch<bang> -dir=build/ cmake -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage -g -O0" .. && make tests -j$(nproc) && ctest && /home/e3-user/.local/bin/gcovr --exclude-unreachable-branches --exclude-throw-branches -r .. -e ../src/gen -e ../tests --html-details coverage.html
+command -nargs=? -bang Build :Dispatch<bang> -dir=/mnt/build/ make -j$(nproc) <args>
+command -nargs=0 -bang Test :Dispatch<bang> -dir=/mnt/build/ make -j$(nproc) tests && GTEST_COLOR=1 ctest -V
+command -nargs=? Prep :Dispatch! rm -rf e3sdk_conandeploy || return && conan install . -g deploy --install-folder e3sdk_conandeploy --profile <args> && mkdir -p build && cd build || exit && rm -rf ./* || return && conan install .. --profile <args> && conan build -c .. && cd -
+command -nargs=0 -bang Cover :Dispatch<bang> -dir=/mnt/build/ cmake -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage -g -O0" .. && make tests -j$(nproc) && ctest && /home/e3-user/.local/bin/gcovr --exclude-unreachable-branches --exclude-throw-branches -r .. -e ../src/gen -e ../tests -e ../submodules/e3_subm_dhm_arxml/generated --html-details coverage.html
