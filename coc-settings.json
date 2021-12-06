@@ -1,0 +1,117 @@
+{
+  "languageserver": {
+    "ccls": {
+      "command": "ccls",
+      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+      "rootPatterns": [".ccls-root", "build/compile_commands.json", ".git/"],
+      "initializationOptions": {
+        "compilationDatabaseDirectory": "build",
+        "highlight": { "lsRanges": true },
+        "cache": {
+          "directory": "/tmp/ccls"
+        },
+        "client": {
+          "snippetSupport": true
+        },
+        "index": {
+          "onChange": true
+        },
+        "diagnostics": {
+          "onChange": 500
+        }
+      }
+    },
+    "dockerfile": {
+      "command": "docker-langserver",
+      "filetypes": ["dockerfile"],
+      "args": ["--stdio"]
+    },
+    "cmake": {
+      "command": "cmake-language-server",
+      "filetypes": ["cmake"],
+      "rootPatterns": [
+        "build/"
+      ],
+      "initializationOptions": {
+        "buildDirectory": "build"
+      }
+    },
+     "python": {
+      "command": "jedi-language-server",
+      "filetypes": ["python"]
+    }
+  },
+  "diagnostic-languageserver.filetypes": {
+    "sh": "shellcheck",
+    "python": "flake8",
+    "markdown": ["write-good", "markdownlint"]
+  },
+  "coc.preferences.extensionUpdateCheck": "weekly",
+  "diagnostic-languageserver.linters": {
+    "shellcheck": {
+      // linter name, for example: vint
+      "command": "shellcheck", // linter command
+      "rootPatterns": [], // root patterns, default empty array
+      "isStdout": true, // use stdout output, default true
+      "isStderr": false, // use stderr output, default false
+      "debounce": 100, // debounce time
+      "args": ["--format=gcc", "-"], // args
+      "offsetLine": 0, // offsetline
+      "offsetColumn": 0, // offsetColumn
+      "sourceName": "shellcheck", // source name
+
+      // Using regular expressions:
+      "formatLines": 1, // how much lines for formatPattern[0] to match
+      "formatPattern": [
+        "^([^:]+):(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$", // line match pattern (javascript regex)
+        {
+          "sourceName": 1,
+          "line": 2, // diagnostic line use match group 2
+          "column": 3, // diagnostic column use match group 3
+          "endLine": 2, // diagnostic end line use match group 2. Will default to group from `line`
+          "endColumn": 3, // diagnostic end column use match group 3. Will default to group from `column`
+          "message": [5], // message to display use match group 5
+          "security": 4 // security to use match group 4, ignore if linter do not support security
+        }
+      ],
+      "securities": {
+        // security keys, ignore if linter do not support security
+        "error": "error", // [key: string]?: "error" | "warning" | "info" | "hint"
+        "warning": "warning",
+        "note": "info"
+      }
+    },
+  "flake8": {
+      "sourceName": "flake8",
+      "command": "flake8",
+      "debounce": 200,
+      "rootPatterns": [".git", "pyproject.toml", "setup.py"],
+      "args": [
+        "--ignore=E402,C901,W503,W504,E116,E702,C0103,C0114,C0115,C0116,C0103,C0301,W0613,W0102,R0903,R0902,R0914,R0915,R0205,W0703,W0702,W0603",
+        "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s",
+        "-"
+      ],
+      "offsetLine": 0,
+      "offsetColumn": 0,
+      "formatLines": 1,
+      "formatPattern": [
+        "(\\d+),(\\d+),([A-Z]),(.*)(\\r|\\n)*$",
+        {
+          "line": 1,
+          "column": 2,
+          "security": 3,
+          "message": 4
+        }
+      ],
+      "securities": {
+        "W": "info",
+        "E": "warning",
+        "F": "info",
+        "C": "info",
+        "N": "hint"
+      }
+    }
+  },
+  "explorer.icon.enableNerdfont": true,
+  "explorer.icon.source": "vim-devicons"
+}
