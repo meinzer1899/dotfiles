@@ -15,6 +15,8 @@ setopt INC_APPEND_HISTORY_TIME  # append command to history file immediately aft
 setopt EXTENDED_HISTORY  # record command start time
 
 setopt autocd extendedglob notify
+setopt promptsubst
+
 unsetopt beep nomatch
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
@@ -35,7 +37,7 @@ autoload -U promptinit; promptinit
 if [[ ! -f $HOME/.zinit/bin/zinit.zsh ]]; then
     print -P "%F{33}▓▒░ %F{220}Installing %F{33}DHARMA%F{220} Initiative Plugin Manager (%F{33}zdharma/zinit%F{220})…%f"
     command mkdir -p "$HOME/.zinit" && command chmod g-rwX "$HOME/.zinit"
-    command git clone https://github.com/zdharma/zinit "$HOME/.zinit/bin" && \
+    command git clone https://github.com/zdharma-continuum/zinit "$HOME/.zinit/bin" && \
         print -P "%F{33}▓▒░ %F{34}Installation successful.%f%b" || \
         print -P "%F{160}▓▒░ The clone has failed.%f%b"
 fi
@@ -44,23 +46,26 @@ source "$HOME/.zinit/bin/zinit.zsh"
 autoload -Uz _zinit
 (( ${+_comps} )) && _comps[zinit]=_zinit
 
-# Load a few important annexes, without Turbo
-# (this is currently required for annexes)
-zinit light-mode for \
-    zinit-zsh/z-a-rust \
-    zinit-zsh/z-a-as-monitor \
-    zinit-zsh/z-a-patch-dl \
-    zinit-zsh/z-a-bin-gem-node \
-    zinit-zsh/z-a-meta-plugins
+zinit wait lucid for \
+        OMZL::git.zsh \
+  atload"unalias grv" \
+        OMZP::git
+
+# A glance at the new for-syntax – load all of the above
+# plugins with a single command. For more information see:
+# https://zdharma-continuum.github.io/zinit/wiki/For-Syntax/
+zinit ice wait
+zinit for \
+    light-mode  zsh-users/zsh-autosuggestions \
+    light-mode  zdharma-continuum/fast-syntax-highlighting \
+                zdharma-continuum/history-search-multi-word \
+    light-mode pick"async.zsh" src"pure.zsh" \
+                sindresorhus/pure
 
 # Load after compinit, but before zsh-autosuggestions and zsh-syntax-highlighting (zsh-users+fast)
 zinit light Aloxaf/fzf-tab
 
 ### End of Zinit's installer chunk
-zinit for annexes zsh-users+fast
-zinit ice compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh'
-zinit light sindresorhus/pure
-zinit light skywind3000/z.lua
 
 zinit lucid wait light-mode as"program" from"gh-r" for \
     atclone"cp -vf bat/autocomplete/bat.zsh _bat" \
