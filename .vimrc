@@ -155,6 +155,7 @@ Plug 'Yggdroot/indentLine'
 Plug 'Asheq/close-buffers.vim'
 Plug 'antoinemadec/coc-fzf'
 Plug 'chaoren/vim-wordmotion'
+Plug 'rust-lang/rust.vim'
 
 " Initialize plugin system
 call plug#end()

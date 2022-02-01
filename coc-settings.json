@@ -113,5 +113,7 @@
     }
   },
   "explorer.icon.enableNerdfont": true,
-  "explorer.icon.source": "vim-devicons"
+  "explorer.icon.source": "vim-devicons",
+  "rust-analyzer.inlayHints.enable": true
+  "rust-analyzer.inlayHints.typeHints": true
 }
