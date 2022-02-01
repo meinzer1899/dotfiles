@@ -156,6 +156,7 @@ Plug 'Asheq/close-buffers.vim'
 Plug 'antoinemadec/coc-fzf'
 Plug 'chaoren/vim-wordmotion'
 Plug 'rust-lang/rust.vim'
+Plug 'jesseleite/vim-agriculture'
 
 " Initialize plugin system
 call plug#end()
@@ -501,6 +502,10 @@ nmap b          <Plug>WordMotion_b
 nmap gE         <Plug>WordMotion_gE
 omap aW         <Plug>WordMotion_aW
 cmap <C-R><C-W> <Plug>WordMotion_<C-R><C-W>
+
+" vim-agriculture
+vmap <Leader>rr <Plug>RgRawVisualSelection<cr>
+vmap <Leader>aa <Plug>AgRawVisualSelection<cr>
 
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=/mnt/build/ make -j$(nproc) <args>
