@@ -65,7 +65,15 @@ zinit for \
 # Load after compinit, but before zsh-autosuggestions and zsh-syntax-highlighting (zsh-users+fast)
 zinit light Aloxaf/fzf-tab
 
+# completion
+zinit ice as"completion"
+zinit snippet OMZP::docker/_docker
+
+zinit ice as"completion"
+zinit snippet OMZP::fd/_fd
+
 ### End of Zinit's installer chunk
+# All of the above using the for-syntax and also z-a-bin-gem-node annex
 
 zinit lucid wait light-mode as"program" from"gh-r" for \
     atclone"cp -vf bat/autocomplete/bat.zsh _bat" \
@@ -80,4 +88,8 @@ zinit lucid wait light-mode as"program" from"gh-r" for \
 
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
 
+# symlink fd-find
+ln -fs $(which fdfind) ~/.local/bin/fd
+
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+fpath+=${ZDOTDIR:-~}/.zsh_functions
