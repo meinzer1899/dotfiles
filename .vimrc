@@ -186,7 +186,7 @@ if executable('ag')
     let g:ackprg='ag --vimgrep'
 
     " Use ag in fzf for listing files. Lightning fast and respects .gitignore
-    let $FZF_DEFAULT_COMMAND = 'ag --follow -H --literal --files-with-matches --nocolor -g ""'
+    let $FZF_DEFAULT_COMMAND='ag --follow -H --literal --files-with-matches --nocolor -g ""'
 endif
 
 if executable('rg')
@@ -228,7 +228,10 @@ let g:fzf_action = {
 " Call Ag and Rg to only match file content, not file names
 " https://github.com/junegunn/fzf.vim/issues/346
 command! -bang -nargs=* Rg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1, {'options': '--delimiter : --nth 4..'}, <bang>0)
+  \ call fzf#vim#grep(
+  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview(), <bang>0)
+
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
@@ -427,9 +430,9 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 nmap <Leader>rf <Plug>(coc-refactor)
 
+" ccls specific c++
 " call hierarchy
 nmap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true})<CR>
-
 " outline
 nmap <silent> go :CocFzfList outline<CR>
 
