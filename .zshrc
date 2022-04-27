@@ -86,6 +86,8 @@ zinit lucid wait light-mode as"program" from"gh-r" for \
     mv"bin/exa* -> exa" \
     @ogham/exa
 
+# Install z.lua
+zinit light skywind3000/z.lua
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
 
 # symlink fd-find
