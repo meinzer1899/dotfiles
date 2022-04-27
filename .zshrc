@@ -1,7 +1,4 @@
-# Add installation directories for different platforms (e.g. pip, cargo)
-export PATH=$PATH:/home/semeyer/.local/bin:/home/semeyer/.cargo/bin
 # https://jdhao.github.io/2021/03/24/zsh_history_setup/
-#
 # the detailed meaning of the below three variable can be found in `man zshparam`.
 export HISTFILE=~/.histfile
 export HISTSIZE=1000000   # the number of items for the internal history list
@@ -21,6 +18,8 @@ unsetopt beep nomatch
 # End of lines configured by zsh-newuser-install
 # The following lines were added by compinstall
 zstyle :compinstall filename '/home/semeyer/.zshrc'
+
+fpath+=~/.zfunc
 
 autoload -Uz compinit
 compinit
@@ -90,8 +89,7 @@ zinit lucid wait light-mode as"program" from"gh-r" for \
 zinit light skywind3000/z.lua
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
 
-# symlink fd-find
-ln -fs $(which fdfind) ~/.local/bin/fd
+export PYTHONPATH=$PYTHONPATH:/home/sebastian/.local/lib/python3.8/site-packages
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 fpath+=${ZDOTDIR:-~}/.zsh_functions
