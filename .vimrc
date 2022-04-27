@@ -9,6 +9,7 @@ nnoremap <silent> <Leader>m :FZFMru<CR>
 nnoremap <silent> <Leader>s :update<CR>
 nnoremap <silent> <Leader>gs :vertical :Git <CR>:vertical resize 45<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
+nnoremap <silent> <Leader>q :@:<CR>
 
 filetype off
 " inoremap jk <ESC> " use C-c
@@ -226,11 +227,10 @@ let g:fzf_action = {
 
 
 " Call Ag and Rg to only match file content, not file names
-" https://github.com/junegunn/fzf.vim/issues/346
+" https://github.com/junegunn/fzf.vim/issues/714#issuecomment-428802659
 command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case -- '.shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview(), <bang>0)
+  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case ".shellescape(<q-args>), 1,
+  \   fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
 
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
@@ -432,7 +432,8 @@ nmap <Leader>rf <Plug>(coc-refactor)
 
 " ccls specific c++
 " call hierarchy
-nmap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true})<CR>
+nmap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true,'levels':5})<CR>
+nmap <silent> gL :call CocLocations('ccls','$ccls/call',{'callee':v:true,'levels':5})<cr>
 " outline
 nmap <silent> go :CocFzfList outline<CR>
 
