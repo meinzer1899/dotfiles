@@ -3,7 +3,7 @@
     "ccls": {
       "command": "ccls",
       "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls-root", "build/compile_commands.json", ".git/"],
+      "rootPatterns": [".ccls-root", "_build/compile_commands.json", ".git/"],
       "initializationOptions": {
         "compilationDatabaseDirectory": "build",
         "highlight": { "lsRanges": true },
@@ -114,6 +114,6 @@
   },
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "vim-devicons",
-  "rust-analyzer.inlayHints.enable": true
+  "rust-analyzer.inlayHints.enable": true,
   "rust-analyzer.inlayHints.typeHints": true
 }
