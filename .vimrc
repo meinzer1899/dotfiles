@@ -158,6 +158,7 @@ Plug 'antoinemadec/coc-fzf'
 Plug 'chaoren/vim-wordmotion'
 Plug 'rust-lang/rust.vim'
 Plug 'jesseleite/vim-agriculture'
+Plug 'romainl/vim-qf'
 
 " Initialize plugin system
 call plug#end()
