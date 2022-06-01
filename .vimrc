@@ -137,7 +137,7 @@ Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 Plug 'metakirby5/codi.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-explorer coc-json coc-docker coc-diagnostics coc-snippets coc-yank'}
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-explorer coc-json coc-docker coc-diagnostic coc-snippets coc-yank'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
