@@ -41,8 +41,21 @@ vim plug: https://github.com/junegunn/vim-plug
 ## node, nvm
 https://github.com/nvm-sh/nvm#installing-and-updating
 
+## ccls
+https://github.com/MaskRay/ccls/wiki/Build
+https://github.com/MaskRay/ccls/wiki/Install
+
+## CMake language server
+https://github.com/regen100/cmake-language-server
+
 ## .gitconfig
 [core]
     editor = vim
 [diff]
     algorithm = histogram
+
+## Ideas
+
+### dotbare
+Manage dotfiles and any git directories interactively with fzf
+https://github.com/kazhala/dotbare
