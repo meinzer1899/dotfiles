@@ -48,6 +48,9 @@ https://github.com/MaskRay/ccls/wiki/Install
 ## CMake language server
 https://github.com/regen100/cmake-language-server
 
+## Nerdfont
+https://github.com/ronniedroid/getnf
+
 ## .gitconfig
 [core]
     editor = vim
