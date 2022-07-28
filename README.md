@@ -59,3 +59,9 @@ https://github.com/regen100/cmake-language-server
 ### dotbare
 Manage dotfiles and any git directories interactively with fzf
 https://github.com/kazhala/dotbare
+
+### mold
+CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
+
+### nvim
+Move to nvim
