@@ -1,26 +1,26 @@
 {
   "languageserver": {
-    "ccls": {
-      "command": "ccls",
-      "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-      "rootPatterns": [".ccls-root", "_build/compile_commands.json", ".git/"],
-      "initializationOptions": {
-        "compilationDatabaseDirectory": "build",
-        "highlight": { "lsRanges": true },
-        "cache": {
-          "directory": "/tmp/ccls"
-        },
-        "client": {
-          "snippetSupport": true
-        },
-        "index": {
-          "onChange": true
-        },
-        "diagnostics": {
-          "onChange": 500
-        }
-      }
-    },
+    // "ccls": {
+    //   "command": "ccls",
+    //   "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
+    //   "rootPatterns": [".ccls-root", "_build/compile_commands.json", ".git/"],
+    //   "initializationOptions": {
+    //     "compilationDatabaseDirectory": "_build",
+    //     "highlight": { "lsRanges": true },
+    //     "cache": {
+    //       "directory": "/tmp/ccls"
+    //     },
+    //     "client": {
+    //       "snippetSupport": true
+    //     },
+    //     "index": {
+    //       "onChange": true
+    //     },
+    //     "diagnostics": {
+    //       "onChange": 500
+    //     }
+    //   }
+    // },
     "dockerfile": {
       "command": "docker-langserver",
       "filetypes": ["dockerfile"],
@@ -30,10 +30,10 @@
       "command": "cmake-language-server",
       "filetypes": ["cmake"],
       "rootPatterns": [
-        "build/"
+        "_build/"
       ],
       "initializationOptions": {
-        "buildDirectory": "build"
+        "buildDirectory": "_build"
       }
     },
      "python": {
@@ -43,7 +43,7 @@
   },
   "diagnostic-languageserver.filetypes": {
     "sh": "shellcheck",
-    "python": "flake8",
+    "python": ["flake8", "mypy"],
     "markdown": ["write-good", "markdownlint"]
   },
   "coc.preferences.extensionUpdateCheck": "weekly",
@@ -55,7 +55,7 @@
       "isStdout": true, // use stdout output, default true
       "isStderr": false, // use stderr output, default false
       "debounce": 100, // debounce time
-      "args": ["--format=gcc", "-"], // args
+      "args": ["--format=gcc", "-x", "-"], // args
       "offsetLine": 0, // offsetline
       "offsetColumn": 0, // offsetColumn
       "sourceName": "shellcheck", // source name
@@ -87,7 +87,8 @@
       "debounce": 200,
       "rootPatterns": [".git", "pyproject.toml", "setup.py"],
       "args": [
-        "--ignore=E402,C901,W503,W504,E116,E702,C0103,C0114,C0115,C0116,C0103,C0301,W0613,W0102,R0903,R0902,R0914,R0915,R0205,W0703,W0702,W0603",
+        // "--ignore=E402,C901,W503,W504,E116,E702,C0103,C0114,C0115,C0116,C0103,C0301,W0613,W0102,R0903,R0902,R0914,R0915,R0205,W0703,W0702,W0603",
+        "--select=F,DUO,SIM",
         "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s",
         "-"
       ],
@@ -104,16 +105,53 @@
         }
       ],
       "securities": {
-        "W": "info",
+        "W": "warning",
         "E": "warning",
-        "F": "info",
+        "F": "warning",
+        "D": "warning",
+        "S": "warning",
         "C": "info",
         "N": "hint"
+      }
+    },
+    "mypy": {
+      "sourceName": "mypy",
+      "command": "mypy",
+      "args": [
+        "--no-color-output",
+        "--no-error-summary",
+        "--show-column-numbers",
+        "--follow-imports=silent",
+        "--ignore-missing-imports",
+        "%file"
+      ],
+      "formatPattern": [
+        "^.*:(\\d+?):(\\d+?): ([a-z]+?): (.*)$",
+        {
+          "line": 1,
+          "column": 2,
+          "security": 3,
+          "message": 4
+        }
+      ],
+      "securities": {
+        "error": "error"
       }
     }
   },
   "explorer.icon.enableNerdfont": true,
-  "explorer.icon.source": "vim-devicons",
-  "rust-analyzer.inlayHints.enable": true,
-  "rust-analyzer.inlayHints.typeHints": true
+  "explorer.icon.source": "builtin",
+  "clangd.compilationDatabasePath": "_build",
+  "clangd.disableProgressNotifications": true,
+  "clangd.showDBChangedNotification": false,
+  "clangd.arguments": [
+    "--background-index",
+    "--clang-tidy",
+    "-j=3",
+    "--completion-style=detailed",
+    "--all-scopes-completion=true"
+  ],
+  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/14.0.3/clangd_14.0.3/bin/clangd",
+  "clangd.inlayHints.enable": true,
+  "semanticTokens.filetypes": ["c", "cpp"]
 }
