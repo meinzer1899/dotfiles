@@ -10,6 +10,18 @@ nnoremap <silent> <Leader>s :update<CR>
 nnoremap <silent> <Leader>gs :vertical :Git <CR>:vertical resize 45<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
 nnoremap <silent> <Leader>q :@:<CR>
+nnoremap <silent> <Leader>co :Copen<CR> G<CR>
+
+" mappings to make search results appear in the middle of the screen
+" https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
+nnoremap n nzz
+nnoremap N Nzz
+nnoremap * *zz
+nnoremap # #zz
+nnoremap g* g*zz
+nnoremap g# g#zz
+nnoremap g; g;zz
+nnoremap g, g,zz
 
 filetype off
 " inoremap jk <ESC> " use C-c
@@ -122,9 +134,10 @@ Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-dispatch' " Asynchronous build and test dispatcher 
+Plug 'tpope/vim-obsession'
+Plug 'tpope/vim-endwise'
 " Plug 'junegunn/goyo.vim' " Prose Mode
 " Plug 'altercation/vim-colors-solarized' " used by prose mode
-" Plug 'arcticicestudio/nord-vim' " next tops are: onedark and vim-moonfly-colors
 Plug 'joshdick/onedark.vim'
 Plug 'itchyny/lightline.vim'
 " Plug 'dense-analysis/ale' " Asynchronous Linting Engine
@@ -143,7 +156,7 @@ Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
 Plug 'stsewd/fzf-checkout.vim'
 " Plug 'goerz/jupytext.vim'
-Plug 'jackguo380/vim-lsp-cxx-highlight'
+" Plug 'jackguo380/vim-lsp-cxx-highlight'
 Plug 'jpalardy/vim-slime'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
@@ -159,6 +172,11 @@ Plug 'chaoren/vim-wordmotion'
 Plug 'rust-lang/rust.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'romainl/vim-qf'
+Plug 'junegunn/vim-peekaboo'
+Plug 'junegunn/rainbow_parentheses.vim'
+" Intelligently reopen files at your last edit position
+Plug 'farmergreg/vim-lastplace'
+let g:lastplace_ignore_buftype = "quickfix"
 
 " Initialize plugin system
 call plug#end()
@@ -170,10 +188,8 @@ filetype plugin indent on
 " COLORS
 "
 set termguicolors
-let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 syntax enable
-colorscheme onedark " nord (also adapt in lightline section)
+colorscheme onedark " also adapt in lightline section
 if has("macunix") || has('win32')
     set clipboard=unnamed
 elseif has("unix")
@@ -511,6 +527,22 @@ cmap <C-R><C-W> <Plug>WordMotion_<C-R><C-W>
 " vim-agriculture
 vmap <Leader>rr <Plug>RgRawVisualSelection<cr>
 vmap <Leader>aa <Plug>AgRawVisualSelection<cr>
+
+" rainbow parenthesis
+" Activation based on file type
+augroup rainbow_lisp
+  autocmd!
+  autocmd FileType cpp,c,lisp,clojure,scheme RainbowParentheses
+augroup END
+
+" persistent undo
+" from https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
+let s:undodir = "/tmp/.undodir_" . $USER
+if !isdirectory(s:undodir)
+    call mkdir(s:undodir, "", 0700)
+endif
+let &undodir=s:undodir
+set undofile
 
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=/mnt/build/ make -j$(nproc) <args>
