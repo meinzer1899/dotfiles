@@ -63,6 +63,7 @@ zinit for \
 
 # Load after compinit, but before zsh-autosuggestions and zsh-syntax-highlighting (zsh-users+fast)
 zinit light Aloxaf/fzf-tab
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath' # remember to use single quote here!!!
 
 # completion
 zinit ice as"completion"
@@ -90,6 +91,13 @@ zinit light skywind3000/z.lua
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
 
 export PYTHONPATH=$PYTHONPATH:/home/sebastian/.local/lib/python3.8/site-packages
+export PYTHONPATH=$PYTHONPATH:/home/sebastian/.local/bin
+
+export PATH=$PATH:/snap/bin
+
+bindkey '^k' autosuggest-execute
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 fpath+=${ZDOTDIR:-~}/.zsh_functions
+
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
