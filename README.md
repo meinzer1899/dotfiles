@@ -67,4 +67,5 @@ https://github.com/kazhala/dotbare
 CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
 ### nvim
+https://toroid.org/modern-neovim
 Move to nvim and enable inlay type hints (with clangd-14)[https://clangd.llvm.org/extensions#inlay-hints)].
