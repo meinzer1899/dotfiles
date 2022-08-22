@@ -68,4 +68,6 @@ CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
 ### nvim
 https://toroid.org/modern-neovim
+https://github.com/AstroNvim/AstroNvim
+https://github.com/p00f/clangd_extensions.nvim
 Move to nvim and enable inlay type hints (with clangd-14)[https://clangd.llvm.org/extensions#inlay-hints)].
