@@ -69,5 +69,12 @@ CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 ### nvim
 https://toroid.org/modern-neovim
 https://github.com/AstroNvim/AstroNvim
+https://github.com/artart222/CodeArt
 https://github.com/p00f/clangd_extensions.nvim
-Move to nvim and enable inlay type hints (with clangd-14)[https://clangd.llvm.org/extensions#inlay-hints)].
+https://github.com/shaun-mathew/Chameleon.nvim
+https://github.com/phaazon/hop.nvim
+https://github.com/lukas-reineke/indent-blankline.nvim
+https://github.com/RRethy/nvim-base16
+https://github.com/chriskempson/base16-shell
+https://github.com/yamatsum/nvim-nonicons
+Move to nvim and enable inlay type hints (with clangd-14)[https://clangd.llvm.org/extensions#inlay-hints)] => use ubuntu 22.04
