@@ -39,6 +39,10 @@ set laststatus=2 " to have colors within lightline status bar
 
 set relativenumber
 set number
+" prevent laggy scrolling using j and k
+" https://eduncan911.com/software/fix-slow-scrolling-in-vim-and-neovim.html
+set nocursorline
+set lazyredraw
 
 " Give more space for displaying messages.
 set cmdheight=2
@@ -104,6 +108,7 @@ if has('nvim-0.3.2') || has("patch-8.1.0360")
 endif
 
 " Autocommand
+au BufNewFile,BufRead *.tpp set filetype=cpp
 augroup vimrcEx
     autocmd!
     " When editing a file, always jump to the last known cursor position.
@@ -138,10 +143,9 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-endwise'
 " Plug 'junegunn/goyo.vim' " Prose Mode
 " Plug 'altercation/vim-colors-solarized' " used by prose mode
-Plug 'joshdick/onedark.vim'
+Plug 'joshdick/onedark.vim' " also nice: EdenEast/nightfox
+let g:onedark_terminal_italics=1
 Plug 'itchyny/lightline.vim'
-" Plug 'dense-analysis/ale' " Asynchronous Linting Engine
-" Plug 'maximbaz/lightline-ale'
 Plug 'airblade/vim-gitgutter'
 Plug 'pechorin/any-jump.vim'
 Plug 'pbogut/fzf-mru.vim' " most recently used files
@@ -177,6 +181,8 @@ Plug 'junegunn/rainbow_parentheses.vim'
 " Intelligently reopen files at your last edit position
 Plug 'farmergreg/vim-lastplace'
 let g:lastplace_ignore_buftype = "quickfix"
+" Easy text exchange operator for Vim
+Plug 'tommcdo/vim-exchange'
 
 " Initialize plugin system
 call plug#end()
@@ -187,8 +193,18 @@ filetype plugin indent on
 "
 " COLORS
 "
-set termguicolors
-syntax enable
+if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
+"For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+"Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+" < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+if (has("termguicolors"))
+    set termguicolors
+endif
+
+syntax on
 colorscheme onedark " also adapt in lightline section
 if has("macunix") || has('win32')
     set clipboard=unnamed
@@ -208,8 +224,12 @@ if executable('ag')
 endif
 
 if executable('rg')
-    let $FZF_DEFAULT_COMMAND='rg --files --follow'
+    let $FZF_DEFAULT_COMMAND='rg --files --follow --hidden --no-ignore-dot'
     set grepprg=rg\ --vimgrep
+endif
+
+if executable('fd')
+    let $FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
 endif
 
 let g:fzf_buffers_jump = 1
@@ -252,7 +272,7 @@ command! -bang -nargs=* Rg
 command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
 
 " FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
-nnoremap <silent> <Leader>;     :Buffers<CR>
+nnoremap <silent> <Leader>,     :Buffers<CR>
 nnoremap <silent> <Leader>rr    :Rg<CR>
 nnoremap <silent> <Leader>t     :Files<CR>
 nnoremap <silent> <Leader>aa    :Ag<CR>
@@ -361,9 +381,11 @@ endif
 " re-enter Terminal-Job mode by pressing i
 
 " COC
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+inoremap <silent><expr> <C-x><C-z> coc#pum#visible() ? coc#pum#stop() : "\<C-x>\<C-z>"
 " Change navigation of completion info popup
-inoremap <silent><expr> <C-j> pumvisible() ? "\<C-n>" : "\<Down>"
-inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
+inoremap <silent><expr> <C-j> coc#pum#visible() ? "\<C-n>" : "\<Down>"
+inoremap <silent><expr> <C-k> coc#pum#visible() ? "\<C-p>" : "\<Up>"
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
@@ -372,12 +394,14 @@ inoremap <silent><expr> <C-k> pumvisible() ? "\<C-p>" : "\<Up>"
 " I think coc-snippets is required
 " (https://github.com/neoclide/coc-snippets)
 inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
+      \ coc#pum#visible() ? coc#_select_confirm() :
       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
+      \ CheckBackSpace() ? "\<TAB>" :
       \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <silent><expr> <c-space> coc#refresh()
 
-function! s:check_back_space() abort
+function! CheckBackSpace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
@@ -393,11 +417,6 @@ command! -nargs=0 Prettier :CocCommand prettier.formatFile
 " else
 "     inoremap <silent><expr> <c-@> coc#refresh()
 " endif
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Remap <C-f> and <C-b> for scroll float windows or popups
 if has('nvim-0.4.0') || has('patch-8.2.0750')
@@ -415,7 +434,7 @@ endif
 if exists('*complete_info')
     inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
 else
-    inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+    inoremap <expr> <cr> coc#pum#visible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
 " Use `[g` and `]g` to navigate diagnostics
