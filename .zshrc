@@ -53,13 +53,16 @@ zinit wait lucid for \
 # A glance at the new for-syntax – load all of the above
 # plugins with a single command. For more information see:
 # https://zdharma-continuum.github.io/zinit/wiki/For-Syntax/
-zinit ice wait
 zinit for \
-    light-mode  zsh-users/zsh-autosuggestions \
-    light-mode  zdharma-continuum/fast-syntax-highlighting \
-                zdharma-continuum/history-search-multi-word \
-    light-mode pick"async.zsh" src"pure.zsh" \
-                sindresorhus/pure
+    light-mode \
+  zsh-users/zsh-autosuggestions \
+    light-mode \
+  zdharma-continuum/fast-syntax-highlighting \
+  zdharma-continuum/history-search-multi-word \
+    light-mode \
+    pick"async.zsh" \
+    src"pure.zsh" \
+  sindresorhus/pure
 
 # Load after compinit, but before zsh-autosuggestions and zsh-syntax-highlighting (zsh-users+fast)
 zinit light Aloxaf/fzf-tab
@@ -67,14 +70,13 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath' # 
 
 # completion
 zinit ice as"completion"
-zinit snippet OMZP::docker/_docker
+zinit snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
 
 zinit ice as"completion"
 zinit snippet OMZP::fd/_fd
 
 ### End of Zinit's installer chunk
 # All of the above using the for-syntax and also z-a-bin-gem-node annex
-
 zinit lucid wait light-mode as"program" from"gh-r" for \
     atclone"cp -vf bat/autocomplete/bat.zsh _bat" \
     atpull"%atclone" \
@@ -87,8 +89,16 @@ zinit lucid wait light-mode as"program" from"gh-r" for \
     @ogham/exa
 
 # Install z.lua
-zinit light skywind3000/z.lua
+zinit ice wait'!0' zinit light skywind3000/z.lua
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
+
+# FZF
+# The following example uses tree command to show the entries of the directory.
+export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
+# follow symbolic links and don't exclude hidden files
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+# To apply the command to CTRL-T as well
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
 export PYTHONPATH=$PYTHONPATH:/home/sebastian/.local/lib/python3.8/site-packages
 export PYTHONPATH=$PYTHONPATH:/home/sebastian/.local/bin
@@ -96,6 +106,8 @@ export PYTHONPATH=$PYTHONPATH:/home/sebastian/.local/bin
 export PATH=$PATH:/snap/bin
 
 bindkey '^k' autosuggest-execute
+
+alias ll="exa --tree --level=2 -a --long"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 fpath+=${ZDOTDIR:-~}/.zsh_functions
