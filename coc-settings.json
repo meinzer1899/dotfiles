@@ -30,10 +30,10 @@
       "command": "cmake-language-server",
       "filetypes": ["cmake"],
       "rootPatterns": [
-        "_build/"
+        "build/RelWithDebInfo"
       ],
       "initializationOptions": {
-        "buildDirectory": "_build"
+        "buildDirectory": "build/RelWithDebInfo"
       }
     },
      "python": {
@@ -141,7 +141,7 @@
   },
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",
-  "clangd.compilationDatabasePath": "_build",
+  "clangd.compilationDatabasePath": "build/RelWithDebInfo",
   "clangd.disableProgressNotifications": true,
   "clangd.showDBChangedNotification": false,
   "clangd.arguments": [
