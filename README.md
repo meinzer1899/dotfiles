@@ -57,6 +57,9 @@ https://github.com/ronniedroid/getnf
 [diff]
     algorithm = histogram
 
+## tldr
+https://github.com/dbrgn/tealdeer and corresponding zsh completion plugin
+
 ## Ideas
 
 ### dotbare

@@ -104,6 +104,9 @@ zinit light "lukechilds/zsh-nvm"
 zinit ice lucid wait as'completion' blockf has'rg'
 zinit snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
 
+zinit ice lucid wait as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
+zinit snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
+
 # FZF
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'tree -C {} | head -200'"
