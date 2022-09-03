@@ -24,10 +24,10 @@ fpath+=~/.zfunc
 autoload -Uz compinit
 compinit
 
-# End of lines added by compinstall
-export NVM_DIR="$HOME/.config/nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
-[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # this loads nvm bash completion
+# # End of lines added by compinstall
+# export NVM_DIR="$HOME/.config/nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh" # This loads nvm
+# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion" # this loads nvm bash completion
 
 # .zshrc
 autoload -U promptinit; promptinit
@@ -91,6 +91,12 @@ zinit lucid wait light-mode as"program" from"gh-r" for \
 # Install z.lua
 zinit ice wait'!0' zinit light skywind3000/z.lua
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
+
+# zsh-nvim
+export NVM_LAZY_LOAD=true
+# disable lazy load for vim command
+export NVM_LAZY_LOAD_EXTRA_COMMANDS=('vim')
+zinit light "lukechilds/zsh-nvm"
 
 # FZF
 # The following example uses tree command to show the entries of the directory.
