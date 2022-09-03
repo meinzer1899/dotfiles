@@ -84,11 +84,12 @@ zinit lucid wait light-mode as"program" from"gh-r" for \
     atpull"%atclone" \
     mv"bat* -> bat" pick"bat/bat" \
     @sharkdp/bat \
-    \
-    atclone"cp -vf completions/exa.zsh _exa" \
-    atpull"%atclone" \
-    mv"bin/exa* -> exa" \
-    @ogham/exa
+
+zinit ice from'gh-r' as'program' sbin'**/exa -> exa' atclone'cp -vf completions/exa.zsh _exa'
+zinit light ogham/exa
+zinit wait lucid for \
+  has'exa' atinit'AUTOCD=1' \
+    zplugin/zsh-exa
 
 # Install z.lua
 zinit ice wait zinit light skywind3000/z.lua
@@ -117,8 +118,6 @@ export PYTHONPATH=$PYTHONPATH:/home/sebastian/.local/bin
 export PATH=$PATH:/snap/bin
 
 bindkey '^k' autosuggest-execute
-
-alias ll="exa --tree --level=2 -a --long"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 fpath+=${ZDOTDIR:-~}/.zsh_functions
