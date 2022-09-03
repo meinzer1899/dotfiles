@@ -50,6 +50,9 @@ zinit wait lucid for \
   atload"unalias grv" \
         OMZP::git
 
+zinit ice blockf
+zinit light zsh-users/zsh-completions
+
 # A glance at the new for-syntax – load all of the above
 # plugins with a single command. For more information see:
 # https://zdharma-continuum.github.io/zinit/wiki/For-Syntax/
@@ -60,8 +63,7 @@ zinit for \
   zdharma-continuum/fast-syntax-highlighting \
   zdharma-continuum/history-search-multi-word \
     light-mode \
-    pick"async.zsh" \
-    src"pure.zsh" \
+    pick"async.zsh" src"pure.zsh" \
   sindresorhus/pure
 
 # Load after compinit, but before zsh-autosuggestions and zsh-syntax-highlighting (zsh-users+fast)
@@ -70,7 +72,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath' # 
 
 # completion
 zinit ice as"completion"
-zinit snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
+zinit snippet OMZP::docker/_docker
 
 zinit ice as"completion"
 zinit snippet OMZP::fd/_fd
@@ -89,7 +91,7 @@ zinit lucid wait light-mode as"program" from"gh-r" for \
     @ogham/exa
 
 # Install z.lua
-zinit ice wait'!0' zinit light skywind3000/z.lua
+zinit ice wait zinit light skywind3000/z.lua
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
 
 # zsh-nvim
@@ -97,6 +99,9 @@ export NVM_LAZY_LOAD=true
 # disable lazy load for vim command
 export NVM_LAZY_LOAD_EXTRA_COMMANDS=('vim')
 zinit light "lukechilds/zsh-nvm"
+
+zinit ice lucid wait as'completion' blockf has'rg'
+zinit snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
 
 # FZF
 # The following example uses tree command to show the entries of the directory.
