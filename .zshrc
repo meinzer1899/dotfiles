@@ -50,6 +50,9 @@ zinit wait lucid for \
   atload"unalias grv" \
         OMZP::git
 
+zinit ice lucid wait as'completion' blockf mv'git-completion.zsh -> _git'
+zinit snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
+
 zinit ice blockf
 zinit light zsh-users/zsh-completions
 
@@ -59,14 +62,20 @@ zinit light zsh-users/zsh-completions
 zinit for \
     light-mode \
   zsh-users/zsh-autosuggestions \
-    light-mode \
   zdharma-continuum/fast-syntax-highlighting \
   zdharma-continuum/history-search-multi-word \
     light-mode \
     pick"async.zsh" src"pure.zsh" \
   sindresorhus/pure
 
+# zsh-nvim
+export NVM_LAZY_LOAD=true
+# disable lazy load for vim command
+export NVM_LAZY_LOAD_EXTRA_COMMANDS=('vim')
+zinit light "lukechilds/zsh-nvm"
+
 # Load after compinit, but before zsh-autosuggestions and zsh-syntax-highlighting (zsh-users+fast)
+zinit ice lucid wait has'fzf'
 zinit light Aloxaf/fzf-tab
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath' # remember to use single quote here!!!
 
@@ -74,7 +83,16 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --color=always $realpath' # 
 zinit ice as"completion"
 zinit snippet OMZP::docker/_docker
 
-zinit ice as"completion"
+zinit ice lucid wait as'completion' blockf has'rg'
+zinit snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
+
+zinit ice lucid wait as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
+zinit snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
+
+zinit ice lucid wait as'completion' blockf has'alacritty'
+zinit snippet https://github.com/alacritty/alacritty/blob/master/extra/completions/_alacritty
+
+zinit ice lucid wait as'completion' blockf has'fd'
 zinit snippet OMZP::fd/_fd
 
 ### End of Zinit's installer chunk
@@ -94,18 +112,6 @@ zinit wait lucid for \
 # Install z.lua
 zinit ice wait zinit light skywind3000/z.lua
 eval "$(lua ~/.zinit/plugins/skywind3000---z.lua/z.lua --init zsh)"
-
-# zsh-nvim
-export NVM_LAZY_LOAD=true
-# disable lazy load for vim command
-export NVM_LAZY_LOAD_EXTRA_COMMANDS=('vim')
-zinit light "lukechilds/zsh-nvm"
-
-zinit ice lucid wait as'completion' blockf has'rg'
-zinit snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
-
-zinit ice lucid wait as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
-zinit snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
 
 # FZF
 # The following example uses tree command to show the entries of the directory.
