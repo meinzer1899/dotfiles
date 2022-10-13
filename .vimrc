@@ -1,8 +1,8 @@
 set encoding=utf-8
 set nocompatible
-" Basti's VIMRC
+" meinzer1899's VIMRC
 "
-map <Space> <Leader>
+let mapleader = "\<Space>"
 nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
 nnoremap <silent> <Leader>m :FZFMru<CR>
@@ -24,7 +24,6 @@ nnoremap g; g;zz
 nnoremap g, g,zz
 
 filetype off
-" inoremap jk <ESC> " use C-c
 inoremap jj <CR>
 command! EVimrc :vs $MYVIMRC
 " ci( does not jump automatically to parenthesis, fix with this two lines
@@ -63,11 +62,14 @@ else
   set signcolumn=yes
 endif
 
-set signcolumn=yes " With this the left bar is broader for line numbers and linter symbols
+" With this the left bar is broader for line numbers and linter symbols
+set signcolumn=yes
 
-set hidden      " Allow buffer switching even if unsaved
+" Allow buffer switching even if unsaved
+set hidden
 set wrap
-set fo=croq " help fo-table.  set fo=croq (only format comments, good for code), set fo=tcrq for text
+" help fo-table.  set fo=croq (only format comments, good for code), set fo=tcrq for text
+set fo=croq
 au BufRead,BufNewFile *.md setlocal textwidth=80
 
 " Fix Vim's ridiculous line wrapping model
@@ -97,9 +99,12 @@ set noswapfile
 " Make it obvious where 80 characters is
 set colorcolumn=+1
 " Searching
-set ignorecase " case insensitive
-set smartcase  " use case if any caps used
-set incsearch  " show match as search proceeds
+" case insensitive
+set ignorecase
+" use case if any caps used
+set smartcase
+" show match as search proceeds
+set incsearch
 
 set diffopt=filler,context:3,iwhite,hiddenoff
 if has('nvim-0.3.2') || has("patch-8.1.0360")
@@ -128,6 +133,13 @@ augroup vimrcEx
     autocmd BufRead,BufNewFile tmux.conf.local set filetype=tmux
     autocmd BufRead,BufNewFile vimrc.local set filetype=vim
 augroup END
+
+" https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
+let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
+if empty(glob(data_dir . '/autoload/plug.vim'))
+  silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
+  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+endif
 
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
@@ -180,7 +192,7 @@ Plug 'junegunn/vim-peekaboo'
 Plug 'junegunn/rainbow_parentheses.vim'
 " Intelligently reopen files at your last edit position
 Plug 'farmergreg/vim-lastplace'
-let g:lastplace_ignore_buftype = "quickfix"
+" let g:lastplace_ignore_buftype = "quickfix"
 " Easy text exchange operator for Vim
 Plug 'tommcdo/vim-exchange'
 
@@ -320,7 +332,6 @@ let g:lightline = {
 
 
 " Prose Mode for distraction free writing
-" FIXME: does not switch to solarized light theme
 function! ProseMode()
     call goyo#execute(0, [])
     set spell noci nosi noai nolist noshowmode noshowcmd
@@ -367,7 +378,7 @@ let g:ctrlsf_auto_focus = {
     \ 'at': 'start',
     \ }
 let g:ctrlsf_search_mode = 'async'
-nmap <Leader>n <Plug>CtrlSFCwordPath<CR>
+nnoremap <Leader>n <Plug>CtrlSFCwordPath<CR>
 
 " TERMINAL
 if has('win32')
@@ -437,16 +448,20 @@ else
     inoremap <expr> <cr> coc#pum#visible() ? "\<C-y>" : "\<C-g>u\<CR>"
 endif
 
+
+" Setup prettier
+command! -nargs=0 Prettier :CocCommand prettier.formatFile
+
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nmap <silent> [g <Plug>(coc-diagnostic-prev)
-nmap <silent> ]g <Plug>(coc-diagnostic-next)
+nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
+nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
 
 " GoTo code navigation.
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gt <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent> gd <Plug>(coc-definition)
+nnoremap <silent> gt <Plug>(coc-type-definition)
+nnoremap <silent> gi <Plug>(coc-implementation)
+nnoremap <silent> gr <Plug>(coc-references)
 
 " Use K to show documentation in preview window.
 nnoremap <silent> K :call <SID>show_documentation()<CR>
@@ -463,15 +478,15 @@ endfunction
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " Symbol renaming and refactoring
-nmap <leader>rn <Plug>(coc-rename)
-nmap <Leader>rf <Plug>(coc-refactor)
+nnoremap <leader>rn <Plug>(coc-rename)
+nnoremap <Leader>rf <Plug>(coc-refactor)
 
 " ccls specific c++
 " call hierarchy
-nmap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true,'levels':5})<CR>
-nmap <silent> gL :call CocLocations('ccls','$ccls/call',{'callee':v:true,'levels':5})<cr>
+nnoremap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true,'levels':5})<CR>
+nnoremap <silent> gL :call CocLocations('ccls','$ccls/call',{'callee':v:true,'levels':5})<cr>
 " outline
-nmap <silent> go :CocFzfList outline<CR>
+nnoremap <silent> go :CocFzfList outline<CR>
 
 " Formatting selected code.
 " xmap <leader>f  <Plug>(coc-format-selected)
@@ -518,7 +533,7 @@ nnoremap <silent> <Leader>o :CocCommand explorer --no-focus --sources=buffer+,fi
 let g:slime_target = "vimterminal"
 let g:slime_vimterminal_cmd = "python"
 " Send whole file to slime via C-c C-x
-nmap <c-c><c-x> :%SlimeSend<cr>
+nnoremap <c-c><c-x> :%SlimeSend<cr>
 
 " coc-yank
 " show list with yanked lines
@@ -535,17 +550,9 @@ let g:indentLine_setColors = 0 "0: highlight conceal color with your colorscheme
 " coc-fzf
 let g:coc_fzf_preview = 'right:40%'
 
-" vim-wordmotion
-let g:wordmotion_nomap = 1
-nmap w          <Plug>WordMotion_w
-nmap b          <Plug>WordMotion_b
-nmap gE         <Plug>WordMotion_gE
-omap aW         <Plug>WordMotion_aW
-cmap <C-R><C-W> <Plug>WordMotion_<C-R><C-W>
-
 " vim-agriculture
-vmap <Leader>rr <Plug>RgRawVisualSelection<cr>
-vmap <Leader>aa <Plug>AgRawVisualSelection<cr>
+vnoremap <Leader>rr <Plug>RgRawVisualSelection<cr>
+vnoremap <Leader>aa <Plug>AgRawVisualSelection<cr>
 
 " rainbow parenthesis
 " Activation based on file type

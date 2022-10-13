@@ -15,6 +15,9 @@ https://github.com/tmux/tmux/wiki/Installing#from-version-control
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 tmux new -s tmux
 
+## zi
+https://wiki.zshell.dev/docs/getting_started/installation
+
 ## cargo
 https://doc.rust-lang.org/cargo/getting-started/installation.html
 https://rust-lang.github.io/rustup/installation/index.html #autocompletion
@@ -34,9 +37,19 @@ dont forget to checkout tagged commit
 https://github.com/junegunn/fzf
 
 ## vim
+
+Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
+
+### vim plug
+Gets installed automatically, see .vimrc.
+vim plug: https://github.com/junegunn/vim-plug
+
+### Installation via zi
+should be installed automatically via zi.
+
+### Manual Installation
 ./configure --with-tlib=ncurses --enable-python3interp=yes
 cd src && make && sudo make install
-vim plug: https://github.com/junegunn/vim-plug
 
 ## node, nvm
 https://github.com/nvm-sh/nvm#installing-and-updating
@@ -81,3 +94,4 @@ https://github.com/RRethy/nvim-base16
 https://github.com/chriskempson/base16-shell
 https://github.com/yamatsum/nvim-nonicons
 Move to nvim and enable inlay type hints (with clangd-14)[https://clangd.llvm.org/extensions#inlay-hints)] => use ubuntu 22.04
+https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
