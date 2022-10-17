@@ -21,67 +21,87 @@
     //     }
     //   }
     // },
-    "dockerfile": {
-      "command": "docker-langserver",
-      "filetypes": ["dockerfile"],
-      "args": ["--stdio"]
-    },
-    "cmake": {
-      "command": "cmake-language-server",
-      "filetypes": ["cmake"],
-      "rootPatterns": [
-        "build/RelWithDebInfo"
-      ],
-      "initializationOptions": {
-        "buildDirectory": "build/RelWithDebInfo"
-      }
-    },
+    // "cmake": {
+    //   "command": "cmake-language-server",
+    //   "filetypes": ["cmake"],
+    //   "rootPatterns": [
+    //     "build/"
+    //   ],
+    //   "initializationOptions": {
+    //     "buildDirectory": "build"
+    //   }
+    // },
      "python": {
       "command": "jedi-language-server",
       "filetypes": ["python"]
     }
   },
   "diagnostic-languageserver.filetypes": {
+    "vim": "vint",
     "sh": "shellcheck",
+    // "cmake": "cmakelint",
     "python": ["flake8", "mypy"],
     "markdown": ["write-good", "markdownlint"]
   },
   "coc.preferences.extensionUpdateCheck": "weekly",
   "diagnostic-languageserver.linters": {
-    "shellcheck": {
-      // linter name, for example: vint
-      "command": "shellcheck", // linter command
-      "rootPatterns": [], // root patterns, default empty array
-      "isStdout": true, // use stdout output, default true
-      "isStderr": false, // use stderr output, default false
-      "debounce": 100, // debounce time
-      "args": ["--format=gcc", "-x", "-"], // args
-      "offsetLine": 0, // offsetline
-      "offsetColumn": 0, // offsetColumn
-      "sourceName": "shellcheck", // source name
-
-      // Using regular expressions:
-      "formatLines": 1, // how much lines for formatPattern[0] to match
+    "vint": {
+      "command": "vint",
+      "debounce": 100,
+      "args": [ "--style-problem", "-"],
+      "offsetLine": 0,
+      "offsetColumn": 0,
+      "sourceName": "vint",
+      "formatLines": 1,
       "formatPattern": [
-        "^([^:]+):(\\d+):(\\d+):\\s+([^:]+):\\s+(.*)$", // line match pattern (javascript regex)
+        "[^:]+:(\\d+):(\\d+):\\s*(.*)(\\r|\\n)*$",
         {
-          "sourceName": 1,
-          "line": 2, // diagnostic line use match group 2
-          "column": 3, // diagnostic column use match group 3
-          "endLine": 2, // diagnostic end line use match group 2. Will default to group from `line`
-          "endColumn": 3, // diagnostic end column use match group 3. Will default to group from `column`
-          "message": [5], // message to display use match group 5
-          "security": 4 // security to use match group 4, ignore if linter do not support security
+          "line": 1,
+          "column": 2,
+          "message": 3
         }
+      ]
+    },
+    "shellcheck": {
+      "command": "shellcheck",
+      "debounce": 100,
+      "args": [
+        "--format",
+        "json",
+        "-"
       ],
+      "sourceName": "shellcheck",
+      "parseJson": {
+        "line": "line",
+        "column": "column",
+        "endLine": "endLine",
+        "endColumn": "endColumn",
+        "message": "${message} [${code}]",
+        "security": "level"
+      },
       "securities": {
-        // security keys, ignore if linter do not support security
-        "error": "error", // [key: string]?: "error" | "warning" | "info" | "hint"
+        "error": "error",
         "warning": "warning",
-        "note": "info"
+        "info": "info",
+        "style": "hint"
       }
     },
-  "flake8": {
+    "zsh": {
+      "command": "zsh",
+      "args": ["-n", "%file"],
+      "isStdout": false,
+      "isStderr": true,
+      "sourceName": "zsh",
+      "formatLines": 1,
+      "formatPattern": [
+        "^[^:]+:(\\d+):\\s+(.*)$",
+        {
+          "line": 1,
+          "message": 2
+        }
+      ]
+    },
+    "flake8": {
       "sourceName": "flake8",
       "command": "flake8",
       "debounce": 200,
@@ -151,7 +171,8 @@
     "--completion-style=detailed",
     "--all-scopes-completion=true"
   ],
-  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/14.0.3/clangd_14.0.3/bin/clangd",
-  "clangd.inlayHints.enable": true,
-  "semanticTokens.filetypes": ["c", "cpp"]
+  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/15.0.1/clangd_15.0.1/bin/clangd",
+  "inlayHint.enable": true,
+  "inlayHint.enableParameter": true,
+  "semanticTokens.enable": true
 }
