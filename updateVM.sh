@@ -2,7 +2,7 @@
 
 tldr --update
 
-# zinit update --parallel && zinit self-update
+zi update --all --parallel
 
 nvm install 'lts/*' --reinstall-packages-from=default --latest-npm
 
