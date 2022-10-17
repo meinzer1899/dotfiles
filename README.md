@@ -35,9 +35,9 @@ dont forget to checkout tagged commit
 
 ## fzf
 https://github.com/junegunn/fzf
+https://github.com/junegunn/fzf-git.sh
 
 ## vim
-
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
 ### vim plug
@@ -50,6 +50,16 @@ should be installed automatically via zi.
 ### Manual Installation
 ./configure --with-tlib=ncurses --enable-python3interp=yes
 cd src && make && sudo make install
+
+### linter
+https://github.com/iamcco/diagnostic-languageserver/wiki/Linters
+
+#### shellcheck
+https://github.com/koalaman/shellcheck#installing
+
+#### vint
+VimL linter
+https://github.com/Vimjas/vint
 
 ## node, nvm
 https://github.com/nvm-sh/nvm#installing-and-updating
@@ -75,6 +85,11 @@ https://github.com/dbrgn/tealdeer and corresponding zsh completion plugin
 
 ## Ideas
 
+### asynctask
+https://github.com/skywind3000/asynctasks.vim
+https://github.com/voldikss/vim-floaterm#asynctasksvim--asyncrunvim
+https://github.com/voldikss/coc-extensions/tree/main/packages/coc-tasks
+
 ### dotbare
 Manage dotfiles and any git directories interactively with fzf
 https://github.com/kazhala/dotbare
@@ -95,3 +110,5 @@ https://github.com/chriskempson/base16-shell
 https://github.com/yamatsum/nvim-nonicons
 Move to nvim and enable inlay type hints (with clangd-14)[https://clangd.llvm.org/extensions#inlay-hints)] => use ubuntu 22.04
 https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
+https://github.com/ibhagwan/fzf-lua
+https://github.com/deathmaz/fzf-lua-asynctasks
