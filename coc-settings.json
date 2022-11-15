@@ -31,75 +31,30 @@
     //     "buildDirectory": "build"
     //   }
     // },
-     "python": {
-      "command": "jedi-language-server",
-      "filetypes": ["python"]
-    }
+     // "python": {
+     //  "command": "jedi-language-server",
+     //  "filetypes": ["python"]
+    // }
   },
   "diagnostic-languageserver.filetypes": {
     "vim": "vint",
     "sh": "shellcheck",
-    // "cmake": "cmakelint",
+    "cmake": "cmake-lint",
     "python": ["flake8", "mypy"],
-    "markdown": ["write-good", "markdownlint"]
+    "markdown": ["write-good", "markdownlint"],
+    "dockerfile": "hadolint",
+    "zsh": "zsh"
   },
-  "coc.preferences.extensionUpdateCheck": "weekly",
+  "diagnostic-languageserver.mergeConfig": true,
   "diagnostic-languageserver.linters": {
-    "vint": {
-      "command": "vint",
-      "debounce": 100,
-      "args": [ "--style-problem", "-"],
-      "offsetLine": 0,
-      "offsetColumn": 0,
-      "sourceName": "vint",
-      "formatLines": 1,
-      "formatPattern": [
-        "[^:]+:(\\d+):(\\d+):\\s*(.*)(\\r|\\n)*$",
-        {
-          "line": 1,
-          "column": 2,
-          "message": 3
-        }
-      ]
-    },
-    "shellcheck": {
-      "command": "shellcheck",
-      "debounce": 100,
+    "cmake-lint": {
       "args": [
-        "--format",
-        "json",
-        "-"
+        "--disabled-codes",
+        "C0301",
+        "C0307",
+        "--",
+        "%filename",
       ],
-      "sourceName": "shellcheck",
-      "parseJson": {
-        "line": "line",
-        "column": "column",
-        "endLine": "endLine",
-        "endColumn": "endColumn",
-        "message": "${message} [${code}]",
-        "security": "level"
-      },
-      "securities": {
-        "error": "error",
-        "warning": "warning",
-        "info": "info",
-        "style": "hint"
-      }
-    },
-    "zsh": {
-      "command": "zsh",
-      "args": ["-n", "%file"],
-      "isStdout": false,
-      "isStderr": true,
-      "sourceName": "zsh",
-      "formatLines": 1,
-      "formatPattern": [
-        "^[^:]+:(\\d+):\\s+(.*)$",
-        {
-          "line": 1,
-          "message": 2
-        }
-      ]
     },
     "flake8": {
       "sourceName": "flake8",
@@ -133,35 +88,12 @@
         "C": "info",
         "N": "hint"
       }
-    },
-    "mypy": {
-      "sourceName": "mypy",
-      "command": "mypy",
-      "args": [
-        "--no-color-output",
-        "--no-error-summary",
-        "--show-column-numbers",
-        "--follow-imports=silent",
-        "--ignore-missing-imports",
-        "%file"
-      ],
-      "formatPattern": [
-        "^.*:(\\d+?):(\\d+?): ([a-z]+?): (.*)$",
-        {
-          "line": 1,
-          "column": 2,
-          "security": 3,
-          "message": 4
-        }
-      ],
-      "securities": {
-        "error": "error"
-      }
     }
   },
+  "coc.preferences.extensionUpdateCheck": "weekly",
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",
-  "clangd.compilationDatabasePath": "build/RelWithDebInfo",
+  "clangd.compilationDatabasePath": "build",
   "clangd.disableProgressNotifications": true,
   "clangd.showDBChangedNotification": false,
   "clangd.arguments": [
