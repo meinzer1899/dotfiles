@@ -8,23 +8,36 @@ export EDITOR=vim
 # export PATHs
 export PATH=$PATH:/usr/local/go/bin
 
+# https://wiki.zshell.dev/community/gallery/collection/themes
+[[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
+# When running: zi update will:
+#     if an update is available, will update the fonts.
+#     repeat the install process to update fonts.
+zi ice if"[[ -d ${HOME}/.local/share/fonts ]] && [[ $OSTYPE = linux* ]]" \
+  id-as"JetBrainsMono" from"gh-r" bpick"JetBrainsMono.zip" extract nocompile depth"1" \
+  atclone="rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f" atpull"%atclone"
+zi light ryanoasis/nerd-fonts
+
 ### annexes
 zi light-mode for z-shell/z-a-meta-plugins @annexes @rust-utils
+zi light z-shell/z-a-bin-gem-node
 
 zi wait lucid for \
         OMZL::git.zsh \
   atload"unalias grv" \
         OMZP::git
 
-zi light-mode for @sindresorhus/pure
-zstyle :prompt:pure:git:stash show yes
+zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload" \
+  PURE_PROMPT_SYMBOL='▶'; PURE_PROMPT_VICMD_SYMBOL='◀'; \
+  zstyle ':prompt:pure:git:stash' show 'yes'" \
+    sindresorhus/pure
 
 zi wait lucid light-mode for \
   OMZP::fancy-ctrl-z \
-  OMZP::nvm
 
-zstyle ':omz:plugins:nvm' lazy true
-zstyle ':omz:plugins:nvm' lazy-cmd nvim vim
+# fast toolchain as code for JS (e.g. node)
+# volta is much faster than nvm, thus nvm is replaced
+zi light cowboyd/zsh-volta
 
 zi ice wait'1' lucid
 zi light laggardkernel/zsh-thefuck
@@ -48,14 +61,19 @@ zi lucid wait light-mode as"program" from"gh-r" for \
     mv"bat* -> bat" pick"bat/bat" \
     @sharkdp/bat \
 
+zi ice lucid wait as'program' has'bat' pick'src/*'
+zi light eth-p/bat-extras
+
+zi ice from'gh-r' as'program' mv'fd* fd' sbin'**/fd(.exe|) -> fd'
+zi light @sharkdp/fd
+
 zi ice lucid wait from'gh-r' as'program' sbin'**/exa -> exa' atclone'cp -vf completions/exa.zsh _exa'
 zi light ogham/exa
 zi wait lucid for \
   has'exa' atinit'AUTOCD=1' \
     zplugin/zsh-exa
 
-zi ice lucid wait as'program' has'bat' pick'src/*'
-zi light eth-p/bat-extras
+### zi pack
 
 # Install the newest zsh
 zi pack for zsh
@@ -63,7 +81,16 @@ zi pack for zsh
 # FZF
 # Download the package with the bin-gem-node annex-utilizing ice list
 # + setting up the key bindings. The "+keys" variants are available for each profile
-zi pack"bgn+keys" for fzf
+# zi pack"bgn+keys" for fzf # did not update fzf binary (was 0.30.0 when 0.38.0 (>1year) was available
+zi for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'gh-r' dl'
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf_completion;
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh -> key-bindings.zsh;
+  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf-tmux.1 -> $ZI[MAN_DIR]/man1/fzf-tmux.1;
+  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZI[MAN_DIR]/man1/fzf.1' \
+    id-as'junegunn/fzf' nocompile pick'/dev/null' sbin'fzf' src'key-bindings.zsh' \
+      junegunn/fzf
+
+source ~/fzf-git.sh/fzf-git.sh
 
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'exa -1 --icons --group-directories-first --color=always {} | head -200'"
@@ -72,27 +99,32 @@ export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --e
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 
-source ~/fzf-git.sh/fzf-git.sh
+# --cmd x is important as zoxide uses z _and_ zi.
+# zi is used for zsh zi
+# if remapped, source this file ~/.zi/bin/zi.zsh
+zi ice as'program' from'gh-r' pick'zoxide' \
+  atclone'ln -s completions/_zoxide -> _zoxide;
+  cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd x > init.zsh' \
+  atpull'%atclone' src'init.zsh' nocompile'!'
+zi light ajeetdsouza/zoxide
 
-# Install z.lua
-# alternative: https://github.com/ajeetdsouza/zoxide
-zi light-mode for @skywind3000/z.lua
-eval "$(lua ~/.zi/plugins/skywind3000---z.lua/z.lua --init zsh enhanced once fzf)"
+# # Install z.lua
+# # alternative: https://github.com/ajeetdsouza/zoxide
+# zi light-mode for @skywind3000/z.lua
+# eval "$(lua ~/.zi/plugins/skywind3000---z.lua/z.lua --init zsh enhanced once fzf)"
 
 zi ice as'program' atclone'rm -f src/auto/config.cache; \ 
   ./configure --prefix=$ZPFX --enable-python3interp=yes' atpull'%atclone' make'all install' pick'$ZPFX/bin/vim'
   zi light vim/vim
 
-# fzf-based tab-completion. Load after all other completion plugins
-zi ice lucid wait has'fzf'
-zi light Aloxaf/fzf-tab
-
 ### completions
 zi ice lucid wait as'completion' blockf mv'git-completion.zsh -> _git'
 zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
 
+# zi ice as"completion"
+# zi snippet OMZP::docker/_docker
 zi ice as"completion"
-zi snippet OMZP::docker/_docker
+zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
 
 zi ice lucid wait as'completion' blockf has'rg'
 zi snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
@@ -105,9 +137,15 @@ zi snippet OMZP::fd/_fd
 
 zi ice lucid wait as'completion' blockf has'cargo'
 zi snippet https://github.com/rust-lang/cargo/blob/master/src/etc/_cargo
+zi ice lucid wait as'completion' blockf has'rustc'
+zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
 
 zi ice lucid wait as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
 zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
+
+# fzf-based tab-completion. Load after all other completion plugins
+zi ice lucid wait has'fzf'
+zi light Aloxaf/fzf-tab
 
 
 # only for git
@@ -145,7 +183,7 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 # # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode
 zi light-mode for \
   atinit"zicompinit; zicdreplay" \
-    z-shell/F-Sy-H \
+    zsh-users/zsh-syntax-highlighting \
   atload"_zsh_autosuggest_start" \
     zsh-users/zsh-autosuggestions \
   blockf atpull'zi creinstall -q .' \
@@ -180,25 +218,25 @@ setopt prompt_subst         # Substitution of parameters inside the prompt each 
 setopt pushd_ignore_dups    # Don't push multiple copies directory onto the directory stack.
 setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposite.
 
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
-zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
+# zstyle ':completion:*' completer _complete _match _approximate
+# zstyle ':completion:*:match:*' original only
+# zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
 
-zstyle ':completion:*:matches' group 'yes'
-zstyle ':completion:*:options' description 'yes'
-zstyle ':completion:*:options' auto-description '%d'
-zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
-zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
-zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
-zstyle ':completion:*' group-name ''
-zstyle ':completion:*' verbose yes
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
-zstyle ':completion:*' use-cache true
-zstyle ':completion:*' rehash true
+# zstyle ':completion:*:matches' group 'yes'
+# zstyle ':completion:*:options' description 'yes'
+# zstyle ':completion:*:options' auto-description '%d'
+# zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
+# zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
+# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
+# zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
+# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+# zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
+# zstyle ':completion:*' group-name ''
+# zstyle ':completion:*' verbose yes
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+# zstyle ':completion:*' use-cache true
+# zstyle ':completion:*' rehash true
 
 ### bindings
 # bindkey -v
@@ -207,4 +245,5 @@ bindkey "^N" down-line-or-search
 bindkey "^E" autosuggest-execute
 
 ### alias
+alias v="vim"
 alias nv="nvim"

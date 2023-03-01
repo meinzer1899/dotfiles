@@ -10,6 +10,7 @@ setxkbmap -option ctrl:nocaps such that it
 
 ## lua
 
+not needed if zoxide is used in .zshrc
 for zsh extension z.lua
 https://www.lua.org/download.html -> Building (sudo make install)
 
@@ -23,32 +24,44 @@ tmux new -s tmux
 
 https://wiki.zshell.dev/docs/getting_started/installation
 
-## cargo
+## cargo and rust
+
+Gets installed by zi.
 
 https://doc.rust-lang.org/cargo/getting-started/installation.html
 https://rust-lang.github.io/rustup/installation/index.html #autocompletion
 
+Search rust book via cli:
+
+https://github.com/0xhiro/thebook
+
 ## fd
 
+Gets installed by zi.
 https://github.com/sharkdp/fd#installation
 
 ## rg
 
+Gets installed by zi.
 https://github.com/BurntSushi/ripgrep#installation
 Clone repo, cd into repo, cargo install --path .
 
 ## zsh
 
+Gets installed by zi.
 https://github.com/zsh-users/zsh/blob/zsh-5.8.1/INSTALL (adapt version)
 dont forget to checkout tagged commit
 
 ## fzf
 
+Gets installed by zi.
 https://github.com/junegunn/fzf
+This gets not installed by zi.
 https://github.com/junegunn/fzf-git.sh
 
 ## vim
 
+Gets installed by zi.
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
 ### vim plug
@@ -56,20 +69,15 @@ Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 Gets installed automatically, see .vimrc.
 vim plug: https://github.com/junegunn/vim-plug
 
-### Installation via zi
-
-should be installed automatically via zi.
-
-### Manual Installation
-
-`./configure --with-tlib=ncurses --enable-python3interp=yes
-cd src && make && sudo make install`
-
 ### linter
 
 https://github.com/iamcco/diagnostic-languageserver/wiki/Linters
 All of them are configured via coc-diagnostic. Activate them by mapping the
 linter to the desired filetype in `coc-settings.json`.
+
+#### bash-language-server
+
+`volta install bash-language-server`
 
 #### shellcheck
 
@@ -85,6 +93,7 @@ https://github.com/Vimjas/vint
 https://github.com/hadolint/hadolint
 * tip: download release binary, cp to /usr/bin
 * vim filetype for Dockerfiles is `dockerfiles`
+* TODO: download & update via zi
 
 ## node, nvm
 
@@ -106,46 +115,9 @@ https://stackoverflow.com/questions/51582604/how-to-use-cpplint-code-style-check
 https://llvm.org/docs/CMake.html
 https://github.com/include-what-you-use/include-what-you-use#how-to-build-as-part-of-llvm
 
-  llvm-project/build$ cmake -G "Unix Makefiles" -DLLVM_ENABLE_PROJECTS=clang -DLLVM_EXTERNAL_PROJECTS=iwyu -DLLVM_EXTERNAL_IWYU_SOURCE_DIR=/path/to/iwyu /path/to/llvm-project/llvm
-  llvm-project/build$ make
+`llvm-project/build$ cmake -G "Unix Makefiles" -DLLVM_ENABLE_PROJECTS=clang -DLLVM_EXTERNAL_PROJECTS=iwyu -DLLVM_EXTERNAL_IWYU_SOURCE_DIR=/path/to/iwyu ../llvm`
 
-## markdown-lint & write-good
-
-https://github.com/btford/write-good
-https://github.com/DavidAnson/markdownlint
-
-## python
-
-https://flake8.pycqa.org/en/latest/index.html with https://github.com/MartinThoma/flake8-simplify
-more extensions: https://github.com/DmytroLitvinov/awesome-flake7-extensions
-
-## Nerdfont
-
-https://github.com/ronniedroid/getnf
-
-## .gitconfig
-
-`
-[core]
-    editor = vim
-[diff]
-    algorithm = histogram
-`
-
-## language references
-
-https://github.com/jeaye/stdman
-https://zealdocs.org/ and https://cukic.co/2022/04/02/fuzzy-search-documentation/
-
-## keybindings
-
-### tmux
-
-`CTRL+space + <`: show menu for current pane (swap, kill,...)
-
-## Ideas
-
-### vim
+`llvm-project/build$ sudo cmake --build . --target install`
 
 - [ ] update .vimrc with comments from https://github.com/nvim-zh/minimal_vim/blob/master/init.vim
 - [ ] Read series https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
@@ -153,10 +125,12 @@ https://zealdocs.org/ and https://cukic.co/2022/04/02/fuzzy-search-documentation
 ### asynctask
 
 https://github.com/skywind3000/asynctasks.vim
+https://github.com/albertomontesg/lightline-asyncrun
+https://github.com/deathmaz/fzf-lua-asynctasks (neovim)
 https://github.com/voldikss/vim-floaterm#asynctasksvim--asyncrunvim
 https://github.com/voldikss/coc-extensions/tree/main/packages/coc-tasks
 
-### dotfiles
+### dotfiles management
 
 - Manage dotfiles and any git directories interactively with fzf https://github.com/kazhala/dotbare
 - https://dotfiles.github.io/
@@ -169,6 +143,7 @@ CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
 https://toroid.org/modern-neovim
 https://github.com/AstroNvim/AstroNvim
+https://nvchad.com/
 https://github.com/artart222/CodeArt
 https://github.com/p00f/clangd_extensions.nvim
 https://github.com/shaun-mathew/Chameleon.nvim
