@@ -1,4 +1,5 @@
 set encoding=utf-8
+" nocompatible needed by vim-polyglot
 set nocompatible
 " meinzer1899's VIMRC
 "
@@ -23,9 +24,7 @@ nnoremap g# g#zz
 nnoremap g; g;zz
 nnoremap g, g,zz
 
-filetype off
 inoremap jj <CR>
-command! EVimrc :vs $MYVIMRC
 " ci( does not jump automatically to parenthesis, fix with this two lines
 nnoremap ci( f(ci(
 nnoremap ci) f)ci)
@@ -38,10 +37,6 @@ set laststatus=2 " to have colors within lightline status bar
 
 set relativenumber
 set number
-" prevent laggy scrolling using j and k
-" https://eduncan911.com/software/fix-slow-scrolling-in-vim-and-neovim.html
-set nocursorline
-set lazyredraw
 
 " Give more space for displaying messages.
 set cmdheight=2
@@ -150,22 +145,30 @@ Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
-Plug 'tpope/vim-dispatch' " Asynchronous build and test dispatcher 
+" Asynchronous build and test dispatcher
+Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-endwise'
-" Plug 'junegunn/goyo.vim' " Prose Mode
-" Plug 'altercation/vim-colors-solarized' " used by prose mode
-Plug 'joshdick/onedark.vim' " also nice: EdenEast/nightfox
+Plug 'tpope/vim-sensible'
+Plug 'tpope/vim-sleuth'
+ " Prose Mode
+" Plug 'junegunn/goyo.vim'
+" used by prose mode
+" Plug 'altercation/vim-colors-solarized'
+ " also nice: EdenEast/nightfox
+Plug 'joshdick/onedark.vim'
 let g:onedark_terminal_italics=1
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'pechorin/any-jump.vim'
-Plug 'pbogut/fzf-mru.vim' " most recently used files
-Plug 'junegunn/limelight.vim' " Hyperfocus writing in Vim
+" most recently used files
+Plug 'pbogut/fzf-mru.vim'
+" Hyperfocus writing in Vim
+Plug 'junegunn/limelight.vim'
 Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
-Plug 'metakirby5/codi.vim'
+" Plug 'metakirby5/codi.vim'
 Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-explorer coc-json coc-docker coc-diagnostic coc-snippets coc-yank'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
@@ -176,7 +179,7 @@ Plug 'stsewd/fzf-checkout.vim'
 Plug 'jpalardy/vim-slime'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
-Plug 'dbeniamine/cheat.sh-vim'
+" Plug 'dbeniamine/cheat.sh-vim'
 Plug 'unblevable/quick-scope'
 Plug 'ilyachur/cmake4vim'
 Plug 'muellan/vim-brace-for-umlauts'
