@@ -1,44 +1,13 @@
 {
   "languageserver": {
-    // "ccls": {
-    //   "command": "ccls",
-    //   "filetypes": ["c", "cpp", "cuda", "objc", "objcpp"],
-    //   "rootPatterns": [".ccls-root", "_build/compile_commands.json", ".git/"],
-    //   "initializationOptions": {
-    //     "compilationDatabaseDirectory": "_build",
-    //     "highlight": { "lsRanges": true },
-    //     "cache": {
-    //       "directory": "/tmp/ccls"
-    //     },
-    //     "client": {
-    //       "snippetSupport": true
-    //     },
-    //     "index": {
-    //       "onChange": true
-    //     },
-    //     "diagnostics": {
-    //       "onChange": 500
-    //     }
-    //   }
-    // },
-    // "cmake": {
-    //   "command": "cmake-language-server",
-    //   "filetypes": ["cmake"],
-    //   "rootPatterns": [
-    //     "build/"
-    //   ],
-    //   "initializationOptions": {
-    //     "buildDirectory": "build"
-    //   }
-    // },
-     // "python": {
-     //  "command": "jedi-language-server",
-     //  "filetypes": ["python"]
-    // }
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"]
+    }
   },
   "diagnostic-languageserver.filetypes": {
     "vim": "vint",
-    "sh": "shellcheck",
     "cmake": "cmake-lint",
     "python": ["flake8", "mypy"],
     "markdown": ["write-good", "markdownlint"],
