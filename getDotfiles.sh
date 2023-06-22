@@ -4,6 +4,7 @@ mkdir -p .config/tealdeer
 mkdir -p .config/bat
 
 cp ~/.zshrc .
+cp ~/.zshenv .
 cp ~/.vimrc .
 cp ~/.tmux.conf .
 cp ~/.vim/coc-settings.json .
