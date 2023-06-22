@@ -59,7 +59,8 @@
       }
     }
   },
-  "coc.preferences.extensionUpdateCheck": "weekly",
+  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.source.file.ignoreHidden": false,
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",
   // "clangd.compilationDatabasePath": "build/", // compilationDatabaseCandidates is ignored if you specify a value here :(
@@ -81,9 +82,10 @@
     "--suggest-missing-includes"
   ],
   "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/16.0.2/clangd_16.0.2/bin/clangd",
+  "yaml.schemaStore.enable": true,
   "inlayHint.enable": true,
-  "inlayHint.display": true,
-  // "inlayHint.enableParameter": true,
+  "inlayHint.display": false,
+  "inlayHint.enableParameter": false,
   "semanticTokens.enable": true,
   "colors.enable": true,
   "diagnostic.format": "%message [%source]",
