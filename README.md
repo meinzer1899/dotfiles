@@ -24,6 +24,11 @@ tmux new -s tmux
 
 https://wiki.zshell.dev/docs/getting_started/installation
 
+zshrc's
+https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
+https://github.com/callistachang/dots/blob/main/dot_zshrc
+
+
 ## cargo and rust
 
 Gets installed by zi.
@@ -35,6 +40,10 @@ Search rust book via cli:
 
 https://github.com/0xhiro/thebook
 
+## tealdeer
+
+`cargo install tealdeer`
+
 ## fd
 
 Gets installed by zi.
@@ -42,27 +51,58 @@ https://github.com/sharkdp/fd#installation
 
 ## rg
 
-Gets installed by zi.
 https://github.com/BurntSushi/ripgrep#installation
-Clone repo, cd into repo, cargo install --path .
+
+Gets installed by zi.
+
+Currently, I use a local installation, because the last ripgrep relase is from
+Jun 12, 2021.
+
+Clone repo, cd into repo, 
+cargo build --release --features 'pcre2' (pcre2 needed by anyjump.vim).
+cargo install --path .
+sudo cp $(which rg) /usr/local/bin/
 
 ## zsh
 
 Gets installed by zi.
+
+If, on a fresh system, zi cannot install zsh (because zsh is not available), try
+to install zsh in a location, where no sudo privileges are needed (local?)
 https://github.com/zsh-users/zsh/blob/zsh-5.8.1/INSTALL (adapt version)
 dont forget to checkout tagged commit
 
 ## fzf
 
-Gets installed by zi.
+For FZF-TMUX to find fzf executable, change
+`fzf="$(command -v fzf 2> /dev/null)" || fzf=$HOME/.zi/polaris/bin/fzf`
+
+Gets installed by zi
+
 https://github.com/junegunn/fzf
-This gets not installed by zi.
-https://github.com/junegunn/fzf-git.sh
+
+This gets not installed by zi: https://github.com/junegunn/fzf-git.sh
+
+Vim Integration: https://github.com/junegunn/fzf/blob/master/README-VIM.md
+
+## docker
+
+completion gets installed automatically by zi
+https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ## vim
 
+https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
+
 Gets installed by zi.
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
+
+### devcontainer
+
+https://gitlab.com/smoores/open-devcontainer
+https://stackoverflow.com/questions/72397020/containerizing-vim-with-plugins
+https://github.com/nemanjan00/dev-environment
+https://github.com/esensar/nvim-dev-container
 
 ### vim plug
 
@@ -71,9 +111,12 @@ vim plug: https://github.com/junegunn/vim-plug
 
 ### linter
 
+https://github.com/caramelomartins/awesome-linters
+
 https://github.com/iamcco/diagnostic-languageserver/wiki/Linters
 All of them are configured via coc-diagnostic. Activate them by mapping the
 linter to the desired filetype in `coc-settings.json`.
+https://github.com/iamcco/coc-diagnostic/blob/master/src/config.ts
 
 #### bash-language-server
 
@@ -95,17 +138,17 @@ https://github.com/hadolint/hadolint
 * vim filetype for Dockerfiles is `dockerfiles`
 * TODO: download & update via zi
 
-## node, nvm
-
-https://github.com/nvm-sh/nvm#installing-and-updating
-
 ## ccls
 
 https://github.com/MaskRay/ccls/wiki/Build
 https://github.com/MaskRay/ccls/wiki/Install
 
-## CMake language server
+## CMake
 
+### cmake4vim
+https://github.com/ilyachur/cmake4vim/
+
+### language server
 https://github.com/regen100/cmake-language-server
 
 ## llvm, include-what-you-use
@@ -122,27 +165,45 @@ https://github.com/include-what-you-use/include-what-you-use#how-to-build-as-par
 - [ ] update .vimrc with comments from https://github.com/nvim-zh/minimal_vim/blob/master/init.vim
 - [ ] Read series https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
 
-### asynctask
+## asynctask
 
 https://github.com/skywind3000/asynctasks.vim
 https://github.com/albertomontesg/lightline-asyncrun
 https://github.com/deathmaz/fzf-lua-asynctasks (neovim)
 https://github.com/voldikss/vim-floaterm#asynctasksvim--asyncrunvim
 https://github.com/voldikss/coc-extensions/tree/main/packages/coc-tasks
+https://github.com/EthanJWright/vs-tasks.nvim
 
-### dotfiles management
+## dotfiles management
 
 - Manage dotfiles and any git directories interactively with fzf https://github.com/kazhala/dotbare
 - https://dotfiles.github.io/
 
-### mold
+## mold
 
 CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
-### nvim
+## nvim
 
-https://toroid.org/modern-neovim
+https://www.youtube.com/watch?v=stqUbv-5u2s TJ De Vries  Effective Neovim: Instant IDE
+https://github.com/nvim-lua/kickstart.nvim
+
+lazy nvim
+https://github.com/thieung/nvim
+
+AstroNvim
 https://github.com/AstroNvim/AstroNvim
+https://astronvim.com/Recipes/advanced_lsp
+
+https://github.com/askfiy/nvim
+
+https://github.com/kutsan/dotfiles/blob/master/.config/nvim/plugin/settings.lua
+https://github.com/nicknisi/dotfiles
+https://github.com/disrupted/dotfiles/tree/master/.config/nvim
+https://github.com/danymat/champagne
+https://toroid.org/modern-neovim
+https://github.com/joshukraine/dotfiles/tree/master/nvim
+
 https://nvchad.com/
 https://github.com/artart222/CodeArt
 https://github.com/p00f/clangd_extensions.nvim
@@ -152,8 +213,24 @@ https://github.com/lukas-reineke/indent-blankline.nvim
 https://github.com/RRethy/nvim-base16
 https://github.com/chriskempson/base16-shell
 https://github.com/yamatsum/nvim-nonicons
-Move to nvim and enable inlay type hints (with clangd-14)[https://clangd.llvm.org/extensions#inlay-hints)] => use ubuntu 22.04
 https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
 https://github.com/ibhagwan/fzf-lua
 https://github.com/deathmaz/fzf-lua-asynctasks
 https://github.com/ggandor/leap.nvim vim sneak alternative
+https://github.com/aserowy/tmux.nvim
+https://gitlab.com/ivan-cukic/nvim-telescope-zeal-cli
+https://github.com/jedrzejboczar/toggletasks.nvim
+https://github.com/sindrets/diffview.nvim
+
+### other
+
+https://github.com/tummychow/git-absorb
+
+https://github.com/jarun/ddgr with
+https://github.com/tats/w3m/blob/master/doc/README
+
+### offline documentation
+
+https://zealdocs.org/
+https://cukic.co/2022/04/02/fuzzy-search-documentation/
+https://gitlab.com/ivan-cukic/zeal-lynx-cli
