@@ -2,10 +2,12 @@
 
 tldr --update
 
+# https://wiki.zshell.dev/docs/guides/commands
 zi update --all --parallel --quiet
 
 # installs latest LTS with volta
 volta install node
+# from time to time, uninstall old node versions via rm -rf in ~/.volta/tools/image/node/<version>
 
 ~/.tmux/plugins/tpm/bin/update_plugins all
 ~/.tmux/plugins/tpm/bin/clean_plugins
@@ -20,4 +22,18 @@ pip freeze --local | tee before_upgrade.txt | grep -v '^\-e' | cut -d = -f 1  | 
 # vim
 vim +PlugUpdate +CocUpdate +PlugClean! +qall
 
-# font gets updated via zsh (.zshrc)
+# tmux
+# manual via repository
+#
+# ripgrep rg, fd and bat
+# because of bug (error command rg ...) in fzf.vim (or vim shellescape) when calling Rg or RG
+#
+sudo cp ~/.zi/plugins/sharkdp---bat/bat/bat ~/.zi/plugins/sharkdp---fd/fd/fd ~/.zi/plugins/BurntSushi---ripgrep/target/release/rg /usr/local/bin
+#
+#
+# hadolint
+# https://github.com/hadolint/hadolint
+# tip: download release binary, cp to /usr/bin
+#
+# fzf-git.sh
+# cd ~/fzf-git.sh && git pull
