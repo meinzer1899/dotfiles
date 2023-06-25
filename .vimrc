@@ -1,9 +1,146 @@
-set encoding=utf-8
-" nocompatible needed by vim-polyglot
-set nocompatible
 " meinzer1899's VIMRC
+
+" Vim guides
+" https://google.github.io/styleguide/vimscriptguide.xml
+" https://rbtnn.hateblo.jp/entry/2014/12/28/010913
+" https://github.com/skwp/dotfiles/blob/master/vimrc
+
+" Use Vim settings, rather then Vi settings (much better!).
+" This must be first, because it changes other options as a side effect.
+set nocompatible
+set encoding=utf-8
+scriptencoding utf-8
+
+" Open new split panes to right and buttom
+set splitbelow
+
+" lightline shows the mode already
+set noshowmode
+" to have colors within lightline status bar
+set laststatus=2
+
+set relativenumber
+"Line numbers are good
+set number
+
+"No sounds
+set visualbell
+"Reload files changed outside vim
+set autoread
+
+"Show current mode down the bottom
+set showmode
+
+" Give more space for displaying messages.
+set cmdheight=2
+
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu| (coc)
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+set signcolumn=yes
+
+" Allow buffer switching even if unsaved
+set hidden
+set wrap
+" help fo-table.  set fo=croq (only format comments, good for code), set fo=tcrq for text
+set fo=croq
+
+" Fix Vim's ridiculous line wrapping model
+set whichwrap=<,>,[,],h,l
+" set nowrap       "Don't wrap lines
+"Wrap lines at convenient points
+set linebreak
+
+" ================ Folds ============================
+
+"fold based on indent
+set foldmethod=indent
+"deepest fold is 3 levels
+set foldnestmax=3
+"dont fold by default
+set nofoldenable
+
+"" ================ Indentation ======================
 "
-let mapleader = "\<Space>"
+" show existing tab with 4 spaces width
+" set tabstop=4
+" when indenting with '>', use 4 spaces width
+set shiftwidth=4
+" On pressing tab, insert 4 spaces
+set expandtab
+set autoindent
+set tabstop=4
+set smarttab
+set smartindent
+
+" Auto indent pasted text
+nnoremap p p=`]<C-o>
+nnoremap P P=`]<C-o>
+
+" post plugin section
+" Also load indent files, to automatically do language-dependent indenting.
+filetype plugin indent on
+
+" Display extra whitespace
+set list listchars=tab:»·,trail:·,nbsp:·
+
+" --- backup and swap files ---
+" I save all the time, those are annoying and unnecessary...
+set nobackup
+set nowritebackup
+set noswapfile
+
+" Make it obvious where 80 characters is
+set colorcolumn=+1
+
+" Searching
+" case insensitive...
+set ignorecase
+" unlesse any caps are used
+set smartcase
+" show match as search proceeds
+set incsearch
+" Highlight searches by default
+set hlsearch
+" and unhighlight when pressing C-c
+nnoremap <nowait><silent> <C-C> :noh<CR>
+
+" ================ Security ==========================
+set modelines=0
+set nomodeline
+
+" turn on syntax highlighting
+syntax on
+
+" ================ Completion =======================
+
+set wildmode=list:longest
+set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
+set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
+set wildignore+=*vim/backups*
+set wildignore+=*sass-cache*
+set wildignore+=*DS_Store*
+set wildignore+=vendor/rails/**
+set wildignore+=vendor/cache/**
+set wildignore+=*.gem
+set wildignore+=log/**
+set wildignore+=tmp/**
+set wildignore+=*.png,*.jpg,*.gif
+
+" ================ Scrolling ========================
+
+"Start scrolling when we're 8 lines away from margins
+set scrolloff=8
+set sidescrolloff=15
+set sidescroll=1
+
+let g:mapleader = ' '
 nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
 nnoremap <silent> <Leader>m :FZFMru<CR>
@@ -14,6 +151,15 @@ nnoremap <silent> <Leader>cc :Commands<CR>
 nnoremap <silent> <Leader>q :@:<CR>
 nnoremap <silent> <Leader>co :Copen<CR> G<CR>
 nnoremap <silent> <Leader>rc :vs $MYVIMRC<CR>
+
+" enable a simple form of dot repetition over visual line selections
+xnoremap . :norm.<CR>
+" clones paragraph and pastes it below copied from paragraph
+nnoremap cp yap<S-}>p
+" Control-v is a common system level shortcut to paste from the clipboard. So why not use it also to paste from the system clipboard when in insert mode.
+inoremap <C-v> <C-r>+
+" Automatically equalize splits when Vim is resized (e.g. because of tmux split)
+autocmd VimResized * wincmd =
 
 " mappings to make search results appear in the middle of the screen
 " https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
@@ -31,96 +177,9 @@ inoremap jj <CR>
 nnoremap ci( f(ci(
 nnoremap ci) f)ci)
 
-" Open new split panes to right and buttom
-set splitbelow
-
-set noshowmode " lightline shows the mode already
-set laststatus=2 " to have colors within lightline status bar
-
-set relativenumber
-set number
-
-" Give more space for displaying messages.
-set cmdheight=2
-
-" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
-" delays and poor user experience.
-set updatetime=300
-
-" Don't pass messages to |ins-completion-menu| (coc)
-set shortmess+=c
-
-" Always show the signcolumn, otherwise it would shift the text each time
-" diagnostics appear/become resolved.
-if has("patch-8.1.1564")
-  " Recently vim can merge signcolumn and number column into one
-  set signcolumn=number
-else
-  set signcolumn=yes
-endif
-
-" With this the left bar is broader for line numbers and linter symbols
-set signcolumn=yes
-
-" Allow buffer switching even if unsaved
-set hidden
-set wrap
-" help fo-table.  set fo=croq (only format comments, good for code), set fo=tcrq for text
-set fo=croq
-
-" Fix Vim's ridiculous line wrapping model
-set ww=<,>,[,],h,l
-
-"Tabs and spacing
-" show existing tab with 4 spaces width
-" set tabstop=4
-" when indenting with '>', use 4 spaces width
-set shiftwidth=4
-" On pressing tab, insert 4 spaces
-set expandtab
-set autoindent
-set cindent
-set tabstop=4
-set smarttab
-
-" Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
-
-" --- backup and swap files ---
-"  " I save all the time, those are annoying and unnecessary...
-set nobackup
-set nowritebackup
-set noswapfile
-
-" Make it obvious where 80 characters is
-set colorcolumn=+1
-au BufRead,BufNewFile *.md setlocal textwidth=80
-" Searching
-" case insensitive
-set ignorecase
-" use case if any caps used
-set smartcase
-" show match as search proceeds
-set incsearch
-
-" ================ Completion =======================
-
-set wildmode=list:longest
-set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
-set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
-set wildignore+=*vim/backups*
-set wildignore+=*sass-cache*
-set wildignore+=*DS_Store*
-set wildignore+=vendor/rails/**
-set wildignore+=vendor/cache/**
-set wildignore+=*.gem
-set wildignore+=log/**
-set wildignore+=tmp/**
-set wildignore+=*.png,*.jpg,*.gif
-
 " diffopt
 set diffopt=filler,context:3,iwhite,hiddenoff
-if has('nvim-0.3.2') || has("patch-8.1.0360")
+if has('nvim-0.3.2') || has('patch-8.1.0360')
     " https://old.reddit.com/r/vim/comments/cn20tv/tip_histogrambased_diffs_using_modern_vim/
     set diffopt+=internal,algorithm:histogram,indent-heuristic
 endif
@@ -142,6 +201,7 @@ augroup vimrcEx
 
     " Set syntax highlighting for specific file types
     autocmd BufRead,BufNewFile *.md set filetype=markdown
+    autocmd BufRead,BufNewFile *.md setlocal textwidth=80
     autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
     autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=sh
     autocmd BufRead,BufNewFile gitconfig.local set filetype=gitconfig
@@ -160,9 +220,9 @@ if empty(glob(data_dir . '/autoload/plug.vim'))
 endif
 
 call plug#begin('~/.vim/plugged')
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-Plug 'mileszs/ack.vim'
+" Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
@@ -192,13 +252,15 @@ Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 " Plug 'metakirby5/codi.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': ':CocInstall coc-explorer coc-json coc-docker coc-diagnostic coc-snippets coc-yank coc-jedi coc-rust-analyzer'}
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'CocInstall coc-explorer coc-json coc-docker coc-diagnostic coc-snippets coc-yank coc-jedi coc-rust-analyzer coc-yaml'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
 Plug 'stsewd/fzf-checkout.vim'
 " Plug 'goerz/jupytext.vim'
 " Plug 'jackguo380/vim-lsp-cxx-highlight'
+" or (newer)
+" Plug 'bfrg/vim-cpp-modern'
 Plug 'jpalardy/vim-slime'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
@@ -213,6 +275,7 @@ Plug 'antoinemadec/coc-fzf'
 Plug 'chaoren/vim-wordmotion'
 Plug 'rust-lang/rust.vim'
 Plug 'jesseleite/vim-agriculture'
+Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'romainl/vim-qf'
 Plug 'junegunn/vim-peekaboo'
 Plug 'luochen1990/rainbow'
@@ -220,14 +283,14 @@ Plug 'luochen1990/rainbow'
 let g:rainbow_active = 1
 " Intelligently reopen files at your last edit position
 Plug 'farmergreg/vim-lastplace'
-" let g:lastplace_ignore_buftype = "quickfix"
+" let g:lastplace_ignore_buftype = 'quickfix'
 " Easy text exchange operator for Vim
 Plug 'tommcdo/vim-exchange'
 " add buffers to tabline
 Plug 'mengelbrecht/lightline-bufferline'
 " always show tabline
 set showtabline=2
-Plug 'KabbAmine/zeavim.vim'
+" Plug 'KabbAmine/zeavim.vim'
 " If you don't have nodejs and yarn
 " use pre build, add 'vim-plug' to the filetype list so vim-plug can update this plugin
 Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'plantuml', 'vim-plug']}
@@ -235,53 +298,46 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': 
 " these filetypes will have MarkdownPreview... commands
 let g:mkdp_filetypes = ['markdown', 'plantuml']
 " Plug 'justinmk/vim-sneak'
+Plug 'kana/vim-niceblock'
+Plug 'z-shell/zi-vim-syntax'
 
 " Initialize plugin system
 call plug#end()
-
-" post plugin section
-" Also load indent files, to automatically do language-dependent indenting.
-filetype plugin indent on
 "
 " COLORS
 "
-if (has("nvim"))
+if (has('nvim'))
     "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
     let $NVIM_TUI_ENABLE_TRUE_COLOR=1
 endif
 "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
 "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
 " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-if (has("termguicolors"))
+if (has('termguicolors'))
     set termguicolors
 endif
 
-syntax on
-colorscheme onedark " also adapt in lightline section
-if has("macunix") || has('win32')
+" also adapt in lightline section
+colorscheme onedark
+if has('macunix') || has('win32')
     set clipboard=unnamed
-elseif has("unix")
+elseif has('unix')
     set clipboard=unnamedplus
 endif
 
 " FZF
-" Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
-if executable('ag')
-    " Use Ag over Grep
-    set grepprg=ag\ --nogroup\ --nocolor
-    let g:ackprg='ag --vimgrep'
-
-    " Use ag in fzf for listing files. Lightning fast and respects .gitignore
-    let $FZF_DEFAULT_COMMAND='ag --follow -H --literal --files-with-matches --nocolor -g ""'
-endif
-
 if executable('rg')
-    let $FZF_DEFAULT_COMMAND='rg --files --follow --hidden --no-ignore-dot'
+    " use the same as in.zshrc
+    " let $FZF_DEFAULT_COMMAND='rg --files --follow --hidden --no-ignore-dot'
     set grepprg=rg\ --vimgrep
 endif
 
 if executable('fd')
-    let $FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+    " use the same as in.zshrc
+    " let $FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
+    " https://github.com/junegunn/fzf.vim#completion-functions
+    " path completion with fd in insert mode
+    inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
 endif
 
 let g:fzf_buffers_jump = 1
@@ -327,8 +383,9 @@ command! -bang -nargs=* Rg
 " A lot faster, but without fuzzy find
 " from: https://github.com/junegunn/fzf.vim#example-advanced-ripgrep-integration
 " added: trim whitespaces when displaying results
+" OWN: fast enough to dont respect ignore files (git, .dotfiles) in search
 function! RipgrepFzf(query, fullscreen)
-  let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --trim -- %s || true'
+    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --trim --no-ignore -- %s || true'
   let initial_command = printf(command_fmt, shellescape(a:query))
   let reload_command = printf(command_fmt, '{q}')
   let spec = {'options': ['--disabled', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
@@ -357,18 +414,13 @@ nnoremap <silent> <Leader>bc    :BCommits<CR>
 nnoremap <Leader>gj :diffget //3<CR>
 nnoremap <Leader>gf :diffget //2<CR>
 
-" makes j and k move by wrapped line unless I had a count, in which case it
-" behaves normally
-nnoremap <expr> k (v:count == 0 ? 'gk' : 'k')
-nnoremap <expr> j (v:count == 0 ? 'gj' : 'j')
+" display line movements unless preceded by a count whilst also recording jump points for movements larger than five lines:
+nnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
+nnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
 
 " LIGHTLINE
 " register compoments:
 call lightline#coc#register()
-
-" Lightline bufferline
-" update modified indicator immediately
-autocmd BufWritePost,TextChanged,TextChangedI * call lightline#update()
 
 " switch to buffers using their ordinal number in the bufferline
 let g:lightline#bufferline#show_number  = 2
@@ -487,11 +539,20 @@ let g:ctrlsf_search_mode = 'async'
 nnoremap <Leader>n <Plug>CtrlSFCwordPath -hidden<CR>
 vmap     <leader>N <Plug>CtrlSFVwordPath
 
+" autocmd TerminalWinOpen *
+"       \ if &buftype == 'terminal' |
+"   \   resize 16 |
+"   \   setlocal termwinsize=16x0 |
+"   \   setlocal nowrap |
+"   \ endif
 " TERMINAL
 if has('win32')
     noremap <Leader>p :tab term<CR>
 else
-    noremap <silent><Leader>p :term ++rows=12<CR>source $HOME/.bash_profile<CR>clear<CR>
+    " set termwinsize=16x0
+    noremap <silent><Leader>p :term ++rows=16<CR>source $HOME/.bash_profile<CR>clear<CR>
+    " set noequalalways
+    " noremap <silent><Leader>p :term<CR>
 endif
 " enter Terminal-Normal mode (for scrolling log output)
 " https://stackoverflow.com/a/46822285/8981617
@@ -582,17 +643,14 @@ function! ShowDocumentation()
   endif
 endfunction
 
-" Highlight the symbol and its references when holding the cursor.
-autocmd CursorHold * silent call CocActionAsync('highlight')
-
 " Symbol renaming and refactoring
 nnoremap <leader>rn <Plug>(coc-rename)
 nnoremap <Leader>rf <Plug>(coc-refactor)
 
-" ccls specific c++
 " call hierarchy
-nnoremap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true,'levels':5})<CR>
-nnoremap <silent> gL :call CocLocations('ccls','$ccls/call',{'callee':v:true,'levels':5})<cr>
+" nnoremap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true,'levels':5})<CR>
+" nnoremap <silent> gL :call CocLocations('ccls','$ccls/call',{'callee':v:true,'levels':5})<cr>
+nnoremap <silent> gl :call CocAction('showIncomingCalls')<CR>
 " outline
 nnoremap <silent> go :CocFzfList outline<CR>
 " Search workspace symbols
@@ -608,6 +666,8 @@ augroup mygroup
     autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     " Update signature help on jump placeholder.
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    " Highlight the symbol and its references when holding the cursor.
+    " autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup end
 
 " Add `:Format` command to format current buffer.
@@ -630,6 +690,7 @@ nnoremap <leader>ab :AnyJumpBack<CR>
 nnoremap <leader>al :AnyJumpLastResults<CR>
 " Show line numbers in search rusults
 let g:any_jump_list_numbers = 1
+let g:any_jump_remove_comments_from_results = 0
 
 " FZF CHECKOUT
 let g:fzf_checkout_git_options = '--sort=-committerdate'
@@ -641,10 +702,10 @@ nmap <Leader>er <Cmd>call CocAction('runCommand', 'explorer.doAction', 'closest'
 
 " vim-slime
 " spawns REPL environment
-let g:slime_target = "vimterminal"
-let g:slime_vimterminal_cmd = "python"
+let g:slime_target = 'vimterminal'
+let g:slime_vimterminal_cmd = 'python'
 " Send whole file to slime via C-c C-x
-nnoremap <c-c><c-x> :%SlimeSend<cr>
+" nnoremap <c-c><c-x> :%SlimeSend<cr>
 
 " coc-yank
 " show list with yanked lines
@@ -656,7 +717,8 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " vim indentLine
 let g:indentLine_char = '▏'
-let g:indentLine_setColors = 0 "0: highlight conceal color with your colorscheme
+" 0: highlight conceal color with your colorscheme
+let g:indentLine_setColors = 0
 
 " coc-fzf
 let g:coc_fzf_preview = 'right:40%'
@@ -674,9 +736,9 @@ let g:rainbow_conf = {
 \   }
 \}
 
-" persistent undo
+" persistent undo in RAM /tmp/
 " from https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
-let s:undodir = "/tmp/.undodir_" . $USER
+let s:undodir = '/tmp/.undodir_' . $USER
 if !isdirectory(s:undodir)
     call mkdir(s:undodir, "", 0700)
 endif
