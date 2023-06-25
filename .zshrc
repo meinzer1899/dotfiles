@@ -31,15 +31,14 @@ zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload
   zstyle ':prompt:pure:git:stash' show 'yes'" \
   sindresorhus/pure
 
-zi wait lucid light-mode for \
+zi wait lucid for \
   OMZP::fancy-ctrl-z
 
 # fast toolchain as code for JS (e.g. node)
 # volta is much faster than nvm, thus nvm is replaced
 zi light cowboyd/zsh-volta
 
-export ZSH_PLUGINS_ALIAS_TIPS_TEXT="Has alias: "
-zi wait lucid light-mode for @djui/alias-tips
+zi wait lucid for atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" @djui/alias-tips
 
 ### programs
 
@@ -51,26 +50,50 @@ zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
   export CARGO_HOME=\$PWD; export RUSTUP_HOME=\$PWD/rustup" for \
   z-shell/0
 
-zi lucid wait light-mode as"program" from"gh-r" for \
-  atclone"cp -vf bat/autocomplete/bat.zsh _bat" \
-  atpull"%atclone" \
-  mv"bat* -> bat" pick"bat/bat" \
+zi wait lucid as'program' from'gh-r' for \
+  atclone'cp -vf bat/autocomplete/bat.zsh _bat' \
+  atpull'%atclone' \
+  mv'bat* -> bat' sbin'**/bat(.exe|) -> bat' \
   @sharkdp/bat
 
-zi ice wait lucid as'program' from'gh-r' sbin'**/delta -> delta'
-zi light dandavison/delta
+zi wait lucid as'program' from'gh-r' for \
+  atclone'cp -vf fd/autocomplete/_fd _fd' \
+  atpull"%atclone" \
+  mv'fd* -> fd' sbin'**/fd(.exe|) -> fd' \
+  pick'$ZPFX/bin/fd' \
+  @sharkdp/fd
 
-zi ice lucid wait as'program' has'bat' pick'src/*'
-zi light eth-p/bat-extras
+zi wait lucid as'program' from'gh-r' for \
+  sbin'**/delta -> delta' \
+  pick'$ZPFX/bin/delta' \
+  @dandavison/delta 
 
-zi ice from'gh-r' as'program' mv'fd* fd' sbin'**/fd(.exe|) -> fd'
-zi light @sharkdp/fd
+# zi ice as'program' from'gh-r' pick'zoxide' \
+#   atclone'ln -s completions/_zoxide -> _zoxide;
+#   cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd x > init.zsh' \
+#   atpull'%atclone' src'init.zsh' nocompile'!'
 
-zi ice lucid wait from'gh-r' as'program' sbin'**/exa -> exa' atclone'cp -vf completions/exa.zsh _exa'
-zi light ogham/exa
+zi wait lucid as'program' from'gh-r' has'bat' pick'src/*' for \
+  @eth-p/bat-extras
+
+zi wait lucid as'program' from'gh-r' for \
+  atclone'cp -vf completions/exa.zsh _exa' \
+  atpull"%atclone" \
+  sbin'**/exa -> exa' \
+  pick'$ZPFX/bin/exa' \
+  @ogham/exa
+
+# important: gh, not gh-r because ripgrep gets released very infrequently
+zi wait lucid as'program' from'gh' for \
+  atclone'cargo build --release --features "pcre2"' \
+  atpull'%atclone' \
+  sbin'**/rg(.exe|) -> rg' \
+  pick'$ZPFX/bin/rg' \
+  @BurntSushi/ripgrep
+
 zi wait lucid for \
   has'exa' atinit'AUTOCD=1' \
-  zplugin/zsh-exa
+  @zplugin/zsh-exa
 
 ### zi pack
 
@@ -84,11 +107,11 @@ zi wait pack atload=+"zicompinit_fast; zicdreplay" for system-completions
 # Download the package with the bin-gem-node annex-utilizing ice list
 # + setting up the key bindings. The "+keys" variants are available for each profile
 # zi pack"bgn+keys" for fzf # did not update fzf binary (was 0.30.0 when 0.38.0 (>1year) was available
-zi for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'gh-r' dl'
+zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'gh-r' dl'
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf_completion;
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh -> key-bindings.zsh;
-  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf-tmux.1 -> $ZI[MAN_DIR]/man1/fzf-tmux.1;
-  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZI[MAN_DIR]/man1/fzf.1' \
+  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf-tmux.1 -> $ZPFX/man/man1/fzf-tmux.1;
+  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZPFX/man/man1/fzf.1' \
     id-as'junegunn/fzf' nocompile pick'/dev/null' sbin'fzf' src'key-bindings.zsh' \
     junegunn/fzf
 # For fzf-tmux to find fzf executable, change
@@ -119,37 +142,36 @@ export FZF_CTRL_R_OPTS="
 #   atpull'%atclone' src'init.zsh' nocompile'!'
 zi ice as'null' from"gh-r" sbin
 zi light ajeetdsouza/zoxide
-zi ice has'zoxide'
-zi light z-shell/zsh-zoxide
+zi has'zoxide' wait lucid for \
+    z-shell/zsh-zoxide
+# zi ice has'zoxide'
+# zi light z-shell/zsh-zoxide
 
   # atpull'%atclone' make'all install' pick'$ZPFX/bin/vim'
 zi ice as'program' atclone'rm -f src/auto/config.cache; \
   ./configure --prefix=$ZPFX --enable-python3interp=yes' \
   atpull'%atclone' make pick'src/vim'
-  zi light vim/vim
+zi light vim/vim
 
 ### completions
-zi ice lucid wait as'completion' blockf mv'git-completion.zsh -> _git'
+zi ice wait lucid as'completion' blockf mv'git-completion.zsh -> _git'
 zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
 
-zi ice as"completion"
+zi ice wait lucid as"completion"
 zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
 
-zi ice lucid wait as'completion' blockf has'rg'
+zi ice wait lucid as'completion' blockf has'rg'
 zi snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
 
-zi ice lucid wait as'completion' blockf has'alacritty'
+zi ice wait lucid as'completion' blockf has'alacritty'
 zi snippet https://github.com/alacritty/alacritty/blob/master/extra/completions/_alacritty
 
-zi ice lucid wait as'completion' blockf has'fd'
-zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/fd/_fd
-
-zi ice lucid wait as'completion' blockf has'cargo'
+zi ice wait lucid as'completion' blockf has'cargo'
 zi snippet https://github.com/rust-lang/cargo/blob/master/src/etc/_cargo
-zi ice lucid wait as'completion' blockf has'rustc'
+zi ice wait lucid as'completion' blockf has'rustc'
 zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
 
-zi ice lucid wait as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
+zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
 zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
 
 # only for git
@@ -188,7 +210,7 @@ zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
   '(out=$(tldr --color always "$word") 2>/dev/null && echo $out) || (out=$(MANWIDTH=$FZF_PREVIEW_COLUMNS man "$word") 2>/dev/null && echo $out) || (out=$(which "$word") && echo $out) || echo "${(P)word}"'
 
 # fzf-tab needs to be loaded after compinit, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting!!
-zi ice lucid wait has'fzf'
+zi ice wait lucid has'fzf'
 zi light Aloxaf/fzf-tab
 
 # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
@@ -265,7 +287,6 @@ setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposit
 # zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 ### bindings
-source ~/fzf-git.sh/fzf-git.sh
 
 bindkey -e
 bindkey "^P" up-line-or-search
@@ -284,6 +305,9 @@ bindkey '^n' history-beginning-search-forward
 bindkey '^y' yank
 bindkey '^q' show-buffer-stack
 
+source ~/fzf-git.sh/fzf-git.sh
+
 ### alias
 alias v="vim"
 alias nv="nvim"
+alias man="batman.sh"
