@@ -8,11 +8,9 @@ https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys
 sudo vi /etc/default/keyboard and change XKBOPTIONS="ctrl:nocaps"
 setxkbmap -option ctrl:nocaps such that it
 
-## lua
+## git
 
-not needed if zoxide is used in .zshrc
-for zsh extension z.lua
-https://www.lua.org/download.html -> Building (sudo make install)
+add .gitconfig.local for user entries
 
 ## TMUX
 
