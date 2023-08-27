@@ -33,6 +33,8 @@
 [status]
 	submoduleSummary = true
 	showUntrackedFiles = all
+[submodule]
+	recurse = true
 [init]
 	templatedir = ~/.git-templates
 [delta]
