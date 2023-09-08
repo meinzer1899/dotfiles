@@ -34,6 +34,3 @@ sudo cp ~/.zi/plugins/sharkdp---bat/bat/bat ~/.zi/plugins/sharkdp---fd/fd/fd ~/.
 # hadolint
 # https://github.com/hadolint/hadolint
 # tip: download release binary, cp to /usr/bin
-#
-# fzf-git.sh
-# cd ~/fzf-git.sh && git pull
