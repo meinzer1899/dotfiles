@@ -153,6 +153,12 @@ zi ice as'program' atclone'rm -f src/auto/config.cache; \
   atpull'%atclone' make pick'src/vim'
 zi light vim/vim
 
+zi wait lucid as'program' from'gh-r' for \
+  mv'shellcheck* -> shellcheck' \
+  sbin'**/shellcheck -> shellcheck' \
+  @koalaman/shellcheck
+
+# pick'$ZPFX/bin/shellcheck' \
 ### completions
 zi ice wait lucid as'completion' blockf mv'git-completion.zsh -> _git'
 zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh

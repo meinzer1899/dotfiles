@@ -97,6 +97,9 @@ Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
 ### devcontainer
 
+Login to dev container via ssh; install zsh and copy dotfiles
+https://github.com/dpetersen/dev-container-base
+
 https://gitlab.com/smoores/open-devcontainer
 https://stackoverflow.com/questions/72397020/containerizing-vim-with-plugins
 https://github.com/nemanjan00/dev-environment
@@ -120,16 +123,12 @@ https://github.com/iamcco/coc-diagnostic/blob/master/src/config.ts
 
 `volta install bash-language-server`
 
-#### shellcheck
-
-https://github.com/koalaman/shellcheck#installing
-
 #### vint
 
 VimL linter
 https://github.com/Vimjas/vint
 
-#### hadolint (Dockerfiles)
+#### hadolint (Dockerfile linter)
 
 https://github.com/hadolint/hadolint
 * tip: download release binary, cp to /usr/bin
