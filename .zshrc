@@ -51,67 +51,80 @@ zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
   z-shell/0
 
 zi wait lucid as'program' from'gh-r' for \
-  atclone'cp -vf bat/autocomplete/bat.zsh _bat' \
+  atclone'ln -s bat/autocomplete/bat.zsh -> _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
   mv'bat* -> bat' sbin'**/bat(.exe|) -> bat' \
+  pick'$ZPFX/bin/bat' \
   @sharkdp/bat
 
+zi wait lucid as'program' from'gh' has'bat' pick'src/*' for \
+  @eth-p/bat-extras
+
 zi wait lucid as'program' from'gh-r' for \
-  atclone'cp -vf fd/autocomplete/_fd _fd' \
+  atclone'ln -s fd/autocomplete/_fd -> _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
   atpull"%atclone" \
   mv'fd* -> fd' sbin'**/fd(.exe|) -> fd' \
   pick'$ZPFX/bin/fd' \
   @sharkdp/fd
 
 zi wait lucid as'program' from'gh-r' for \
+  mv'delta* -> delta' \
   sbin'**/delta -> delta' \
   pick'$ZPFX/bin/delta' \
   @dandavison/delta 
 
-# zi ice as'program' from'gh-r' pick'zoxide' \
-#   atclone'ln -s completions/_zoxide -> _zoxide;
-#   cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd x > init.zsh' \
-#   atpull'%atclone' src'init.zsh' nocompile'!'
+# last updated 3 yrs ago...
+zi ice wait lucid as'completion' blockf has'delta'
+zi snippet https://raw.githubusercontent.com/dandavison/delta/master/etc/completion/completion.zsh
 
-zi wait lucid as'program' from'gh-r' has'bat' pick'src/*' for \
-  @eth-p/bat-extras
-
-zi wait lucid as'program' from'gh-r' for \
-  atclone'cp -vf completions/exa.zsh _exa' \
+# important: gh, not gh-r because app gets release infrequently
+zi wait lucid as'program' from'gh' for \
+  atclone'cargo build --release; \
+	  ln -s completions/zsh/_exa -> _exa; \
+	  cp -vf man/*.1.* $ZI[MAN_DIR]/man1; cp -vf man/*.5.* $ZI[MAN_DIR]/man5' \
   atpull"%atclone" \
   sbin'**/exa -> exa' \
   pick'$ZPFX/bin/exa' \
   @ogham/exa
 
-# important: gh, not gh-r because ripgrep gets released very infrequently
-zi wait lucid as'program' from'gh' for \
-  atclone'cargo build --release --features "pcre2"' \
-  atpull'%atclone' \
-  sbin'**/rg(.exe|) -> rg' \
-  pick'$ZPFX/bin/rg' \
-  @BurntSushi/ripgrep
-
 zi wait lucid for \
   has'exa' atinit'AUTOCD=1' \
   @zplugin/zsh-exa
 
+# completions only available in debug build
+zi wait lucid as'program' from'gh' for \
+  atclone'cargo build --release --features "pcre2"' \
+  atpull'%atclone' \
+  sbin'**/rg -> rg' \
+  pick'$ZPFX/bin/rg' \
+  @BurntSushi/ripgrep
+
+zi ice wait lucid as'completion' blockf has'rg'
+zi snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
+
+zi wait lucid as'program' from'gh-r' for \
+  mv'tealdeer* -> tealdeer' \
+  sbin'**/tealdeer -> tldr' \
+  pick'$ZPFX/bin/tldr' \
+  @dbrgn/tealdeer
+
+zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
+zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
+
 ### zi pack
 
-# Install the newest zsh
+# Install latest zsh
 zi pack for zsh
-
-# Utilize Turbo and initialize the completion with fast compinit
-zi wait pack atload=+"zicompinit_fast; zicdreplay" for system-completions
 
 # FZF
 # Download the package with the bin-gem-node annex-utilizing ice list
 # + setting up the key bindings. The "+keys" variants are available for each profile
 # zi pack"bgn+keys" for fzf # did not update fzf binary (was 0.30.0 when 0.38.0 (>1year) was available
 zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'gh-r' dl'
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf_completion;
-  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh -> key-bindings.zsh;
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf;
   https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf-tmux.1 -> $ZPFX/man/man1/fzf-tmux.1;
-  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZPFX/man/man1/fzf.1' \
+  https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZPFX/man/man1/fzf.1;
+  https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh -> key-bindings.zsh' \
     id-as'junegunn/fzf' nocompile pick'/dev/null' sbin'fzf' src'key-bindings.zsh' \
     junegunn/fzf
 # For fzf-tmux to find fzf executable, change
@@ -123,7 +136,7 @@ zi load junegunn/fzf-git.sh
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'exa -1 --icons --group-directories-first --color=always --all {} | head -200'"
 # follow symbolic links and don't exclude hidden files
-export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs'
+export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git'
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Narrow down the list with a query, point to a command,
@@ -136,6 +149,11 @@ export FZF_CTRL_R_OPTS="
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard'"
 
+### pip
+# https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5
+zi ice pip'cmake-language-server <- !cmake-language-server -> cmake-language-server' id-as'cmake-language-server' nocompile
+zi load z-shell/0
+
 # --cmd x is important as zoxide uses z _and_ zi.
 # zi is used for zsh zi
 # if remapped, source this file ~/.zi/bin/zi.zsh
@@ -146,14 +164,15 @@ export FZF_CTRL_R_OPTS="
 zi ice as'null' from"gh-r" sbin
 zi light ajeetdsouza/zoxide
 zi has'zoxide' wait lucid for \
-    z-shell/zsh-zoxide
-# zi ice has'zoxide'
-# zi light z-shell/zsh-zoxide
+  z-shell/zsh-zoxide
+
+zi ice wait lucid as'completion' blockf has'zoxide'
+zi snippet https://github.com/ajeetdsouza/zoxide/blob/main/contrib/completions/_zoxide
 
   # atpull'%atclone' make'all install' pick'$ZPFX/bin/vim'
 zi ice as'program' atclone'rm -f src/auto/config.cache; \
   ./configure --prefix=$ZPFX --enable-python3interp=yes' \
-  atpull'%atclone' make pick'src/vim'
+  atpull'%atclone' make pick'$ZPFX/bin/vim'
 zi light vim/vim
 
 zi wait lucid as'program' from'gh-r' for \
@@ -169,9 +188,6 @@ zi snippet https://github.com/git/git/blob/master/contrib/completion/git-complet
 zi ice wait lucid as"completion"
 zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
 
-zi ice wait lucid as'completion' blockf has'rg'
-zi snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
-
 zi ice wait lucid as'completion' blockf has'alacritty'
 zi snippet https://github.com/alacritty/alacritty/blob/master/extra/completions/_alacritty
 
@@ -179,9 +195,6 @@ zi ice wait lucid as'completion' blockf has'cargo'
 zi snippet https://github.com/rust-lang/cargo/blob/master/src/etc/_cargo
 zi ice wait lucid as'completion' blockf has'rustc'
 zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
-
-zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
-zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
 
 # only for git
 # zstyle ':completion:*:*:git:*' fzf-search-display true
@@ -222,14 +235,19 @@ zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
 zi ice wait lucid has'fzf'
 zi light Aloxaf/fzf-tab
 
+# Utilize Turbo and initialize the completion with fast compinit
+# zi wait pack atload=+"zicompinit_fast; zicdreplay" for system-completions
+# Utilize Turbo
+zi wait pack for system-completions
+
 # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
 zi wait lucid for \
-  atinit"zicompinit; zicdreplay" \
+  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay" \
   zsh-users/zsh-syntax-highlighting \
   blockf \
-  zsh-users/zsh-autosuggestions \
+  zsh-users/zsh-completions \
   atload"!_zsh_autosuggest_start" \
-  zsh-users/zsh-completions
+  zsh-users/zsh-autosuggestions
 
 export HISTFILE=~/.histfile
 export HISTSIZE=1000000   # the number of items for the internal history list
@@ -261,11 +279,12 @@ setopt prompt_subst         # Substitution of parameters inside the prompt each 
 setopt pushd_ignore_dups    # Don't push multiple copies directory onto the directory stack.
 setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposite.
 
-# # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
-# # Fuzzy completion matching
-# zstyle ':completion:*' completer _complete _match _approximate
-# zstyle ':completion:*:match:*' original only
-# zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
+# https://wiki.zshell.dev/docs/guides/customization#other-tweaks
+# Fuzzy completion matching
+zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*:match:*' original only
+# Allow more errors for longer commands
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
 
 # # https://wiki.zshell.dev/docs/guides/customization#pretty-completions
 # zstyle ':completion:*:matches' group 'yes'
@@ -279,21 +298,30 @@ setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposit
 # zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
 # zstyle ':completion:*' group-name ''
 # zstyle ':completion:*' verbose yes
+# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 # zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+# zstyle ':completion:*' use-cache true
 # zstyle ':completion:*' rehash true
 
+# # Complete manual by their section
+# zstyle ':completion:*:manuals' separate-sections true
+# zstyle ':completion:*:manuals.*' insert-sections true
+# zstyle ':completion:*:man:*' menu yes select
+
 # Use cache for slow functions
-# zstyle ':completion:*' use-cache on
+zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path $ZDOTDIR/cache
 # Ignore completion for non-existant commands
-# zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
+zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # https://wiki.zshell.dev/docs/guides/customization#do-menu-driven-completion
 # zstyle ':completion:*' menu select
 
-# # Smart case-y completion
-# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# Smart case-y completion
+zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
+# Dircolors on completions
 # https://wiki.zshell.dev/docs/guides/customization#color-completion-for-some-things
-# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 ### bindings
 
@@ -314,9 +342,8 @@ bindkey '^n' history-beginning-search-forward
 bindkey '^y' yank
 bindkey '^q' show-buffer-stack
 
-source ~/fzf-git.sh/fzf-git.sh
-
 ### alias
 alias v="vim"
 alias nv="nvim"
-alias man="batman.sh"
+# alias man="batman.sh"
+export MANPAGER="vim +MANPAGER --not-a-term -"
