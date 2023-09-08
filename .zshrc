@@ -117,6 +117,9 @@ zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'g
 # For fzf-tmux to find fzf executable, change
 #   `fzf="$(command -v fzf 2> /dev/null)" || fzf=$HOME/.zi/polaris/bin/fzf`
 
+zi ice lucid wait"0b" pick'fzf-git.sh'
+zi load junegunn/fzf-git.sh
+
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'exa -1 --icons --group-directories-first --color=always --all {} | head -200'"
 # follow symbolic links and don't exclude hidden files
