@@ -3,19 +3,23 @@
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
-      "filetypes": ["sh"]
+      "filetypes": ["sh"],
+      "ignoredRootPaths": ["~"]
     }
   },
   "diagnostic-languageserver.filetypes": {
     "vim": "vint",
     "cmake": "cmake-lint",
     "python": ["flake8", "mypy"],
+    // for md, ascidoc and more, https://github.com/errata-ai/vale looks promising
     "markdown": ["write-good", "markdownlint"],
     "dockerfile": "hadolint",
     "zsh": "zsh"
   },
   "diagnostic-languageserver.mergeConfig": true,
   "diagnostic-languageserver.linters": {
+    // https://cmake-format.readthedocs.io/en/latest/cmake-lint.html
+    // part of https://github.com/cheshirekow/cmake_format
     "cmake-lint": {
       "args": [
         "--disabled-codes",
@@ -59,10 +63,11 @@
       }
     }
   },
-  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.extensionUpdateCheck": "weekly",
   "coc.source.file.ignoreHidden": false,
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",
+  "explorer.file.showHiddenFiles": true,
   // "clangd.compilationDatabasePath": "build/", // compilationDatabaseCandidates is ignored if you specify a value here :(
   "clangd.compilationDatabaseCandidates": ["build/",  "build/native/debug/", "build/native/release/", "build/cross/release/", "build/release/", "build/cross/debug/"],
   "clangd.disableProgressNotifications": true,
@@ -70,20 +75,20 @@
   // https://manpages.debian.org/experimental/clangd/clangd.1.en.html
   // https://github.com/llvm/llvm-project/blob/llvmorg-15.0.6/clang-tools-extra/clangd/tool/ClangdMain.cpp
   "clangd.arguments": [
-    "--j=1",
+    "--all-scopes-completion=true",
     "--background-index=true",
     "--background-index-priority=background",
-    "--query-driver=/usr/local/bin/clang++",
-    "--completion-style=detailed",
-    "--all-scopes-completion=true",
     "--clang-tidy=false",
+    "--completion-style=detailed",
+    "--compile-commands-dir=build",
+    "--enable-config=true",
     "--header-insertion=never",
     "--header-insertion-decorators",
-    "--suggest-missing-includes"
+    "-j=2",
+    "--query-driver=/usr/local/bin/clang++",
   ],
   "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/16.0.2/clangd_16.0.2/bin/clangd",
-  "yaml.schemaStore.enable": true,
-  "inlayHint.enable": true,
+  "inlayHint.enable": false,
   "inlayHint.display": false,
   "inlayHint.enableParameter": false,
   "semanticTokens.enable": true,
@@ -93,6 +98,8 @@
   "diagnostic.checkCurrentLine": true,
   "diagnostic.separateRelatedInformationAsDiagnostics": true,
   "diagnostic.virtualTextCurrentLineOnly": true,
+  "diagnostic.virtualTextLimitInOneLine": 2,
+  "diagnostic.messageTarget": "float",
   // Change "diagnostic.enableMessage" to "jump" and use <Plug>(coc-diagnostic-info) to show diagnostic messages.
   "diagnostic.enableMessage": "jump"
 }
