@@ -203,13 +203,14 @@ augroup vimrcEx
     autocmd BufRead,BufNewFile *.md set filetype=markdown
     autocmd BufRead,BufNewFile *.md setlocal textwidth=80
     autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
-    autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=sh
+    autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=zsh
     autocmd BufRead,BufNewFile gitconfig.local set filetype=gitconfig
     autocmd BufRead,BufNewFile tmux.conf.local set filetype=tmux
     autocmd BufRead,BufNewFile vimrc.local set filetype=vim
     autocmd BufRead,BufNewFile .vimrc set filetype=vim
     autocmd BufRead,BufNewFile CMakeLists.txt set filetype=cmake
     autocmd BufRead,BufNewFile *.tpp set filetype=cpp
+    autocmd BufRead,BufNewFile .clang-format set filetype=yaml
 augroup END
 
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
@@ -252,7 +253,7 @@ Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 " Plug 'metakirby5/codi.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'CocInstall coc-explorer coc-json coc-docker coc-diagnostic coc-snippets coc-yank coc-jedi coc-rust-analyzer coc-yaml'}
+Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'CocInstall coc-explorer coc-json coc-docker coc-diagnostic coc-snippets coc-yank coc-jedi coc-rust-analyzer coc-yaml coc-cmake coc-clangd'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
@@ -277,6 +278,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'romainl/vim-qf'
+" let g:qf_bufname_or_text = 2 " filter only on quickfix text, not bufnames
 Plug 'junegunn/vim-peekaboo'
 Plug 'luochen1990/rainbow'
 "set to 0 if you want to enable it later via :RainbowToggle
@@ -293,7 +295,8 @@ set showtabline=2
 " Plug 'KabbAmine/zeavim.vim'
 " If you don't have nodejs and yarn
 " use pre build, add 'vim-plug' to the filetype list so vim-plug can update this plugin
-Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'plantuml', 'vim-plug']}
+" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'plantuml', 'vim-plug']}
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
 " recognized filetypes
 " these filetypes will have MarkdownPreview... commands
 let g:mkdp_filetypes = ['markdown', 'plantuml']
@@ -330,6 +333,7 @@ if executable('rg')
     " use the same as in.zshrc
     " let $FZF_DEFAULT_COMMAND='rg --files --follow --hidden --no-ignore-dot'
     set grepprg=rg\ --vimgrep
+    inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 endif
 
 if executable('fd')
@@ -337,7 +341,7 @@ if executable('fd')
     " let $FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
     " https://github.com/junegunn/fzf.vim#completion-functions
     " path completion with fd in insert mode
-    inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
+    " inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
 endif
 
 let g:fzf_buffers_jump = 1
@@ -373,31 +377,14 @@ let g:fzf_action = {
   \ 'ctrl-x': 'split',
   \ 'ctrl-v': 'vsplit' }
 
-" Call Ag and Rg to only match file content, not file names
-" added: trim whitespaces when displaying results
-" https://github.com/junegunn/fzf.vim/issues/714#issuecomment-428802659
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --trim  ".shellescape(<q-args>), 1,
-  \   fzf#vim#with_preview({'options': '--delimiter : --nth 4..'}), <bang>0)
+" add own flags to command from fzf.vim
+" https://github.com/junegunn/fzf.vim/blob/master/plugin/fzf.vim
+" TODO: use string variable for flags
+" TODO: use bind to toggle --no-ignore
+command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --trim -- ".shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* RG call fzf#vim#grep2("rg --column --line-number --no-heading --color=always --smart-case --trim -- ", <q-args>, fzf#vim#with_preview(), <bang>0)
 
-" A lot faster, but without fuzzy find
-" from: https://github.com/junegunn/fzf.vim#example-advanced-ripgrep-integration
-" added: trim whitespaces when displaying results
-" OWN: fast enough to dont respect ignore files (git, .dotfiles) in search
-function! RipgrepFzf(query, fullscreen)
-    let command_fmt = 'rg --column --line-number --no-heading --color=always --smart-case --trim --no-ignore -- %s || true'
-  let initial_command = printf(command_fmt, shellescape(a:query))
-  let reload_command = printf(command_fmt, '{q}')
-  let spec = {'options': ['--disabled', '--query', a:query, '--bind', 'change:reload:'.reload_command]}
-  let spec = fzf#vim#with_preview(spec, 'right', 'ctrl-/')
-  call fzf#vim#grep(initial_command, 1, spec, a:fullscreen)
-endfunction
-
-command! -nargs=* -bang RG call RipgrepFzf(<q-args>, <bang>0)
-
-command! -bang -nargs=* Ag call fzf#vim#ag(<q-args>, {'options': '--delimiter : --nth 4..'}, <bang>0)
-
-" FZF (replaces Ctrl-P, FuzzyFinder and Command-T)
+" FZF
 nnoremap <silent> <Leader>,     :Buffers<CR>
 nnoremap <silent> <Leader>rr    :Rg<CR>
 nnoremap <silent> <Leader>aa    :RG<CR>
@@ -409,8 +396,14 @@ nnoremap <silent> <Leader>gf    :GFiles?<CR>
 nnoremap <silent> <Leader>h     :History:<CR>
 nnoremap <silent> <Leader>c     :Commits<CR>
 nnoremap <silent> <Leader>bc    :BCommits<CR>
+nnoremap <silent> <Leader>gg    :GGrep<CR>
 
-" merge conflict commands in a 3-way-diff (1: middle, 2: left, 3: right side)
+command! -bang -nargs=* GGrep
+            \ call fzf#vim#grep(
+            \   'git grep --line-number -- '.shellescape(<q-args>),
+            \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
+" merge conflict commands in a 3-way-diff with: 1 - middle (BASE), 2 - left (LOCAL), 3 - right side (REMOTE)
+" https://git-scm.com/docs/vimdiff/en
 nnoremap <Leader>gj :diffget //3<CR>
 nnoremap <Leader>gf :diffget //2<CR>
 
@@ -549,10 +542,14 @@ vmap     <leader>N <Plug>CtrlSFVwordPath
 if has('win32')
     noremap <Leader>p :tab term<CR>
 else
-    " set termwinsize=16x0
-    noremap <silent><Leader>p :term ++rows=16<CR>source $HOME/.bash_profile<CR>clear<CR>
-    " set noequalalways
-    " noremap <silent><Leader>p :term<CR>
+    if executable('zsh')
+        noremap <silent><leader>p :term ++rows=16<CR>
+    else
+        " set termwinsize=16x0
+        noremap <silent><Leader>p :term ++rows=16<CR>source $HOME/.bash_profile<CR>clear<CR>
+        " set noequalalways
+        " noremap <silent><Leader>p :term<CR>
+    endif
 endif
 " enter Terminal-Normal mode (for scrolling log output)
 " https://stackoverflow.com/a/46822285/8981617
@@ -664,10 +661,12 @@ augroup mygroup
     autocmd!
     " Setup formatexpr specified filetype(s).
     autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
+    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
     " Update signature help on jump placeholder.
     autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    " Highlight the symbol and its references when holding the cursor.
-    " autocmd CursorHold * silent call CocActionAsync('highlight')
+    " Highlight the symbol and its references
+    autocmd CursorHold * silent call CocActionAsync('highlight')
+    autocmd BufNewFile,BufReadPost *.md setfiletype markdown
 augroup end
 
 " Add `:Format` command to format current buffer.
