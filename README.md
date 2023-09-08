@@ -1,6 +1,8 @@
 # dotfiles
 
-Linux dotfiles
+My Linux dotfiles.
+
+![Work Environment](image/linux_environment.png "Linux Work Environment")
 
 ## Remap CAPSLOCK to ctrl
 
