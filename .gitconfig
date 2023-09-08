@@ -6,6 +6,7 @@
 	# need git version >= 2.37.0
 	; fsmonitor = true
 [include]
+	# Allow local customizations in the .gitconfig_local file
 	path = ~/.gitconfig.local
 [interactive]
 	diffFilter = delta --color-only
@@ -29,7 +30,10 @@
 	rebase = false
 [fetch]
 	prune = true
+	pruneTags = true
 	recurseSubmodules = on-demand
+	# 0 gives reasonable default, see https://git-scm.com/docs/git-config#Documentation/git-config.txt-fetchparallel
+	parallel = 0
 [status]
 	submoduleSummary = true
 	showUntrackedFiles = all
