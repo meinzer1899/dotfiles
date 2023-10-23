@@ -154,6 +154,9 @@ export FZF_CTRL_R_OPTS="
 zi ice pip'cmake-language-server <- !cmake-language-server -> cmake-language-server' id-as'cmake-language-server' nocompile
 zi load z-shell/0
 
+zi ice pip'ruff <- !ruff -> ruff' id-as'ruff' nocompile
+zi load z-shell/0
+
 # --cmd x is important as zoxide uses z _and_ zi.
 # zi is used for zsh zi
 # if remapped, source this file ~/.zi/bin/zi.zsh
