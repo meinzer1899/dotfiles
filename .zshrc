@@ -96,16 +96,16 @@ zi snippet https://raw.githubusercontent.com/dandavison/delta/master/etc/complet
 # gh, because of completions and man pages
 zi wait lucid as'program' from'gh' for \
   atclone'cargo build --release; \
-	  ln -s completions/zsh/_exa -> _exa; \
+	  ln -sf completions/zsh/_eza _eza; \
 	  cp -vf man/*.1.* $ZI[MAN_DIR]/man1; cp -vf man/*.5.* $ZI[MAN_DIR]/man5' \
-  atpull"%atclone" \
-  sbin'**/exa -> exa' \
-  pick'$ZPFX/bin/exa' \
-  @ogham/exa
+  atpull'%atclone' \
+  sbin'**/eza -> eza' \
+  pick'$ZPFX/bin/eza' \
+  @eza-community/eza
 
 zi wait lucid for \
-  has'exa' atinit'AUTOCD=1' \
-  @zplugin/zsh-exa
+  has'eza' atinit'AUTOCD=1' \
+  @z-shell/zsh-eza
 
 # manpages only available in debug build
 # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
@@ -149,9 +149,9 @@ zi ice lucid wait"0b" pick'fzf-git.sh'
 zi load junegunn/fzf-git.sh
 
 # The following example uses tree command to show the entries of the directory.
-export FZF_ALT_C_OPTS="--preview 'exa -1 --icons --group-directories-first --color=always --all {} | head -200'"
+export FZF_ALT_C_OPTS="--preview 'eza -1 --icons=always --group-directories-first --color=always --all {} | head -200'"
 # follow symbolic links and don't exclude hidden files
-export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git'
+export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '!.git' || find ."
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Narrow down the list with a query, point to a command,
@@ -162,7 +162,10 @@ export FZF_CTRL_R_OPTS="
 --bind 'ctrl-t:track+clear-query'
 --bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
 --color header:italic
---header 'Press CTRL-Y to copy command into clipboard'"
+--header 'Press CTRL-Y to copy command into clipboard'
+"
+export FZF_DEFAULT_OPTS='--height 40%'
+export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'"
 
 ### pip
 # https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5
