@@ -201,10 +201,16 @@ zi wait lucid as'program' from'gh-r' for \
   sbin'**/shellcheck -> shellcheck' \
   @koalaman/shellcheck
 
+# grex generates regular expressions from user-provided test cases
+zi wait lucid as'command' from'gh-r' for \
+  sbin'grex' \
+  @pemistahl/grex
+
 # pick'$ZPFX/bin/shellcheck' \
 ### completions
-zi ice wait lucid as'completion' blockf mv'git-completion.zsh -> _git'
-zi snippet https://github.com/git/git/blob/master/contrib/completion/git-completion.zsh
+zi ice wait lucid as"completion"
+# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitfast
+zi snippet OMZP::gitfast
 
 zi ice wait lucid as"completion"
 zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
