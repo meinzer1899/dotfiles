@@ -36,7 +36,8 @@ set cmdheight=2
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
-set updatetime=300
+set updatetime=150
+set lazyredraw
 
 " Don't pass messages to |ins-completion-menu| (coc)
 set shortmess+=c
@@ -122,16 +123,18 @@ syntax on
 
 set wildmode=list:longest
 set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
-set wildignore=*.o,*.obj,*~ "stuff to ignore when tab completing
+set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib
 set wildignore+=*vim/backups*
-set wildignore+=*sass-cache*
-set wildignore+=*DS_Store*
-set wildignore+=vendor/rails/**
-set wildignore+=vendor/cache/**
-set wildignore+=*.gem
-set wildignore+=log/**
-set wildignore+=tmp/**
 set wildignore+=*.png,*.jpg,*.gif
+set wildignore+=*.so,*.dll,*.swp,*.egg,*.jar,*.class,*.pyc,*.pyo,*.bin,*.dex
+set wildignore+=*.log,*.pyc,*.sqlite,*.sqlite3,*.min.js,*.min.css,*.tags
+set wildignore+=*.zip,*.7z,*.rar,*.gz,*.tar,*.gzip,*.bz2,*.tgz,*.xz
+set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso
+set wildignore+=*.pdf,*.dmg,*.app,*.ipa,*.apk,*.mobi,*.epub
+set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc
+set wildignore+=*.ppt,*.pptx,*.doc,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
+set wildignore+=*/.git/*,*/.svn/*,*.DS_Store
+set wildignore+=*/node_modules/*,*/nginx_runtime/*,*/build/*,*/logs/*,*/dist/*,*/tmp/*
 
 " ================ Scrolling ========================
 
@@ -187,6 +190,9 @@ endif
 " https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
 set selection=exclusive
 
+" Don't render (auto-format) markdown syntax
+set conceallevel=0
+
 " Autocommand
 augroup vimrcEx
     autocmd!
@@ -200,8 +206,7 @@ augroup vimrcEx
         \ endif
 
     " Set syntax highlighting for specific file types
-    autocmd BufRead,BufNewFile *.md set filetype=markdown
-    autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+    autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
     autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
     autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=zsh
     autocmd BufRead,BufNewFile gitconfig.local set filetype=gitconfig
@@ -211,6 +216,11 @@ augroup vimrcEx
     autocmd BufRead,BufNewFile CMakeLists.txt set filetype=cmake
     autocmd BufRead,BufNewFile *.tpp set filetype=cpp
     autocmd BufRead,BufNewFile .clang-format set filetype=yaml
+    autocmd FileType {markdown,gitcommit} setlocal spell spelllang=en_us
+    " Update signature help on jump placeholder.
+    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+    " Highlight the symbol and its references
+    autocmd CursorHold * silent call CocActionAsync('highlight')
 augroup END
 
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
@@ -236,19 +246,23 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
  " Prose Mode
-" Plug 'junegunn/goyo.vim'
+Plug 'junegunn/goyo.vim'
 " used by prose mode
 " Plug 'altercation/vim-colors-solarized'
  " also nice: EdenEast/nightfox
 Plug 'joshdick/onedark.vim'
 let g:onedark_terminal_italics=1
+Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+Plug 'Everblush/everblush.vim'
+let g:everblush_transp_bg = 1
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
-Plug 'pechorin/any-jump.vim'
+let g:gitgutter_set_sign_backgrounds = 1
+" Plug 'pechorin/any-jump.vim'
 " most recently used files
-Plug 'pbogut/fzf-mru.vim'
+" Plug 'pbogut/fzf-mru.vim'
 " Hyperfocus writing in Vim
-Plug 'junegunn/limelight.vim'
+" Plug 'junegunn/limelight.vim'
 Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
@@ -262,18 +276,19 @@ Plug 'stsewd/fzf-checkout.vim'
 " Plug 'jackguo380/vim-lsp-cxx-highlight'
 " or (newer)
 " Plug 'bfrg/vim-cpp-modern'
-Plug 'jpalardy/vim-slime'
+" REPL environment
+" Plug 'jpalardy/vim-slime'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
 " Plug 'dbeniamine/cheat.sh-vim'
-Plug 'unblevable/quick-scope'
+" Plug 'unblevable/quick-scope'
 Plug 'ilyachur/cmake4vim'
 Plug 'muellan/vim-brace-for-umlauts'
 " Plug 'cohama/lexima.vim'
 Plug 'Yggdroot/indentLine'
 Plug 'Asheq/close-buffers.vim'
 Plug 'antoinemadec/coc-fzf'
-Plug 'chaoren/vim-wordmotion'
+" Plug 'chaoren/vim-wordmotion'
 Plug 'rust-lang/rust.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'stefandtw/quickfix-reflector.vim'
@@ -287,7 +302,7 @@ let g:rainbow_active = 1
 Plug 'farmergreg/vim-lastplace'
 " let g:lastplace_ignore_buftype = 'quickfix'
 " Easy text exchange operator for Vim
-Plug 'tommcdo/vim-exchange'
+" Plug 'tommcdo/vim-exchange'
 " add buffers to tabline
 Plug 'mengelbrecht/lightline-bufferline'
 " always show tabline
@@ -295,12 +310,11 @@ set showtabline=2
 " Plug 'KabbAmine/zeavim.vim'
 " If you don't have nodejs and yarn
 " use pre build, add 'vim-plug' to the filetype list so vim-plug can update this plugin
-" Plug 'iamcco/markdown-preview.nvim', { 'do': { -> mkdp#util#install() }, 'for': ['markdown', 'plantuml', 'vim-plug']}
-Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && yarn install' }
+Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' }
 " recognized filetypes
 " these filetypes will have MarkdownPreview... commands
 let g:mkdp_filetypes = ['markdown', 'plantuml']
-" Plug 'justinmk/vim-sneak'
+Plug 'justinmk/vim-sneak'
 Plug 'kana/vim-niceblock'
 Plug 'z-shell/zi-vim-syntax'
 
@@ -321,6 +335,8 @@ if (has('termguicolors'))
 endif
 
 " also adapt in lightline section
+" colorscheme catppuccin_frappe
+" colorscheme everblush
 colorscheme onedark
 if has('macunix') || has('win32')
     set clipboard=unnamed
@@ -332,7 +348,9 @@ endif
 if executable('rg')
     " use the same as in.zshrc
     " let $FZF_DEFAULT_COMMAND='rg --files --follow --hidden --no-ignore-dot'
-    set grepprg=rg\ --vimgrep
+    " https://github.com/BurntSushi/ripgrep/issues/425
+    set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
+    set grepformat+=%f:%l:%c:%m
     inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
 endif
 
@@ -379,10 +397,12 @@ let g:fzf_action = {
 
 " add own flags to command from fzf.vim
 " https://github.com/junegunn/fzf.vim/blob/master/plugin/fzf.vim
+" keep searching for filenames as well: so its possible to select matches in
+" differentt file types (e.g. .cpp)
 " TODO: use string variable for flags
 " TODO: use bind to toggle --no-ignore
-command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --trim -- ".shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
-command! -bang -nargs=* RG call fzf#vim#grep2("rg --column --line-number --no-heading --color=always --smart-case --trim -- ", <q-args>, fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --trim --no-ignore --hidden --glob '!*.git' -- ".shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
+command! -bang -nargs=* RG call fzf#vim#grep2("rg --column --line-number --no-heading --color=always --smart-case --trim --no-ignore --hidden --glob '!*.git' -- ", <q-args>, fzf#vim#with_preview(), <bang>0)
 
 " FZF
 nnoremap <silent> <Leader>,     :Buffers<CR>
@@ -400,7 +420,7 @@ nnoremap <silent> <Leader>gg    :GGrep<CR>
 
 command! -bang -nargs=* GGrep
             \ call fzf#vim#grep(
-            \   'git grep --line-number -- '.shellescape(<q-args>),
+            \   'git grep --line-number -- '.fzf#shellescape(<q-args>),
             \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
 " merge conflict commands in a 3-way-diff with: 1 - middle (BASE), 2 - left (LOCAL), 3 - right side (REMOTE)
 " https://git-scm.com/docs/vimdiff/en
@@ -449,7 +469,7 @@ let g:lightline.component_expand = {
             \   'linter_warnings': 'lightline#coc#warnings',
             \   'linter_errors': 'lightline#coc#errors',
             \   'linter_ok': 'lightline#coc#ok',
-            \   'linter_checking': 'lightline#coc#status'
+            \   'linter_checking': 'lightline#coc#status',
             \ }
 
 let g:lightline.component_type = {
@@ -462,10 +482,15 @@ let g:lightline.component_type = {
             \   'linter_ok': 'left',
             \ }
 
+
 let g:lightline.component_function = {
             \ 'fileformat': 'LightlineFileformat',
-            \ 'gitbranch': 'FugitiveHead'
+            \ 'gitbranch': 'GitBranch',
             \ }
+
+function GitBranch()
+    return " " . FugitiveHead()
+endfunction
 
 " shrink file name when window size falls below threshold
 function! LightlineFileformat()
@@ -501,9 +526,9 @@ augroup END
 
 " BUFFERS
 " bdelete all buffers except the buffer in the current window
-nnoremap <Leader>bdo :Bdelete other<CR>
+nnoremap <silent><Leader>bdo :Bdelete other<CR>
 " bdelete buffers not visible in a window
-nnoremap <Leader>bdh :Bdelete hidden<CR>
+nnoremap <silent><Leader>bdh :Bdelete hidden<CR>:redraw<CR>
 " Disable rnumbers on inactive buffers for active screen indication
 augroup BgHighlight
     autocmd!
@@ -529,6 +554,7 @@ let g:ctrlsf_auto_focus = {
     \ 'at': 'start',
     \ }
 let g:ctrlsf_search_mode = 'async'
+let g:ctrlsf_populate_qflist = 1
 nnoremap <Leader>n <Plug>CtrlSFCwordPath -hidden<CR>
 vmap     <leader>N <Plug>CtrlSFVwordPath
 
@@ -581,105 +607,52 @@ function! CheckBackspace() abort
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" " coc-snippets
-" " Use tab for trigger completion with characters ahead and navigate.
-" " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
-" " other plugin before putting this into your config.
-" inoremap <silent><expr> <TAB>
-"       \ coc#pum#visible() ? coc#_select_confirm() :
-"       \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-"       \ CheckBackspace() ? "\<TAB>" :
-"       \ coc#refresh()
-
-" function! CheckBackspace() abort
-"   let col = col('.') - 1
-"   return !col || getline('.')[col - 1]  =~# '\s'
-" endfunction
-
-" Use <C-j> for jump to next placeholder, it's default of coc.nvim
-let g:coc_snippet_next = '<c-n>'
-
-" Use <C-k> for jump to previous placeholder, it's default of coc.nvim
-let g:coc_snippet_prev = '<c-p>'
-
-" Change navigation of completion info popup
-inoremap <expr> <C-j> coc#pum#visible() ? "\<C-n>" : "\<C-j>"
-inoremap <expr> <C-k> coc#pum#visible() ? "\<C-p>" : "\<C-k>"
-
-" flaot & scroll
-if has('nvim-0.4.0') || has('patch-8.2.0750')
-  nnoremap <silent><nowait> <C-w>f <Plug>(coc-float-jump)
-  nnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-  nnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
-  inoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
-  inoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
-  vnoremap <silent><nowait><expr> <C-n> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-n>"
-  vnoremap <silent><nowait><expr> <C-p> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-p>"
+" Use <c-space> to trigger completion
+if has('nvim')
+    inoremap <silent><expr> <c-space> coc#refresh()
+else
+    inoremap <silent><expr> <c-@> coc#refresh()
 endif
 
-" Setup prettier
-command! -nargs=0 Prettier :CocCommand prettier.formatFile
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-" Use `[g` and `]g` to navigate diagnostics
-" Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
-nnoremap <silent> [g <Plug>(coc-diagnostic-prev)
-nnoremap <silent> ]g <Plug>(coc-diagnostic-next)
-nnoremap <silent> gI <Plug>(coc-diagnostic-info)
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gt <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
 
-" GoTo code navigation.
-nnoremap <silent> gd <Plug>(coc-definition)
-nnoremap <silent> gt <Plug>(coc-type-definition)
-nnoremap <silent> gi <Plug>(coc-implementation)
-nnoremap <silent> gr <Plug>(coc-references)
-
-" Use K to show documentation in preview window
 nnoremap <silent> K :call ShowDocumentation()<CR>
 
 function! ShowDocumentation()
-  if CocAction('hasProvider', 'hover')
-    call CocActionAsync('doHover')
-  else
-    call feedkeys('K', 'in')
-  endif
+    if CocAction('hasProvider', 'hover')
+        call CocActionAsync('doHover')
+    else
+        call feedkeys('K', 'in')
+    endif
 endfunction
 
-" Symbol renaming and refactoring
-nnoremap <leader>rn <Plug>(coc-rename)
-nnoremap <Leader>rf <Plug>(coc-refactor)
+nmap <leader>rn <Plug>(coc-rename)
+
+if has('nvim-0.4.0') || has('patch-8.2.0750')
+    nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    nnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+    inoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(1)\<cr>" : "\<Right>"
+    inoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? "\<c-r>=coc#float#scroll(0)\<cr>" : "\<Left>"
+    vnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
+    vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
+endif
 
 " call hierarchy
 " nnoremap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true,'levels':5})<CR>
 " nnoremap <silent> gL :call CocLocations('ccls','$ccls/call',{'callee':v:true,'levels':5})<cr>
 nnoremap <silent> gl :call CocAction('showIncomingCalls')<CR>
 " outline
-nnoremap <silent> go :CocFzfList outline<CR>
+nnoremap <silent><nowait> go :CocFzfList outline<CR>
 " Search workspace symbols
-nnoremap <silent> gs  :<C-u>CocList -I symbols<cr>
-
-" Formatting selected code.
-" xmap <leader>f  <Plug>(coc-format-selected)
-" nmap <leader>f  <Plug>(coc-format-selected)
-
-augroup mygroup
-    autocmd!
-    " Setup formatexpr specified filetype(s).
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    autocmd FileType typescript,json setl formatexpr=CocAction('formatSelected')
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    " Highlight the symbol and its references
-    autocmd CursorHold * silent call CocActionAsync('highlight')
-    autocmd BufNewFile,BufReadPost *.md setfiletype markdown
-augroup end
-
-" Add `:Format` command to format current buffer.
-command! -nargs=0 Format :call CocAction('format')
-
-" Add `:Fold` command to fold current buffer.
-command! -nargs=? Fold :call     CocAction('fold', <f-args>)
-
-" Add `:OR` command for organize imports of the current buffer.
-command! -nargs=0 OR   :call     CocAction('runCommand', 'editor.action.organizeImport')
+nnoremap <silent><nowait> gs :<C-u>CocList -I symbols<cr>
+" Show diagnostic info
+nmap <silent> gI <Plug>(coc-diagnostic-info)
 
 " ANY JUMP
 " Normal mode: Jump to definition under cursore
@@ -700,7 +673,6 @@ nnoremap <silent> <Leader>gc :GBranches<CR>
 
 " Coc Explorer
 nnoremap <silent> <Leader>o :CocCommand explorer --sources=file+ --width=50<CR>
-nmap <Leader>er <Cmd>call CocAction('runCommand', 'explorer.doAction', 'closest', ['reveal:0'], [['relative', 0, 'file']])<CR>
 
 " vim-slime
 " spawns REPL environment
@@ -721,6 +693,8 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 let g:indentLine_char = '▏'
 " 0: highlight conceal color with your colorscheme
 let g:indentLine_setColors = 0
+" exclude filetypes
+let g:indentLine_fileTypeExclude = ['coc-explorer']
 
 " coc-fzf
 let g:coc_fzf_preview = 'right:40%'
