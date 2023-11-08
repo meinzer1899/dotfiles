@@ -102,5 +102,28 @@
   "diagnostic.virtualTextLimitInOneLine": 2,
   "diagnostic.messageTarget": "float",
   // Change "diagnostic.enableMessage" to "jump" and use <Plug>(coc-diagnostic-info) to show diagnostic messages.
-  "diagnostic.enableMessage": "jump"
+  "diagnostic.enableMessage": "jump",
+  "suggest.snippetsSupport": true,
+  "suggest.acceptSuggestionOnCommitCharacter": true,
+  "suggest.defaultSortMethod": "none",
+  "suggest.detailField": "abbr",
+  "suggest.floatConfig": {
+    "border": true,
+    "rounded": true
+  },
+  "suggest.selection": "recentlyUsedByPrefix",
+  "suggest.languageSourcePriority": 90,
+  "suggest.maxCompleteItemCount": 100,
+  "suggest.triggerCompletionWait": 0,
+  "links.highlight": true,
+  "list.insertMappings": {
+    "<C-c>": "do:exit",
+    "<C-j>": "do:previewdown",
+    "<C-k>": "do:previewup"
+  },
+  "list.normalMappings": {
+    "<C-c>": "do:exit",
+    "<C-j>": "do:previewdown",
+    "<C-k>": "do:previewup"
+  },
 }
