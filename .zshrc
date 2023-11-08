@@ -11,7 +11,7 @@ export EDITOR=vim
 #     if an update is available, will update the fonts.
 #     repeat the install process to update fonts.
 zi ice if"[[ -d ${HOME}/.local/share/fonts ]] && [[ $OSTYPE = linux* ]]" \
-  id-as"JetBrainsMono" from"gh-r" bpick"JetBrainsMono.zip" extract nocompile depth"1" \
+  id-as"JetBrainsMono" from"gh-r" bpick"JetBrainsMono.tar.xz" extract nocompile depth"1" \
   atclone="rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f" atpull"%atclone"
 zi light ryanoasis/nerd-fonts
 
