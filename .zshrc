@@ -26,19 +26,25 @@ zi wait lucid for \
   OMZP::git \
   OMZL::completion.zsh
 
+# :prompt:pure:prompt:* changes the color for both `prompt:success` and `prompt:error`
 zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload" \
   PURE_PROMPT_SYMBOL='▶'; PURE_PROMPT_VICMD_SYMBOL='◀'; \
-  zstyle ':prompt:pure:git:stash' show 'yes'" \
+  zstyle ':prompt:pure:git:stash' show 'yes'; \
+  zstyle ':prompt:pure:prompt:*' color 'magenta'; \
+  " \
   sindresorhus/pure
 
-zi wait lucid for \
+zi wait'0b' lucid for \
   OMZP::fancy-ctrl-z
 
 # fast toolchain as code for JS (e.g. node)
 # volta is much faster than nvm, thus nvm is replaced
 zi light cowboyd/zsh-volta
+# completions -> not working :(
+# zi wait lucid for \
+#   OMZP::volta
 
-zi wait lucid for atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" @djui/alias-tips
+zi wait'0b' lucid for atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" @djui/alias-tips
 
 ### programs
 zi wait lucid as'program' from'gh-r' for \
@@ -55,8 +61,13 @@ zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
   export CARGO_HOME=\$PWD; export RUSTUP_HOME=\$PWD/rustup" for \
   z-shell/0
 
+zi ice wait lucid as'completion' blockf has'cargo'
+zi snippet https://github.com/rust-lang/cargo/blob/master/src/etc/_cargo
+zi ice wait lucid as'completion' blockf has'rustc'
+zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
+
 zi wait lucid as'program' from'gh-r' for \
-  atclone'ln -s bat/autocomplete/bat.zsh -> _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
+  atclone'ln -sf bat/autocomplete/bat.zsh -> _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
   mv'bat* -> bat' sbin'**/bat(.exe|) -> bat' \
   pick'$ZPFX/bin/bat' \
@@ -66,7 +77,7 @@ zi wait lucid as'program' from'gh' has'bat' pick'src/*' for \
   @eth-p/bat-extras
 
 zi wait lucid as'program' from'gh-r' for \
-  atclone'ln -s fd/autocomplete/_fd -> _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
+  atclone'ln -sf fd/autocomplete/_fd -> _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
   atpull"%atclone" \
   mv'fd* -> fd' sbin'**/fd(.exe|) -> fd' \
   pick'$ZPFX/bin/fd' \
@@ -82,7 +93,7 @@ zi wait lucid as'program' from'gh-r' for \
 zi ice wait lucid as'completion' blockf has'delta'
 zi snippet https://raw.githubusercontent.com/dandavison/delta/master/etc/completion/completion.zsh
 
-# important: gh, not gh-r because app gets release infrequently
+# gh, because of completions and man pages
 zi wait lucid as'program' from'gh' for \
   atclone'cargo build --release; \
 	  ln -s completions/zsh/_exa -> _exa; \
@@ -96,16 +107,15 @@ zi wait lucid for \
   has'exa' atinit'AUTOCD=1' \
   @zplugin/zsh-exa
 
-# completions only available in debug build
+# manpages only available in debug build
+# https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
 zi wait lucid as'program' from'gh' for \
-  atclone'cargo build --release --features "pcre2"' \
+  atclone'cargo build --release --features "pcre2"; \
+  ln -sf complete/_rg -> _rg' \
   atpull'%atclone' \
   sbin'**/rg -> rg' \
   pick'$ZPFX/bin/rg' \
   @BurntSushi/ripgrep
-
-zi ice wait lucid as'completion' blockf has'rg'
-zi snippet https://github.com/BurntSushi/ripgrep/blob/master/complete/_rg
 
 zi wait lucid as'program' from'gh-r' for \
   mv'tealdeer* -> tealdeer' \
@@ -166,7 +176,7 @@ zi load z-shell/0
 # zi is used for zsh zi
 # if remapped, source this file ~/.zi/bin/zi.zsh
 # zi ice as'program' from'gh-r' pick'zoxide' \
-#   atclone'ln -s completions/_zoxide -> _zoxide;
+#   atclone'ln -sf completions/_zoxide -> _zoxide;
 #   cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd x > init.zsh' \
 #   atpull'%atclone' src'init.zsh' nocompile'!'
 zi ice as'null' from"gh-r" sbin
@@ -198,11 +208,6 @@ zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_doc
 
 zi ice wait lucid as'completion' blockf has'alacritty'
 zi snippet https://github.com/alacritty/alacritty/blob/master/extra/completions/_alacritty
-
-zi ice wait lucid as'completion' blockf has'cargo'
-zi snippet https://github.com/rust-lang/cargo/blob/master/src/etc/_cargo
-zi ice wait lucid as'completion' blockf has'rustc'
-zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
 
 # only for git
 # zstyle ':completion:*:*:git:*' fzf-search-display true
@@ -243,16 +248,11 @@ zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
 zi ice wait lucid has'fzf'
 zi light Aloxaf/fzf-tab
 
-# Utilize Turbo and initialize the completion with fast compinit
-# zi wait pack atload=+"zicompinit_fast; zicdreplay" for system-completions
-# Utilize Turbo
-zi wait pack for system-completions
-
 # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
-zi wait lucid for \
+zi wait lucid depth"1" for \
   atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay" \
   zsh-users/zsh-syntax-highlighting \
-  blockf \
+  as'completion' blockf \
   zsh-users/zsh-completions \
   atload"!_zsh_autosuggest_start" \
   zsh-users/zsh-autosuggestions
@@ -348,10 +348,15 @@ bindkey '^w' backward-kill-word
 bindkey '^p' history-beginning-search-backward
 bindkey '^n' history-beginning-search-forward
 bindkey '^y' yank
-bindkey '^q' show-buffer-stack
 
 ### alias
 alias v="vim"
 alias nv="nvim"
 # alias man="batman.sh"
+alias -g ...='../..'
+alias -g ....='../../..'
+alias -g .....='../../../..'
+alias -g ......='../../../../..'
+
+### export
 export MANPAGER="vim +MANPAGER --not-a-term -"
