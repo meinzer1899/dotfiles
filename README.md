@@ -40,29 +40,6 @@ Search rust book via cli:
 
 https://github.com/0xhiro/thebook
 
-## tealdeer
-
-`cargo install tealdeer`
-
-## fd
-
-Gets installed by zi.
-https://github.com/sharkdp/fd#installation
-
-## rg
-
-https://github.com/BurntSushi/ripgrep#installation
-
-Gets installed by zi.
-
-Currently, I use a local installation, because the last ripgrep relase is from
-Jun 12, 2021.
-
-Clone repo, cd into repo, 
-cargo build --release --features 'pcre2' (pcre2 needed by anyjump.vim).
-cargo install --path .
-sudo cp $(which rg) /usr/local/bin/
-
 ## zsh
 
 Gets installed by zi.
@@ -183,6 +160,10 @@ https://github.com/EthanJWright/vs-tasks.nvim
 CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
 ## nvim
+
+Use FZF instead of telescope
+https://github.com/ibhagwan/fzf-lua#why-fzf-lua
+https://github.com/ibhagwan/nvim-lua
 
 https://www.youtube.com/watch?v=stqUbv-5u2s TJ De Vries  Effective Neovim: Instant IDE
 https://github.com/nvim-lua/kickstart.nvim
