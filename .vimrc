@@ -20,15 +20,15 @@ set noshowmode
 set laststatus=2
 
 set relativenumber
-"Line numbers are good
+" Line numbers are good
 set number
 
-"No sounds
+" No sounds
 set visualbell
-"Reload files changed outside vim
+" Reload files changed outside vim
 set autoread
 
-"Show current mode down the bottom
+" Show current mode down the bottom
 set showmode
 
 " Give more space for displaying messages.
@@ -253,7 +253,7 @@ Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 " Plug 'metakirby5/codi.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release', 'do': 'CocInstall coc-explorer coc-json coc-docker coc-diagnostic coc-snippets coc-yank coc-jedi coc-rust-analyzer coc-yaml coc-cmake coc-clangd'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
@@ -557,6 +557,9 @@ endif
 " re-enter Terminal-Job mode by pressing i
 
 " COC
+" let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-diagnostic', 'coc-yank', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd']
+let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd', '@yaegassy/coc-ruff', 'coc-pyright']
+
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
 " no select by `"suggest.noselect": true` in your configuration file

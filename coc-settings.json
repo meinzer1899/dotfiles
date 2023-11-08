@@ -10,7 +10,6 @@
   "diagnostic-languageserver.filetypes": {
     "vim": "vint",
     "cmake": "cmake-lint",
-    "python": ["flake8", "mypy"],
     // for md, ascidoc and more, https://github.com/errata-ai/vale looks promising
     "markdown": ["write-good", "markdownlint"],
     "dockerfile": "hadolint",
@@ -63,8 +62,10 @@
       }
     }
   },
-  "coc.preferences.extensionUpdateCheck": "weekly",
+  "coc.preferences.extensionUpdateCheck": "daily",
   "coc.source.file.ignoreHidden": false,
+  // lint only via coc-ruff, not via coc-pyright
+  "python.linting.enabled": false,
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",
   "explorer.file.showHiddenFiles": true,
