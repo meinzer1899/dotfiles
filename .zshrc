@@ -41,6 +41,11 @@ zi light cowboyd/zsh-volta
 zi wait lucid for atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" @djui/alias-tips
 
 ### programs
+zi wait lucid as'program' from'gh-r' for \
+  mv'hadolint* -> hadolint' \
+  sbin'hadolint -> hadolint' \
+  pick'$ZPFX/bin/hadolint' \
+  @hadolint/hadolint
 
 ## rust
 ## https://wiki.zshell.dev/ecosystem/annexes/rust
