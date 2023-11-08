@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/env bash
 
 tldr --update
 
@@ -10,9 +10,9 @@ zi update --all --parallel --quiet && zi self-update
 sudo cp -t /usr/local/bin ~/.zi/polaris/bin/{bat,fd,rg}
 
 # javascript tool manager, installs node.js runtimes, npm and Yarn package managers or any binary from npm
-volta install node # installs latest LTS
+volta install node # installs latest LTS; node@20 installs latest node 20 version
 volta install bash-language-server
-volta install npm # do I need npm or does volta do the job?
+volta install npm # needed for coc plugin install
 # from time to time, uninstall old package versions via rm -rf in ~/.volta/tools/image/[node|npm]
 
 ~/.tmux/plugins/tpm/bin/update_plugins all
@@ -33,7 +33,3 @@ vim +PlugUpdate +CocUpdateSync +PlugClean! +qall
 
 # alacritty
 # manually via repository
-
-# hadolint
-# https://github.com/hadolint/hadolint
-# TODO: install via zi
