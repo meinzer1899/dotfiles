@@ -71,6 +71,7 @@
   "explorer.file.showHiddenFiles": true,
   // "clangd.compilationDatabasePath": "build/", // compilationDatabaseCandidates is ignored if you specify a value here :(
   "clangd.compilationDatabaseCandidates": ["build/",  "build/native/debug/", "build/native/release/", "build/cross/release/", "build/release/", "build/cross/debug/"],
+  "clangd.checkUpdates": true,
   "clangd.disableProgressNotifications": true,
   "clangd.showDBChangedNotification": false,
   // https://manpages.debian.org/experimental/clangd/clangd.1.en.html
@@ -78,11 +79,10 @@
   "clangd.arguments": [
     "--all-scopes-completion=true",
     "--background-index=true",
-    "--background-index-priority=background",
-    "--clang-tidy=false",
+    "--background-index-priority=low",
+    "--clang-tidy=true",
     "--completion-style=detailed",
     "--compile-commands-dir=build",
-    "--enable-config=true",
     "--header-insertion=never",
     "--header-insertion-decorators",
     "-j=2",
