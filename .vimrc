@@ -582,8 +582,7 @@ endif
 " re-enter Terminal-Job mode by pressing i
 
 " COC
-" let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-diagnostic', 'coc-yank', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd']
-let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd', '@yaegassy/coc-ruff', 'coc-pyright']
+let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd', '@yaegassy/coc-ruff', 'coc-pyright', 'coc-yank']
 
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
