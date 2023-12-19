@@ -1,5 +1,93 @@
+# Analyze clangd verbose output via
+# * CocCommand workspace.showOutput
+# * clangd --log=verbose --check=path/to/file
+# https://clangd.llvm.org/config#diagnostics
+If:
+  PathMatch: [/usr/include/.*, .*/build/.*]
+Diagnostics:
+  Suppress:
+    - '*'
+  ClangTidy:
+    Remove:
+      - '*'
+Index:
+  Background: Skip
+---
+# Tweak the clangd parse settings for all files
+CompileFlags:
+  Add:
+    # Treat code as C++
+    - "-xc++"
+    # report all errors
+    - "-ferror-limit=0"
+    - "-fmacro-backtrace-limit=0"
+    - "-ftemplate-backtrace-limit=0"
+    # recommended set https://hackingcpp.com/cpp/diagnostics.html
+    # most important
+    - "-Wall"
+    - "-Wextra"
+    - "-Wpedantic"
+    # recommended
+    - "-Wshadow"
+    - "-Wconversion"
+    - "-fsanitize=undefined,address"
+    - "-Wfloat-equal"
+    - "-Wformat-nonliteral"
+    - "-Wformat-security"
+    - "-Wformat-y2k"
+    - "-Wformat=2"
+    - "-Wimport"
+    - "-Winvalid-pch"
+    - "-Wlogical-op"
+    - "-Wmissing-declarations"
+    - "-Wmissing-field-initializers"
+    - "-Wmissing-format-attribute"
+    - "-Wmissing-include-dirs"
+    - "-Wmissing-noreturn"
+    - "-Wnested-externs"
+    - "-Wpacked"
+    - "-Wpointer-arith"
+    - "-Wredundant-decls"
+    - "-Wstack-protector"
+    - "-Wstrict-null-sentinel"
+    - "-Wswitch-enum"
+    - "-Wundef"
+    - "-Wwrite-strings"
+    # own
+    - "-Warith-conversion"
+    - "-Wpessimizing-move"
+  Remove: -W*                     # strip all other warning-related flags
+# https://github.com/hbuyse/dotfiles/blob/master/dot_config/clangd/config.yaml
 Diagnostics:
   UnusedIncludes: Strict
+  MissingIncludes: None
   ClangTidy:
-    Add: modernize*
-    Remove: modernize-use-trailing-return-type
+    Add:
+      - '*'
+    Remove:
+      - altera-unroll-loops
+      - altera-id-dependent-backward-branch
+      - readability-braces-around-statements
+      - google-readability-braces-around-statements # alias to readability-braces-around-statements
+      - hicpp-braces-around-statements # alias to readability-braces-around-statements
+      - readability-identifier-length
+      - readability-magic-numbers
+      - cppcoreguidelines-avoid-magic-numbers
+      - modernize-use-trailing-return-type
+      - llvm-namespace-comment # alias to google-readability-namespace-comments
+      - google-readability-namespace-comments
+      - google-readability-avoid-underscore-in-googletest-name
+      - fuchsia-*
+      - llvmlibc-*
+    CheckOptions:
+      hicpp-signed-bitwise.IgnorePositiveIntegerLiterals: true
+      cppcoreguidelines-avoid-do-while.IgnoreMacros: true # for function-like macros as used by unit test frameworks
+      readability-operators-representation.BinaryOperators: "and;not;or" # replace: && -> and, ! -> not, || -> or
+InlayHints:
+  BlockEnd: true
+  Designators: false
+  Enabled: false
+  ParameterNames: false
+  DeducedTypes: false
+Index:
+    StandardLibrary: No

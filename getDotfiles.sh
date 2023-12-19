@@ -1,9 +1,9 @@
 #!/bin/bash
 
-mkdir -p .config/tealdeer
-mkdir -p .config/bat
-mkdir -p .config/clangd
-mkdir -p .config/ruff
+test -d .config/tealdeer || mkdir -p .config/tealdeer
+test -d .config/bat || mkdir -p .config/bat
+test -d .config/clangd || mkdir -p .config/clangd
+test -d .config/ruff || mkdir -p .config/ruff
 
 cp ~/.config/tealdeer/config.toml .config/tealdeer/
 cp ~/.config/bat/config .config/bat/
