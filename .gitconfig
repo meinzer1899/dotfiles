@@ -18,6 +18,8 @@
 	colorMoved = default
 	tool = vimdiff
 	submodule = log
+	# detect renamed files and show only actual differences between them
+	renames = copies
 [diff "bin"]
 	# Use `hexdump` to diff binary files.
 	textconv = hexdump -v -C
