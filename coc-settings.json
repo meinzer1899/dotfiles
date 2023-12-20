@@ -13,7 +13,7 @@
     // for md, ascidoc and more, https://github.com/errata-ai/vale looks promising
     "markdown": ["write-good", "markdownlint"],
     "dockerfile": "hadolint",
-    "zsh": "zsh"
+    "zsh": "zsh",
   },
   "diagnostic-languageserver.mergeConfig": true,
   "diagnostic-languageserver.linters": {
@@ -62,10 +62,11 @@
       }
     }
   },
-  "coc.preferences.extensionUpdateCheck": "daily",
+  "coc.preferences.extensionUpdateCheck": "weekly",
   "coc.source.file.ignoreHidden": false,
   // lint only via coc-ruff, not via coc-pyright
   "python.linting.enabled": false,
+  "pyright.disableDiagnostics": true,
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",
   "explorer.file.showHiddenFiles": true,
@@ -95,12 +96,13 @@
   "semanticTokens.enable": true,
   "colors.enable": true,
   "diagnostic.format": "%message [%source]",
-  "diagnostic.virtualText": true,
+  "diagnostic.virtualText": false,
   "diagnostic.checkCurrentLine": true,
   "diagnostic.separateRelatedInformationAsDiagnostics": true,
-  "diagnostic.virtualTextCurrentLineOnly": true,
+  "diagnostic.virtualTextCurrentLineOnly": false,
   "diagnostic.virtualTextLimitInOneLine": 2,
   "diagnostic.messageTarget": "float",
+  //"suggest.timeout": 1000,
   // Change "diagnostic.enableMessage" to "jump" and use <Plug>(coc-diagnostic-info) to show diagnostic messages.
   "diagnostic.enableMessage": "jump",
   "suggest.snippetsSupport": true,
@@ -111,6 +113,7 @@
     "border": true,
     "rounded": true
   },
+  "suggest.virtualText": true,
   "suggest.selection": "recentlyUsedByPrefix",
   "suggest.languageSourcePriority": 90,
   "suggest.maxCompleteItemCount": 100,
