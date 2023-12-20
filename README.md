@@ -12,12 +12,19 @@ setxkbmap -option ctrl:nocaps such that it
 
 ## git
 
-add .gitconfig.local for user entries
+Add .gitconfig.local for user entries
+Change local user.email (optionally also user.name) in this repository, so that Github
+can associate commit with user.
 
 ## TMUX
 
 https://github.com/tmux/tmux/wiki/Installing#from-version-control
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+
+```bash
+sh autogen.sh
+./configure
+make -j$(nproc) && sudo make install
+```
 tmux new -s tmux
 
 ## zi
@@ -53,6 +60,9 @@ dont forget to checkout tagged commit
 
 For FZF-TMUX to find fzf executable, change
 `fzf="$(command -v fzf 2> /dev/null)" || fzf=$HOME/.zi/polaris/bin/fzf`
+
+To auto-accept entry on Enter when searching with CTRL-R, use
+https://github.com/junegunn/fzf/issues/477#issuecomment-444053054
 
 Gets installed by zi
 
@@ -121,22 +131,27 @@ https://github.com/MaskRay/ccls/wiki/Install
 
 ## CMake
 
+https://github.com/foonathan/docker/blob/a18a54c3f04df077419fc21853e219375b2bb58a/common/install-cmake.sh
+
 ### cmake4vim
 https://github.com/ilyachur/cmake4vim/
 
 ### language server
 https://github.com/regen100/cmake-language-server
 
-## llvm, include-what-you-use
+## llvm, clang
+
+Installation description:
+https://apt.llvm.org/ -> Automatic installation script
+installs *all* llvm packages (also clangd, clang-tidy, include-cleaner etc) at `/bin`.
+Also adds apt.llvm.org to apt package list to automatically get updates.
+
+Cache for clang-tidy static analysis results:
+https://github.com/matus-chochlik/ctcache/tree/main
 
 https://stackoverflow.com/questions/51582604/how-to-use-cpplint-code-style-checking-with-cmake
 
-https://llvm.org/docs/CMake.html
-https://github.com/include-what-you-use/include-what-you-use#how-to-build-as-part-of-llvm
-
-`llvm-project/build$ cmake -G "Unix Makefiles" -DLLVM_ENABLE_PROJECTS=clang -DLLVM_EXTERNAL_PROJECTS=iwyu -DLLVM_EXTERNAL_IWYU_SOURCE_DIR=/path/to/iwyu ../llvm`
-
-`llvm-project/build$ sudo cmake --build . --target install`
+https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm
 
 - [ ] update .vimrc with comments from https://github.com/nvim-zh/minimal_vim/blob/master/init.vim
 - [ ] Read series https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
