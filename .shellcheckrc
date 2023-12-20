@@ -1,0 +1,7 @@
+# https://github.com/koalaman/shellcheck/wiki/optional
+
+shell=sh
+
+enable=avoid-nullary-conditions  # Suggest explicitly using -n in `[ $var ]`
+enable=deprecate-which           # Suggest `command -v` instead of `which`
+enable=add-default-case          # Suggest adding a default case in `case` statements
