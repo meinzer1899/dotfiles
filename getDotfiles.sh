@@ -18,3 +18,7 @@ cp -t . \
     ~/.vim/coc-settings.json \
     ~/.alacritty.yml \
     ~/.gitconfig
+    ~/.shellcheckrc
+
+echo "Done"
+exit 0
