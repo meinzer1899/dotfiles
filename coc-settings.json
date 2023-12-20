@@ -72,11 +72,14 @@
   "explorer.file.showHiddenFiles": true,
   // "clangd.compilationDatabasePath": "build/", // compilationDatabaseCandidates is ignored if you specify a value here :(
   "clangd.compilationDatabaseCandidates": ["build/",  "build/native/debug/", "build/native/release/", "build/cross/release/", "build/release/", "build/cross/debug/"],
-  "clangd.checkUpdates": true,
+  // install via https://apt.llvm.org/ -> Automatic installation script
+  "clangd.checkUpdates": false,
   "clangd.disableProgressNotifications": true,
   "clangd.showDBChangedNotification": false,
-  // https://manpages.debian.org/experimental/clangd/clangd.1.en.html
   // https://github.com/llvm/llvm-project/blob/llvmorg-15.0.6/clang-tools-extra/clangd/tool/ClangdMain.cpp
+  // show debug output via CocCommand workspace.showOutput
+  // https://clangd.llvm.org/faq
+  //"--query-driver=/bin/clang++",
   "clangd.arguments": [
     "--all-scopes-completion=true",
     "--background-index=true",
@@ -85,11 +88,11 @@
     "--completion-style=detailed",
     "--compile-commands-dir=build",
     "--header-insertion=never",
-    "--header-insertion-decorators",
-    "-j=2",
-    "--query-driver=/usr/local/bin/clang++",
+    "--offset-encoding=utf-16",
+    "--enable-config=true",
+    "--query-driver=/usr/bin/clang-**,/usr/bin/g++-*",
   ],
-  "clangd.path": "~/.config/coc/extensions/coc-clangd-data/install/16.0.2/clangd_16.0.2/bin/clangd",
+  "clangd.path": "/bin/clangd-17",
   "inlayHint.enable": false,
   "inlayHint.display": false,
   "inlayHint.enableParameter": false,
