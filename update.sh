@@ -25,9 +25,11 @@ volta install bash-language-server
 volta install npm@latest # needed for coc plugin install
 # from time to time, uninstall old package versions via rm -rf in ~/.volta/tools/image/[node|npm]
 
-# fails when called out of tmux session
-~/.tmux/plugins/tpm/bin/clean_plugins
-~/.tmux/plugins/tpm/bin/update_plugins all
+# fails when called outside of tmux session
+if [[ -n $TMUX  ]]; then
+    ~/.tmux/plugins/tpm/bin/clean_plugins
+    ~/.tmux/plugins/tpm/bin/update_plugins all
+fi
 
 # cargo install cargo-update is needed
 # cargo install-update -a
