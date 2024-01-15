@@ -1,10 +1,11 @@
 [core]
 	editor = vim
 	pager = delta
+	# Speed up commands involving untracked files such as `git status`.
+	# https://git-scm.com/docs/git-update-index#_untracked_cache
 	untrackedCache = true
 	# https://github.blog/2022-06-29-improve-git-monorepo-performance-with-a-file-system-monitor/
-	# need git version >= 2.37.0
-	; fsmonitor = true
+	fsmonitor = true
 [include]
 	# Allow local customizations in the .gitconfig_local file
 	path = ~/.gitconfig.local
