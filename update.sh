@@ -2,7 +2,7 @@
 
 # enable bash strict mode
 # (http://redsymbol.net/articles/unofficial-bash-strict-mode/)
-set -euo pipefail
+set -eo pipefail
 IFS=$'\n\t'
 
 echo "Starting update"

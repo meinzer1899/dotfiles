@@ -12,9 +12,16 @@ setxkbmap -option ctrl:nocaps such that it
 
 ## git
 
+https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
+
+For Ubuntu, this PPA provides the latest stable upstream Git version: https://git-scm.com/download/linux.
+
 Add .gitconfig.local for user entries
 Change local user.email (optionally also user.name) in this repository, so that Github
 can associate commit with user.
+
+https://github.com/bigH/git-fuzzy
+https://github.com/gitleaks/gitleaks
 
 ## TMUX
 
