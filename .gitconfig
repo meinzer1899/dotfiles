@@ -6,6 +6,7 @@
 	untrackedCache = true
 	# https://github.blog/2022-06-29-improve-git-monorepo-performance-with-a-file-system-monitor/
 	fsmonitor = true
+	hooksPath = ~/.git-templates/hooks
 [include]
 	# Allow local customizations in the .gitconfig_local file
 	path = ~/.gitconfig.local
