@@ -2,9 +2,6 @@ if [[ -r "$HOME/.config/zi/init.zsh" ]]; then
   source "$HOME/.config/zi/init.zsh" && zzinit
 fi
 
-# environment variables
-export EDITOR=vim
-
 # https://wiki.zshell.dev/community/gallery/collection/themes
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 # When running: zi update will:
@@ -206,7 +203,6 @@ zi wait lucid as'command' from'gh-r' for \
   sbin'grex' \
   @pemistahl/grex
 
-# pick'$ZPFX/bin/shellcheck' \
 ### completions
 zi ice wait lucid as"completion"
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitfast
@@ -270,6 +266,7 @@ export HISTFILE=~/.histfile
 export HISTSIZE=1000000   # the number of items for the internal history list
 export SAVEHIST=1000000   # maximum number of items for the history file
 
+### OPTIONS
 # https://wiki.zshell.dev/docs/guides/customization#history-optimization
 setopt append_history         # Allow multiple sessions to append to one Zsh command history.
 setopt extended_history       # Show timestamp in history.
@@ -295,6 +292,8 @@ setopt no_beep              # Don't beep on error.
 setopt prompt_subst         # Substitution of parameters inside the prompt each time the prompt is drawn.
 setopt pushd_ignore_dups    # Don't push multiple copies directory onto the directory stack.
 setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposite.
+
+unsetopt correct # don't correct command spelling
 
 # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
 # Fuzzy completion matching
@@ -327,7 +326,7 @@ zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX
 
 # Use cache for slow functions
 zstyle ':completion:*' use-cache on
-zstyle ':completion:*' cache-path $ZDOTDIR/cache
+zstyle ':completion:*' rehash true
 # Ignore completion for non-existant commands
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # https://wiki.zshell.dev/docs/guides/customization#do-menu-driven-completion
@@ -338,7 +337,11 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 
 # Dircolors on completions
 # https://wiki.zshell.dev/docs/guides/customization#color-completion-for-some-things
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# Zsh colors
+if [[ "$CLICOLOR" != '0' ]]; then
+    zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" 'ma=1;30;43'
+fi
 
 ### bindings
 
@@ -358,14 +361,59 @@ bindkey '^p' history-beginning-search-backward
 bindkey '^n' history-beginning-search-forward
 bindkey '^y' yank
 
+# use vi keybindings
+# C-j to enter vi mode
+bindkey -v
+
+# add custom bindings
+bindkey ' '    magic-space
+bindkey '\eK'  kill-line-to-system-clipboard
+bindkey '\eY'  yank-from-system-clipboard
+bindkey '\e^?' backward-kill-word
+bindkey '\eb'  backward-word
+bindkey '\ef'  forward-word
+bindkey '\ek'  kill-line-to-system-clipboard
+bindkey '\ey'  yank-from-system-clipboard
+bindkey '^?'   backward-delete-char
+bindkey '^A'   beginning-of-line
+bindkey '^B'   backward-char
+bindkey '^E'   end-of-line
+bindkey '^F'   forward-char
+bindkey '^G'   fzf-cd-widget
+bindkey '^J'   vi-cmd-mode
+bindkey '^K'   kill-line-to-x-selection
+bindkey '^N'   down-history
+bindkey '^P'   up-history
+bindkey '^R'   history-incremental-search-backward
+bindkey '^S'   history-incremental-search-forward
+bindkey '^T'   fzf-file-widget
+bindkey '^U'   kill-whole-line
+bindkey '^W'   backward-kill-word
+bindkey '^X'   fzf-history-widget
+bindkey '^Y'   yank-from-x-selection
+bindkey '^Z'   fzf-file-widget
+
+bindkey "^H" autosuggest-execute
 ### alias
 alias v="vim"
 alias nv="nvim"
-# alias man="batman.sh"
+alias gs="gss"
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 
+## add aliases for all recipes in ~/.user.justfile
+for recipe in `just --justfile ~/.user.justfile --summary 2> /dev/null`; do
+  alias $recipe="just --justfile ~/.user.justfile --working-directory .
+  $recipe"
+done
+
 ### export
-export MANPAGER="vim +MANPAGER --not-a-term -"
+# https://zameermanji.com/blog/2012/12/30/using-vim-as-manpager/
+export MANPAGER="vim +MANPAGER -R --not-a-term -"
+export MANWIDTH="100"
+export EDITOR="vim"
+export VISUAL="vim"
+export BLOCKSIZE="K" # show blocks as kilobytes
+unset MAILCHECK # don't check for mails
