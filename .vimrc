@@ -3,41 +3,68 @@
 " Vim guides
 " https://google.github.io/styleguide/vimscriptguide.xml
 " https://rbtnn.hateblo.jp/entry/2014/12/28/010913
-" https://github.com/skwp/dotfiles/blob/master/vimrc
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
-set nocompatible
 set encoding=utf-8
+set termencoding=utf-8
+set fileencoding=utf-8
 scriptencoding utf-8
+" This is vim, not vi.
+if exists('+nocompatible')
+    set nocompatible
+endif
+
+function! s:get_SID() abort
+    return matchstr(expand('<sfile>'), '<SNR>\d\+_\zeget_SID$')
+endfunction
+let s:SID = s:get_SID()
+delfunction s:get_SID
+
+let s:on_win = has('win32')
+let s:on_mac = has('mac')
 
 " Open new split panes to right and buttom
 set splitbelow
+set lazyredraw
 
 " lightline shows the mode already
 set noshowmode
-" to have colors within lightline status bar
+" Show the statusbar always, not only on last window
 set laststatus=2
 
-set relativenumber
-" Line numbers are good
+" See the cursor line and the offset with the adjacent lines.
 set number
+if exists('+relativenumber')
+    set relativenumber
+endif
 
 " No sounds
 set visualbell
+" disable the more-prompt
+set nomore
 " Reload files changed outside vim
 set autoread
+" Better to be noisy than find something unexpected.
+set noautowrite
+
+" Trigger checktime to get updates on file change more often
+au FocusGained * :checktime
+
+" Set Blowfish for encryption method, but only on Vim >=7.3.
+if has('cryptv') && v:version >= 703 | set cryptmethod=blowfish | endif
 
 " Show current mode down the bottom
 set showmode
+" Don't show commands as you type them
+set noshowcmd
 
 " Give more space for displaying messages.
-set cmdheight=2
+set cmdheight=1
 
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
 " delays and poor user experience.
 set updatetime=150
-set lazyredraw
 
 " Don't pass messages to |ins-completion-menu| (coc)
 set shortmess+=c
@@ -48,56 +75,102 @@ set signcolumn=yes
 
 " Allow buffer switching even if unsaved
 set hidden
+" Don't display long lines that don't fit in the window as if were broken.
+" Display long lines by showing them in multiple visual lines, not by scrolling.
+" Only affects how the lines look. See 'showbreak' for the visual hint.
 set wrap
+" Wrap lines at convenient points. Only makes sense if wrap is enabled.
+set linebreak
 " help fo-table.  set fo=croq (only format comments, good for code), set fo=tcrq for text
 set fo=croq
+" Add 'j' (remove commentstring when joining) to format options.
+if v:version > 703 | set fo+=j | endif
+" Don't leave two spaces between two sentences (foo.  Bar) when joining lines
+set nojoinspaces
 
 " Fix Vim's ridiculous line wrapping model
 set whichwrap=<,>,[,],h,l
-" set nowrap       "Don't wrap lines
-"Wrap lines at convenient points
-set linebreak
 
 " ================ Folds ============================
 
-"fold based on indent
+" fold based on indent
 set foldmethod=indent
-"deepest fold is 3 levels
+" deepest fold is 3 levels
 set foldnestmax=3
-"dont fold by default
+" dont fold by default
 set nofoldenable
 
 "" ================ Indentation ======================
 "
-" show existing tab with 4 spaces width
-" set tabstop=4
-" when indenting with '>', use 4 spaces width
+" tabstop: Set how many spaces _looks_ a tab.
+set tabstop=4
+" shiftwidth: Number of spaces to use for each step of (auto)indent.
+" Usually you set it to the tabstop, unless you want to mix spaces and tabs.
 set shiftwidth=4
+" softtabstop: Makes the backspace more consistent with the tab in insert mode
+" if you set the shiftwidth and the softtabstop the same value
+set softtabstop=4
 " On pressing tab, insert 4 spaces
 set expandtab
 set autoindent
-set tabstop=4
+" Make <Tab> and <BS> behave according to 'shiftwidth'.
 set smarttab
 set smartindent
+" Use multiples of 'shiftwidth' when using the operators '>' and '<'.
+set shiftround
+" Allow the backspace to do useful things (is not the default everywhere)
+set backspace=indent,eol,start
+
+" Syntax highlighting reduced to some reasonable column.
+set synmaxcol=500
 
 " Auto indent pasted text
 nnoremap p p=`]<C-o>
 nnoremap P P=`]<C-o>
 
-" post plugin section
-" Also load indent files, to automatically do language-dependent indenting.
+" Substitute what's under the cursor, or current selection.
+" FIXME: escape regex character, like selecting /foo/bar and the slashes are
+" there
+nnoremap <leader>S :%s/\<<C-R><C-w>\>//c<left><left>
+xnoremap <leader>S y:%s/<C-R>"//c<left><left>
+
+" Load indent files, to automatically do language-dependent indenting.
 filetype plugin indent on
 
-" Display extra whitespace
-set list listchars=tab:»·,trail:·,nbsp:·
+" Show some chars to denote clearly where there is a tab or trailing space
+set list                                                                   " visualize non-visual characters
+set listchars&                                                             "  '- set it to empty first
+set listchars+=conceal:⌦                                                   "  '- what to show when concealing something
+set listchars+=eol:\                                                       "  '- end of line
+set listchars+=extends:\                                                   "  '- last column when wrap is off
+set listchars+=nbsp:                                                       "  '- non-breaking space
+set listchars+=precedes:\                                                  "  '- first column when wrap is off
+set listchars+=tab:»\                                                      "  '- tab
+set listchars+=trail:·                                                     "  '- trailing whitespace
 
 " --- backup and swap files ---
-" I save all the time, those are annoying and unnecessary...
-set nobackup
+set nobackup                                                               " no backups, I have persistent undo
 set nowritebackup
 set noswapfile
 
-" Make it obvious where 80 characters is
+" persistent undo in RAM /tmp/
+" from https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
+if has('persistent_undo')
+    let s:undodir = '/tmp/.undodir_' . $USER
+    if !isdirectory(&undodir)
+        call mkdir(&undodir, "p", 0740)
+    endif
+    let &undodir=s:undodir
+    set undofile
+    " persisent undo for 1024 actions
+    set undolevels=1024
+endif
+
+" Save a lot more history
+set history=200
+
+" Use a colored column to mark the textwidh+1 column
+set textwidth=80
 set colorcolumn=+1
 
 " Searching
@@ -112,14 +185,20 @@ set hlsearch
 " and unhighlight when pressing C-c
 nnoremap <nowait><silent> <C-C> :noh<CR>
 
+" Highlight the opening bracket/parentheses when the closing one is written
+set showmatch
+set matchtime=3
+
 " ================ Security ==========================
 set modelines=0
 set nomodeline
 
 " ================ Completion =======================
 
-set wildmode=list:longest
-set wildmenu                "enable ctrl-n and ctrl-p to scroll thru matches
+" Activate completion of the command line.
+set wildmenu
+" Complete longest common string, then each full match
+set wildmode=list:longest,list:full
 set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib
 set wildignore+=*vim/backups*
 set wildignore+=*.png,*.jpg,*.gif
@@ -130,22 +209,24 @@ set wildignore+=*.png,*.jpg,*.gif,*.bmp,*.tga,*.pcx,*.ppm,*.img,*.iso
 set wildignore+=*.pdf,*.dmg,*.app,*.ipa,*.apk,*.mobi,*.epub
 set wildignore+=*.mp4,*.avi,*.flv,*.mov,*.mkv,*.swf,*.swc
 set wildignore+=*.ppt,*.pptx,*.doc,*.docx,*.xlt,*.xls,*.xlsx,*.odt,*.wps
-set wildignore+=*/.git/*,*/.svn/*,*.DS_Store
+set wildignore+=*/.nx/**,*.app,*.git,.git,*/__pycache__/**,__pycache__,*/.svn/*,*.DS_Store
 set wildignore+=*/node_modules/*,*/nginx_runtime/*,*/build/*,*/logs/*,*/dist/*,*/tmp/*
+
+" Ignore case in the command line.
+if exists('+wildignorecase') | set wildignorecase | endif
 
 " ================ Scrolling ========================
 
-"Start scrolling when we're 8 lines away from margins
-set scrolloff=8
+" Make the text scroll some lines before the cursor reaches the border
+set scrolloff=5
 set sidescrolloff=15
 set sidescroll=1
 
 let g:mapleader = ' '
 nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
-nnoremap <silent> <Leader>m :FZFMru<CR>
 nnoremap <silent> <Leader>s :update<CR>
-nnoremap <silent> <Leader>gs :vertical :Git <CR>:vertical resize 45<CR>
+nnoremap <silent> <Leader>gs :vertical :Git <CR>:vertical resize 45<CR>:setlocal winfixwidth<CR>
 nnoremap <silent> <Leader>gp :Git! push<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
 nnoremap <silent> <Leader>q :@:<CR>
@@ -158,8 +239,6 @@ xnoremap . :norm.<CR>
 nnoremap cp yap<S-}>p
 " Control-v is a common system level shortcut to paste from the clipboard. So why not use it also to paste from the system clipboard when in insert mode.
 inoremap <C-v> <C-r>+
-" Automatically equalize splits when Vim is resized (e.g. because of tmux split)
-autocmd VimResized * wincmd =
 
 " mappings to make search results appear in the middle of the screen
 " https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
@@ -173,9 +252,50 @@ nnoremap g; g;zz
 nnoremap g, g,zz
 
 inoremap jj <CR>
-" ci( does not jump automatically to parenthesis, fix with this two lines
+" ci( or ci{ does not jump automatically to parenthesis, fix with this these
+" lines
 nnoremap ci( f(ci(
+nnoremap cI( F(ci(
 nnoremap ci) f)ci)
+nnoremap cI) F)ci)
+nnoremap ci{ f{ci{
+nnoremap cI{ F{ci{
+nnoremap ci} f}ci}
+nnoremap cI} F}ci}
+nnoremap ci" f"ci"
+nnoremap cI" F"ci"
+nnoremap ci< f<ci<
+nnoremap cI< F<ci<
+nnoremap cI> F>ci>
+nnoremap cI> F>ci>
+" Make Y consistent with C and D.  See :help Y.
+nnoremap Y y$
+
+" Return to the previous cursor position
+" " --------------------------------------
+" "   '' returns to the previous line
+" "   `` returns to the previous line and position
+" " --------------------------------------
+" " I never want #1 so I make it a nop and map #2 to #1
+map '' <nop>
+map '' ``
+
+" my redraw key does a few things:
+"   - remove hlsearch
+"   - remove hlnext,
+"   - clear highlighted yanks
+"   - clear highlighted lines
+"   - clear highlighted CurrentWord*
+"   - clear highlighted InterestingWords
+"   - reset colorcolumn
+"   - redraw screen
+nnoremap <silent> <C-l>
+            \ :call HLNextOff()                   <BAR>
+            \ :nohl                               <BAR>
+            \ :hi clear YankedMatches             <BAR>
+            \ :call HighlightCurrentLine('clear') <BAR>
+            \ :set colorcolumn&                   <BAR>
+            \ :redraw <CR>
 
 " diffopt
 set diffopt=filler,context:3,iwhite,hiddenoff
@@ -184,47 +304,81 @@ if has('nvim-0.3.2') || has('patch-8.1.0360')
     set diffopt+=internal,algorithm:histogram,indent-heuristic
 endif
 
+" Set the characters for statusline (& non current stl), vsplit, fold & diff.
+" " TODO: some characters don't work with some colorschemes because use bold,
+" etc.
+" set fillchars=vert:┃,fold:=,diff:·
+set fillchars=vert:┃,fold:═,diff:·
+
 " https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
 set selection=exclusive
 
 " Don't render (auto-format) markdown syntax
 set conceallevel=0
 
-" Autocommand
-augroup vimrcEx
-    autocmd!
-    " When editing a file, always jump to the last known cursor position.
-    " Don't do it for commit messages, when the position is invalid, or
-    " when
-    " inside an event handler (happens when dropping a file on gvim).
-    autocmd BufReadPost *
-        \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-        \ exe "normal g`\"" |
-        \ endif
+" Limit suggestions when spell checking with z=.
+set spellsuggest=best,15
 
-    " Set syntax highlighting for specific file types
-    autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
-    autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
-    autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=zsh
-    autocmd BufRead,BufNewFile gitconfig.local set filetype=gitconfig
-    autocmd BufRead,BufNewFile tmux.conf.local set filetype=tmux
-    autocmd BufRead,BufNewFile vimrc.local set filetype=vim
-    autocmd BufRead,BufNewFile .vimrc set filetype=vim
-    autocmd BufRead,BufNewFile CMakeLists.txt set filetype=cmake
-    autocmd BufRead,BufNewFile *.tpp set filetype=cpp
-    autocmd BufRead,BufNewFile .clang-format set filetype=yaml
-    autocmd FileType {markdown,gitcommit} setlocal spell spelllang=en_us
-    " Update signature help on jump placeholder.
-    autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-    " Highlight the symbol and its references
-    autocmd CursorHold * silent call CocActionAsync('highlight')
+" Vimrc augroup
+augroup MyVimrc
+    " Clear all autocommands in the group to avoid defining them multiple
+    " times each time vimrc is reloaded. It has to be only once and at the
+    " beginning of each augroup.
+    autocmd!
 augroup END
+
+command! -nargs=+ Autocmd autocmd MyVimrc <args>
+command! -nargs=+ AutocmdFT autocmd MyVimrc FileType <args>
+Autocmd VimEnter,WinEnter .vimrc,.gvimrc,vimrc,gvimrc syn keyword myVimAutocmd Autocmd AutocmdFT contained containedin=vimIsCommand
+Autocmd ColorScheme * highlight def link myVimAutocmd vimAutoCmd
+
+Autocmd VimResized * wincmd =
+" When editing a file, always jump to the last known cursor position.
+" Don't do it for commit messages, when the position is invalid, or
+" when inside an event handler (happens when dropping a file on gvim).
+Autocmd BufReadPost *
+                \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+                \ exe "normal g`\"" |
+                \ endif
+
+Autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
+Autocmd BufRead,BufNewFile *.plantuml setlocal filetype=plantuml
+Autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
+Autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=zsh
+Autocmd BufRead,BufNewFile gitconfig.local set filetype=gitconfig
+Autocmd BufRead,BufNewFile tmux.conf.local set filetype=tmux
+Autocmd BufRead,BufNewFile vimrc.local set filetype=vim
+Autocmd BufRead,BufNewFile .vimrc set filetype=vim
+Autocmd BufRead,BufNewFile CMakeLists.txt set filetype=cmake
+Autocmd BufRead,BufNewFile *.tpp set filetype=cpp
+AutocmdFT cpp setlocal matchpairs+=<:>
+Autocmd BufRead,BufNewFile .clang-format set filetype=yaml
+AutocmdFT {markdown,gitcommit} setlocal spell spelllang=en_us
+" Update signature help on jump placeholder.
+Autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+" Autocmd User CocLocationsChange call s:coc_qf_jump2loc(g:coc_jump_locations)
+" Highlight the symbol and its references
+Autocmd CursorHold * silent call CocActionAsync('highlight')
+" Start in INSERT mode if opening commit message with empty first line
+" Autocmd VimEnter COMMIT_EDITMSG if getline(1) == '' | execute 1 | startinsert | endif
+AutocmdFT gitcommit startinsert!
+" disable automatic comment on newline
+AutocmdFT * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
+" number column may cause ugly formatting when entering terminal window via C-w N :(
+Autocmd TerminalWinOpen * setlocal signcolumn=no textwidth=0 winfixheight norelativenumber nonumber
+
+" vim as MANPAGER
+" https://muru.dev/2015/08/28/vim-for-man.html
+" MAN_PN is set to the manpage name
+if !empty($MAN_PN)
+    Autocmd StdinReadPost * set ft=man | file $MAN_PN
+endif
 
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
-if empty(glob(data_dir . '/autoload/plug.vim'))
+if empty(glob(data_dir . '/autoload/plug.vim')) && empty($MAN_PN)
   silent execute '!curl -fLo '.data_dir.'/autoload/plug.vim --create-dirs  https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
-  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
+  Autocmd VimEnter * PlugInstall --sync | source $MYVIMRC
 endif
 
 call plug#begin('~/.vim/plugged')
@@ -249,9 +403,9 @@ Plug 'junegunn/goyo.vim'
  " also nice: EdenEast/nightfox
 Plug 'joshdick/onedark.vim'
 let g:onedark_terminal_italics=1
-Plug 'catppuccin/vim', { 'as': 'catppuccin' }
-Plug 'Everblush/everblush.vim'
-let g:everblush_transp_bg = 1
+" Plug 'catppuccin/vim', { 'as': 'catppuccin' }
+" Plug 'Everblush/everblush.vim'
+" let g:everblush_transp_bg = 1
 Plug 'itchyny/lightline.vim'
 Plug 'airblade/vim-gitgutter'
 let g:gitgutter_set_sign_backgrounds = 1
@@ -264,7 +418,8 @@ Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 Plug 'dyng/ctrlsf.vim'
 " Plug 'metakirby5/codi.vim'
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
@@ -312,8 +467,15 @@ Plug 'iamcco/markdown-preview.nvim', { 'do': 'cd app && npx --yes yarn install' 
 " these filetypes will have MarkdownPreview... commands
 let g:mkdp_filetypes = ['markdown', 'plantuml']
 Plug 'justinmk/vim-sneak'
+let g:sneak#use_ic_scs = 1
 Plug 'kana/vim-niceblock'
 Plug 'z-shell/zi-vim-syntax'
+Plug 'machakann/vim-highlightedundo'
+nmap u     <Plug>(highlightedundo-undo)
+nmap <C-r> <Plug>(highlightedundo-redo)
+nmap U     <Plug>(highlightedundo-Undo)
+nmap g-    <Plug>(highlightedundo-gminus)
+nmap g+    <Plug>(highlightedundo-gplus)
 
 " Initialize plugin system
 call plug#end()
@@ -321,9 +483,11 @@ call plug#end()
 " COLORS
 " from https://github.com/rhysd/dogfiles/blob/ba7624a7391da033fb328eaa67bb5743368dab4e/vimrc#L1120
 if !has('gui_running') && $TMUX !=# ''
-        set t_Co=256
+    set t_Co=256
 endif
+
 syntax enable
+
 if !has('gui_running')
     if &t_Co < 256
         set background=dark
@@ -334,6 +498,7 @@ if !has('gui_running')
             let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
             let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
             set termguicolors
+            set background=dark
             colorscheme onedark
             let g:lightline = { 'colorscheme': 'onedark' }
         endif
@@ -341,7 +506,7 @@ if !has('gui_running')
 endif
 
 " CLIPBOARD
-if has('macunix') || has('win32')
+if has('macunix') || s:on_win
     set clipboard=unnamed
 elseif has('unix')
     set clipboard=unnamedplus
@@ -413,26 +578,25 @@ nnoremap <silent> <Leader>rr    :Rg<CR>
 nnoremap <silent> <Leader>aa    :RG<CR>
 " nnoremap <silent> <Leader>aa    :Ag<CR>
 nnoremap <silent> <Leader>t     :Files<CR>
-nnoremap <silent> <Leader>l     :Lines<CR>
-nnoremap <silent> <Leader>bl    :BLines<CR>
+nnoremap <silent> <Leader>bl     :Lines<CR>
+nnoremap <silent> <Leader>l    :BLines<CR>
 nnoremap <silent> <Leader>gf    :GFiles?<CR>
 nnoremap <silent> <Leader>h     :History:<CR>
 nnoremap <silent> <Leader>c     :Commits<CR>
+" commits for the current buffer, or current line if a line is selected
 nnoremap <silent> <Leader>bc    :BCommits<CR>
+vnoremap <silent> <Leader>bc    :BCommits<CR>
 nnoremap <silent> <Leader>gg    :GGrep<CR>
 
 command! -bang -nargs=* GGrep
             \ call fzf#vim#grep(
             \   'git grep --line-number -- '.fzf#shellescape(<q-args>),
             \   fzf#vim#with_preview({'dir': systemlist('git rev-parse --show-toplevel')[0]}), <bang>0)
+
 " merge conflict commands in a 3-way-diff with: 1 - middle (BASE), 2 - left (LOCAL), 3 - right side (REMOTE)
 " https://git-scm.com/docs/vimdiff/en
 nnoremap <Leader>gj :diffget //3<CR>
 nnoremap <Leader>gf :diffget //2<CR>
-
-" display line movements unless preceded by a count whilst also recording jump points for movements larger than five lines:
-nnoremap <expr> j v:count ? (v:count > 5 ? "m'" . v:count : '') . 'j' : 'gj'
-nnoremap <expr> k v:count ? (v:count > 5 ? "m'" . v:count : '') . 'k' : 'gk'
 
 " LIGHTLINE
 " register compoments:
@@ -518,24 +682,28 @@ command! ProseMode call ProseMode()
 
 nnoremap <silent> ]g :GitGutterNextHunk<CR>
 nnoremap <silent> [g :GitGutterPrevHunk<CR>
-augroup VimDiff
-    autocmd!
-    autocmd VimEnter,FilterWritePre * if &diff | GitGutterDisable | endif
-augroup END
+Autocmd VimEnter,FilterWritePre * if &diff | GitGutterDisable | endif
 
 " BUFFERS
 " bdelete all buffers except the buffer in the current window
 nnoremap <silent><Leader>bdo :Bdelete other<CR>
 " bdelete buffers not visible in a window
 nnoremap <silent><Leader>bdh :Bdelete hidden<CR>:redraw<CR>
-" Disable rnumbers on inactive buffers for active screen indication
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * set relativenumber
-    autocmd WinLeave * set norelativenumber
-augroup END
+" Clear and redraw the screen. Defaulted to <C-L>.
+nmap <C-L> :redraw!<CR>
 
+" Disable rnumbers on inactive buffers for active screen indication
+" but not for terminal buffers because of ugly formatting when leaving and
+" entering normal mode in a terminal.
+Autocmd WinEnter * if &buftype !~# 'terminal' | set relativenumber | endif
+Autocmd WinLeave * if &buftype !~# 'terminal' | set norelativenumber | endif
+
+" HIGHLIGHT
 highlight StatusLineNC cterm=bold ctermfg=white ctermbg=darkgray
+" highlight the matches that have been yanked to a register and
+" the system clipboard
+highlight YankedMatches ctermfg=bg ctermbg=196 cterm=bolditalic
+highlight HighlightedyankRegion ctermfg=bg ctermbg=185 cterm=bolditalic
 
 " CODI
 let g:codi#interpreters = {
@@ -564,7 +732,7 @@ vmap     <leader>N <Plug>CtrlSFVwordPath
 "   \   setlocal nowrap |
 "   \ endif
 " TERMINAL
-if has('win32')
+if s:on_win
     noremap <Leader>p :tab term<CR>
 else
     if executable('zsh')
@@ -582,7 +750,8 @@ endif
 " re-enter Terminal-Job mode by pressing i
 
 " COC
-let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd', '@yaegassy/coc-ruff', 'coc-pyright', 'coc-yank']
+" let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd', '@yaegassy/coc-ruff', 'coc-pyright', 'coc-yank']
+let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-rust-analyzer', 'coc-yaml', 'coc-cmake', 'coc-clangd', '@yaegassy/coc-ruff', 'coc-pyright']
 
 " Use tab for trigger completion with characters ahead and navigate
 " NOTE: There's always complete item selected by default, you may want to enable
@@ -615,10 +784,14 @@ endif
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
 nmap <silent> ]g <Plug>(coc-diagnostic-next)
 
-nmap <silent> gd <Plug>(coc-definition)
-nmap <silent> gt <Plug>(coc-type-definition)
-nmap <silent> gi <Plug>(coc-implementation)
-nmap <silent> gr <Plug>(coc-references)
+nnoremap <silent><nowait> gd :call CocActionAsync('jumpDefinition')<CR>
+nnoremap <silent><nowait> gi :call CocActionAsync('jumpImplementation')<CR>
+nnoremap <silent><nowait> gt :call CocActionAsync('jumpTypeDefinition')<CR>
+nnoremap <silent><nowait> gr :call CocActionAsync('jumpReferences')<CR>
+" nmap <silent> gd <Plug>(coc-definition)
+" nmap <silent> gt <Plug>(coc-type-definition)
+" nmap <silent> gi <Plug>(coc-implementation)
+" nmap <silent> gr <Plug>(coc-references)
 
 nnoremap <silent> K :call ShowDocumentation()<CR>
 
@@ -631,6 +804,7 @@ function! ShowDocumentation()
 endfunction
 
 nmap <leader>rn <Plug>(coc-rename)
+nmap <leader>rf <Plug>(coc-refactor)
 
 if has('nvim-0.4.0') || has('patch-8.2.0750')
     nnoremap <silent><nowait><expr> <C-f> coc#float#has_scroll() ? coc#float#scroll(1) : "\<C-f>"
@@ -641,29 +815,48 @@ if has('nvim-0.4.0') || has('patch-8.2.0750')
     vnoremap <silent><nowait><expr> <C-b> coc#float#has_scroll() ? coc#float#scroll(0) : "\<C-b>"
 endif
 
+" from https://github.com/fannheyward/init.vim/blob/f91875ebb7fabf831086e66b9c11dd5240e8c859/init.vim#L256
+function! s:coc_qf_diagnostic() abort
+  if !get(g:, 'coc_service_initialized', 0)
+    return
+  endif
+  let diagnostic_list = CocAction('diagnosticList')
+  let items = []
+  let loc_ranges = []
+  for d in diagnostic_list
+    let text = printf('[%s%s] %s', (empty(d.source) ? 'coc.nvim' : d.source), (has_key(d, 'code') ? ' ' . d.code : ''), split(d.message, '\n')[0])
+    let item = {'filename': d.file, 'lnum': d.lnum, 'end_lnum': d.end_lnum, 'col': d.col, 'end_col': d.end_col, 'text': text, 'type': d.severity[0]}
+    call add(loc_ranges, d.location.range)
+    call add(items, item)
+  endfor
+  call setqflist([], ' ', {'title': 'CocDiagnosticList', 'items': items, 'context': {'bqf': {'lsp_ranges_hl': loc_ranges}}})
+  botright copen
+endfunction
+
+" from https://github.com/fannheyward/init.vim/blob/f91875ebb7fabf831086e66b9c11dd5240e8c859/init.vim#L273
+function! s:coc_qf_jump2loc(locs) abort
+    let loc_ranges = map(deepcopy(a:locs), 'v:val.range')
+    call setloclist(0, [], ' ', {'title': 'CocLocationList', 'items': a:locs, 'context': {'bqf': {'lsp_ranges_hl': loc_ranges}}})
+    let winid = getloclist(0, {'winid': 0}).winid
+    if winid == 0
+        rightbelow lwindow
+    else
+        call win_gotoid(winid)
+    endif
+endfunction
+
 " call hierarchy
 " nnoremap <silent> gl :call CocLocations('ccls','$ccls/call', {'hierarchy':v:true,'levels':5})<CR>
 " nnoremap <silent> gL :call CocLocations('ccls','$ccls/call',{'callee':v:true,'levels':5})<cr>
 nnoremap <silent> gl :call CocAction('showIncomingCalls')<CR>
 " outline
-nnoremap <silent><nowait> go :CocFzfList outline<CR>
+nnoremap <silent><nowait> go  :<C-u>CocList -A outline -kind<CR>
 " Search workspace symbols
 nnoremap <silent><nowait> gs :<C-u>CocList -I symbols<cr>
 " Show diagnostic info
-nmap <silent> gI <Plug>(coc-diagnostic-info)
-
-" ANY JUMP
-" Normal mode: Jump to definition under cursore
-nnoremap <leader>j :AnyJump<CR>
-" Visual mode: jump to selected text in visual mode
-xnoremap <leader>j :AnyJumpVisual<CR>
-" Normal mode: open previous opened file (after jump)
-nnoremap <leader>ab :AnyJumpBack<CR>
-" Normal mode: open last closed search window again
-nnoremap <leader>al :AnyJumpLastResults<CR>
-" Show line numbers in search rusults
-let g:any_jump_list_numbers = 1
-let g:any_jump_remove_comments_from_results = 0
+nnoremap <silent><nowait> gI <Plug>(coc-diagnostic-info)
+" Show coc diagnostics in quickfix
+nnoremap <silent><nowait> gq  :call <SID>coc_qf_diagnostic()<CR>
 
 " FZF CHECKOUT
 let g:fzf_checkout_git_options = '--sort=-committerdate'
@@ -689,17 +882,18 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " vim indentLine
 let g:indentLine_char = '▏'
-" 0: highlight conceal color with your colorscheme
-let g:indentLine_setColors = 0
 " exclude filetypes
-let g:indentLine_fileTypeExclude = ['coc-explorer']
+let g:indentLine_fileTypeExclude = ['coc-explorer', 'man', 'COMMIT_EDITMSG']
+let g:indentLine_bufTypeExclude = ['help', 'terminal']
+" (default: 2)
+let g:indentLine_color_dark = 1
 
 " coc-fzf
 let g:coc_fzf_preview = 'right:40%'
 
 " vim-agriculture
+" search word under cursor
 vnoremap <Leader>rr <Plug>RgRawVisualSelection<cr>
-vnoremap <Leader>aa <Plug>AgRawVisualSelection<cr>
 
 " rainbow parenthesis
 " rainbow breakes cmake syntax highlighting
@@ -709,15 +903,6 @@ let g:rainbow_conf = {
 \       'cmake': 0,
 \   }
 \}
-
-" persistent undo in RAM /tmp/
-" from https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
-let s:undodir = '/tmp/.undodir_' . $USER
-if !isdirectory(s:undodir)
-    call mkdir(s:undodir, "", 0700)
-endif
-let &undodir=s:undodir
-set undofile
 
 " cmake4vim
 let g:cmake_build_dir = 'build'
