@@ -31,6 +31,9 @@ zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload
   " \
   sindresorhus/pure
 
+zi wait'0b' lucid as'program' from'gitlab' pick'ufetch-ubuntu' for \
+  jschx/ufetch
+
 zi wait'0b' lucid for \
   OMZP::fancy-ctrl-z
 
@@ -104,13 +107,20 @@ zi wait lucid for \
   has'eza' atinit'AUTOCD=1' \
   @z-shell/zsh-eza
 
+zi wait lucid for \
+  if'(($+commands[xsel] || $+commands[xclip] || $+commands[wl-copy]))' \
+  atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true' \
+  @kutsan/zsh-system-clipboard
+
 # manpages only available in debug build
 # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
-zi wait lucid as'program' from'gh' for \
-  atclone'cargo build --release --features "pcre2"; \
-  ln -sf complete/_rg -> _rg' \
+# zi wait lucid as'program' from'gh' for \
+#   atclone'cargo build --release --features "pcre2"; \
+#   ln -sf crates/core/flags/rg.zsh -> _rg' \
+zi wait lucid as'program' from'gh-r' for \
+  atclone'ln -sf ripgrep/complete/_rg -> _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
-  sbin'**/rg -> rg' \
+  mv'ripgrep* -> ripgrep' sbin'**/rg(.exe|) -> rg' \
   pick'$ZPFX/bin/rg' \
   @BurntSushi/ripgrep
 
@@ -153,15 +163,30 @@ export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --n
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Narrow down the list with a query, point to a command,
 # and hit CTRL-T to see its surrounding commands.
+# copy command with CTRL-Y (https://github.com/junegunn/fzf/blob/6b99399c41d9818ee4b4fa8968a1249100008e4c/README.md?plain=1#L588)
 export FZF_CTRL_R_OPTS="
 --preview 'echo {}' --preview-window up:3:hidden:wrap
 --bind 'ctrl-/:toggle-preview'
 --bind 'ctrl-t:track+clear-query'
---bind 'ctrl-y:execute-silent(echo -n {2..} | pbcopy)+abort'
+--bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -i -selection clipboard)+abort'
 --color header:italic
---header 'Press CTRL-Y to copy command into clipboard'
+--header 'Press CTRL-Y to copy command into clipboard | CTRL-/ to toggle full command preview'
 "
-export FZF_DEFAULT_OPTS='--height 40%'
+
+export FZF_DEFAULT_COLORS='--color=dark'
+
+export FZF_DEFAULT_OPTS="\
+  $FZF_DEFAULT_COLORS \
+  --no-mouse \
+  --height='40%' \
+  --margin='1,3' \
+  --layout='reverse' \
+  --info='inline' \
+  --no-separator \
+  --no-bold \
+  --bind='ctrl-d:half-page-down' \
+  --bind='ctrl-u:half-page-up'"
+
 export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'"
 
 ### pip
@@ -214,13 +239,30 @@ zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_doc
 zi ice wait lucid as'completion' blockf has'alacritty'
 zi snippet https://github.com/alacritty/alacritty/blob/master/extra/completions/_alacritty
 
+### PLUGINS WHICH HAS TO BE LOADED LAST
+
+# fzf-tab needs to be loaded after compinit, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting!!
+zi ice wait lucid has'fzf' atload"zicompinit; zicdreplay" blockf
+zi light Aloxaf/fzf-tab
+
+# # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
+# faster than zi light-mode for @zsh-users+fast TODO: start thread at https://github.com/orgs/z-shell/discussions/
+# use ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20 according to https://github.com/zsh-users/zsh-autosuggestions.
+zi wait lucid depth"1" for \
+  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay" \
+  zsh-users/zsh-syntax-highlighting \
+  as'completion' blockf \
+  zsh-users/zsh-completions \
+  atload"!_zsh_autosuggest_start; ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
+  zsh-users/zsh-autosuggestions
+
 # only for git
 # zstyle ':completion:*:*:git:*' fzf-search-display true
 # or for everything
 zstyle ':completion:*' fzf-search-display true
 
 # fzf-tab completions from https://github.com/Aloxaf/fzf-tab/wiki/Preview
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'exa -1 --icons --group-directories-first --color=always $realpath'
+zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons --group-directories-first --color=always $realpath'
 # disable sort when completing options of any command
 zstyle ':completion:complete:*:options' sort false
 # use input as query string when completing zlua
@@ -248,19 +290,6 @@ zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
 zstyle ':fzf-tab:complete:tldr:argument-1' fzf-preview 'tldr --color always $word'
 zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
   '(out=$(tldr --color always "$word") 2>/dev/null && echo $out) || (out=$(MANWIDTH=$FZF_PREVIEW_COLUMNS man "$word") 2>/dev/null && echo $out) || (out=$(which "$word") && echo $out) || echo "${(P)word}"'
-
-# fzf-tab needs to be loaded after compinit, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting!!
-zi ice wait lucid has'fzf'
-zi light Aloxaf/fzf-tab
-
-# load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
-zi wait lucid depth"1" for \
-  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay" \
-  zsh-users/zsh-syntax-highlighting \
-  as'completion' blockf \
-  zsh-users/zsh-completions \
-  atload"!_zsh_autosuggest_start" \
-  zsh-users/zsh-autosuggestions
 
 export HISTFILE=~/.histfile
 export HISTSIZE=1000000   # the number of items for the internal history list
