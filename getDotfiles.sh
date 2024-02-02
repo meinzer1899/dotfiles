@@ -17,7 +17,8 @@ cp -t . \
     ~/.tmux.conf \
     ~/.vim/coc-settings.json \
     ~/.alacritty.yml \
-    ~/.gitconfig
+    ~/.alacritty.toml \
+    ~/.gitconfig \
     ~/.shellcheckrc
 
 echo "Done"
