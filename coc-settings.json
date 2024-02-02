@@ -90,7 +90,7 @@
     "--header-insertion=never",
     "--offset-encoding=utf-16",
     "--enable-config=true",
-    "--query-driver=/usr/bin/clang-**,/usr/bin/g++-*",
+    "--query-driver=/bin/clang++-*,/bin/g++-*,/bin/clang"
   ],
   "clangd.path": "/bin/clangd-17",
   "inlayHint.enable": false,
