@@ -10,6 +10,13 @@ https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys
 sudo vi /etc/default/keyboard and change XKBOPTIONS="ctrl:nocaps"
 setxkbmap -option ctrl:nocaps such that it
 
+## VirtualBox
+
+Update GuestAdditions after updating VirtualBox via https://help.ubuntu.com/community/VirtualBox/GuestAdditions.
+```bash
+sudo apt-get install virtualbox-guest-additions-iso
+```
+
 ## git
 
 https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
@@ -38,10 +45,6 @@ tmux new -s tmux
 
 https://wiki.zshell.dev/docs/getting_started/installation
 
-zshrc's
-https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
-https://github.com/callistachang/dots/blob/main/dot_zshrc
-
 
 ## cargo and rust
 
@@ -58,15 +61,30 @@ https://github.com/0xhiro/thebook
 
 Gets installed by zi.
 
-If, on a fresh system, zi cannot install zsh (because zsh is not available), try
+On a fresh system, zi cannot install zsh (because zsh is not available), try
 to install zsh in a location, where no sudo privileges are needed (local?)
 https://github.com/zsh-users/zsh/blob/zsh-5.8.1/INSTALL (adapt version)
-dont forget to checkout tagged commit
+don't forget to checkout tagged commit.
+
+zshrcs
+https://github.com/Freed-Wu/Freed-Wu/blob/main/.zshrc
+https://github.com/kutsan/dotfiles/blob/master/.config/zsh/config/settings.zsh
+https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
+https://github.com/callistachang/dots/blob/main/dot_zshrc
+https://github.com/casey/dotfiles/blob/master/etc/zshrc
+https://github.com/agkozak/
+https://github.com/seagle0128/dotfiles/blob/master/.zshrc
+
+plugins
+https://github.com/Freed-Wu/fzf-tab-source
 
 ## fzf
 
-For FZF-TMUX to find fzf executable, change
-`fzf="$(command -v fzf 2> /dev/null)" || fzf=$HOME/.zi/polaris/bin/fzf`
+Adapt tmux-fzf to find fzf:
+```bash
+- fzf="$(command -v fzf 2> /dev/null)" || fzf="$(dirname "$0")/fzf"
++ fzf="$(command -v fzf 2> /dev/null)" || fzf=$HOME/.zi/polaris/bin/fzf
+```
 
 To auto-accept entry on Enter when searching with CTRL-R, use
 https://github.com/junegunn/fzf/issues/477#issuecomment-444053054
@@ -86,12 +104,26 @@ https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ## vim
 
+https://github.com/skywind3000/vim/blob/master/init/unix.vim
+https://github.com/trapd00r/configs/blob/master/vim/vimrc
+https://github.com/suy/configs/blob/master/vimrc
+https://github.com/rhysd/dogfiles/blob/master/vimrc
+https://github.com/fannheyward/init.vim/blob/master/coc-settings.json
+https://github.com/fannheyward/init.vim/blob/master/init.vim
+
 https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
+https://vimtricks.com/p/category/tips-and-tricks/
+http://vimcasts.org/episodes/search-multiple-files-with-vimgrep/
+https://github.com/yuki-yano/fzf-preview.vim
 
 Gets installed by zi.
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
 ### devcontainer
+
+https://www.docker.com/blog/how-to-setup-your-local-node-js-development-environment-using-docker/
+https://stackoverflow.com/questions/51809181/how-to-run-tmux-inside-a-docker-container
+https://wiki.zshell.dev/ecosystem/packages/usage#statically-linked-hermetic-relocatable-zsh
 
 Login to dev container via ssh; install zsh and copy dotfiles
 https://github.com/dpetersen/dev-container-base
@@ -100,11 +132,6 @@ https://gitlab.com/smoores/open-devcontainer
 https://stackoverflow.com/questions/72397020/containerizing-vim-with-plugins
 https://github.com/nemanjan00/dev-environment
 https://github.com/esensar/nvim-dev-container
-
-### vim plug
-
-Gets installed automatically, see .vimrc.
-vim plug: https://github.com/junegunn/vim-plug
 
 ### linter
 
@@ -131,37 +158,60 @@ https://github.com/hadolint/hadolint
 * vim filetype for Dockerfiles is `dockerfiles`
 * TODO: download & update via zi
 
-## ccls
+## C++
+
+### ccls
 
 https://github.com/MaskRay/ccls/wiki/Build
 https://github.com/MaskRay/ccls/wiki/Install
 
-## CMake
+### CMake
 
 https://github.com/foonathan/docker/blob/a18a54c3f04df077419fc21853e219375b2bb58a/common/install-cmake.sh
 
-### cmake4vim
-https://github.com/ilyachur/cmake4vim/
+#### misc
 
-### language server
-https://github.com/regen100/cmake-language-server
+[cmake4vim](https://github.com/ilyachur/cmake4vim/)
+[cmake-language-server](https://github.com/regen100/cmake-language-server)
 
-## llvm, clang
+Determine the minimal required CMake version of a project: [cmake_min_version](https://github.com/nlohmann/cmake_min_version)
+
+### llvm, clang
+
+https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
+https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
+```cmake
+message(STATUS "Address sanitizer enabled")
+add_compile_options(-fsanitize=address,undefined)
+add_compile_options(-fno-sanitize=signed-integer-overflow)
+add_compile_options(-fno-sanitize-recover=all)
+add_compile_options(-fno-omit-frame-pointer)
+add_link_options(-fsanitize=address,undefined -fuse-ld=gold)
+```
 
 Installation description:
 https://apt.llvm.org/ -> Automatic installation script
 installs *all* llvm packages (also clangd, clang-tidy, include-cleaner etc) at `/bin`.
 Also adds apt.llvm.org to apt package list to automatically get updates.
 
+```bash
+sudo update-alternatives --install /bin/clang-format clang-format /bin/clang-format-17 20
+```
+
 Cache for clang-tidy static analysis results:
 https://github.com/matus-chochlik/ctcache/tree/main
 
 https://stackoverflow.com/questions/51582604/how-to-use-cpplint-code-style-checking-with-cmake
 
+https://github.com/lmapii/run-clang-tidy
+
 https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm
 
 - [ ] update .vimrc with comments from https://github.com/nvim-zh/minimal_vim/blob/master/init.vim
 - [ ] Read series https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
+
+### docker
+https://github.com/think-cell/docker
 
 ## asynctask
 
@@ -169,6 +219,7 @@ https://github.com/skywind3000/asynctasks.vim
 https://github.com/albertomontesg/lightline-asyncrun
 https://github.com/deathmaz/fzf-lua-asynctasks (neovim)
 https://github.com/voldikss/vim-floaterm#asynctasksvim--asyncrunvim
+https://github.com/skywind3000/vim-terminal-help#integration
 https://github.com/voldikss/coc-extensions/tree/main/packages/coc-tasks
 https://github.com/EthanJWright/vs-tasks.nvim
 
@@ -176,12 +227,15 @@ https://github.com/EthanJWright/vs-tasks.nvim
 
 - Manage dotfiles and any git directories interactively with fzf https://github.com/kazhala/dotbare
 - https://dotfiles.github.io/
+- https://github.com/rhysd/dotfiles
 
 ## mold
 
 CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
-## nvim
+## neovim
+
+Neovim for C++: https://www.youtube.com/watch?v=lsFoZIg-oDs
 
 Use FZF instead of telescope
 https://github.com/ibhagwan/fzf-lua#why-fzf-lua
@@ -226,10 +280,17 @@ https://github.com/sindrets/diffview.nvim
 
 ### other
 
+https://hackingcpp.com/dev/command_line_tools.html
+
 https://github.com/tummychow/git-absorb
 
 https://github.com/jarun/ddgr with
 https://github.com/tats/w3m/blob/master/doc/README
+
+Whiteboards with https://tldraw.dev/.
+https://github.com/casey/just
+https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
+'just' })
 
 ### offline documentation
 
