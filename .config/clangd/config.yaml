@@ -5,11 +5,9 @@
 If:
   PathMatch: [/usr/include/.*, .*/build/.*]
 Diagnostics:
-  Suppress:
-    - '*'
+  Suppress: '*'
   ClangTidy:
-    Remove:
-      - '*'
+    Remove: '*'
 Index:
   Background: Skip
 ---
@@ -17,53 +15,63 @@ Index:
 CompileFlags:
   Add:
     # Treat code as C++
-    - "-xc++"
+    - -xc++
     # report all errors
-    - "-ferror-limit=0"
-    - "-fmacro-backtrace-limit=0"
-    - "-ftemplate-backtrace-limit=0"
+    - -ferror-limit=0
+    - -fmacro-backtrace-limit=0
+    - -ftemplate-backtrace-limit=0
     # recommended set https://hackingcpp.com/cpp/diagnostics.html
     # most important
-    - "-Wall"
-    - "-Wextra"
-    - "-Wpedantic"
+    - -Wall
+    - -Wextra
+    - -Wpedantic # warn if non-standard C++ is used
     # recommended
-    - "-Wshadow"
-    - "-Wconversion"
-    - "-fsanitize=undefined,address"
-    - "-Wfloat-equal"
-    - "-Wformat-nonliteral"
-    - "-Wformat-security"
-    - "-Wformat-y2k"
-    - "-Wformat=2"
-    - "-Wimport"
-    - "-Winvalid-pch"
-    - "-Wlogical-op"
-    - "-Wmissing-declarations"
-    - "-Wmissing-field-initializers"
-    - "-Wmissing-format-attribute"
-    - "-Wmissing-include-dirs"
-    - "-Wmissing-noreturn"
-    - "-Wnested-externs"
-    - "-Wpacked"
-    - "-Wpointer-arith"
-    - "-Wredundant-decls"
-    - "-Wstack-protector"
-    - "-Wstrict-null-sentinel"
-    - "-Wswitch-enum"
-    - "-Wundef"
-    - "-Wwrite-strings"
+    - -Wshadow
+    - -Wconversion # warn on type conversions that may lose data
+    - -fsanitize=undefined,address
+    - -Wfloat-equal
+    - -Wformat-nonliteral
+    - -Wformat-security
+    - -Wformat-y2k
+    - -Wformat=2 # warn on security issues around functions that format output (ie printf)
+    - -Wimport
+    - -Winvalid-pch
+    - -Wlogical-op
+    - -Wmissing-declarations
+    - -Wmissing-field-initializers
+    - -Wmissing-format-attribute
+    - -Wmissing-include-dirs
+    - -Wmissing-noreturn
+    - -Wnested-externs
+    - -Wpacked
+    - -Wpointer-arith
+    - -Wredundant-decls
+    - -Wstack-protector
+    - -Wstrict-null-sentinel
+    - -Wswitch-enum
+    - -Wundef
+    - -Wwrite-strings
     # own
-    - "-Warith-conversion"
-    - "-Wpessimizing-move"
-  Remove: -W*                     # strip all other warning-related flags
+    - -Warith-conversion
+    - -Wpessimizing-move
+    # from https://github.com/aminya/project_options/blob/main/src/CompilerWarnings.cmake
+    - -Wextra-semi
+    - -Wnon-virtual-dtor  # warn the user if a class with virtual functions has a non-virtual destructor. This helps
+    - -Wold-style-cast    # warn for c-style casts
+    - -Wcast-align # warn for potential performance problem casts
+    - -Wunused # warn on anything being unused
+    - -Woverloaded-virtual # warn if you overload (not override) a virtual function
+    - -Wsign-conversion # warn on sign conversions
+    - -Wnull-dereference # warn if a null dereference is detected
+    - -Wdouble-promotion # warn if float is implicit promoted to double
+    - -Wimplicit-fallthrough # warn on statements that fallthrough without an explicit annotation
+  Remove: -W*               # strip all other warning-related flags
 # https://github.com/hbuyse/dotfiles/blob/master/dot_config/clangd/config.yaml
 Diagnostics:
   UnusedIncludes: Strict
   MissingIncludes: None
   ClangTidy:
-    Add:
-      - '*'
+    Add: '*'
     Remove:
       - altera-unroll-loops
       - altera-id-dependent-backward-branch
@@ -79,6 +87,7 @@ Diagnostics:
       - google-readability-avoid-underscore-in-googletest-name
       - fuchsia-*
       - llvmlibc-*
+      - readability-avoid-const-params-in-decls # const no effect in function definition
     CheckOptions:
       hicpp-signed-bitwise.IgnorePositiveIntegerLiterals: true
       cppcoreguidelines-avoid-do-while.IgnoreMacros: true # for function-like macros as used by unit test frameworks
