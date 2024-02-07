@@ -15,8 +15,8 @@ tldr --update
 # rg, fd and bat
 # because of bug (error command rg ...) in fzf.vim (or vim shellescape) when calling Rg or RG,
 # I need the executables also in /usr/local/bin (symlink not working)
-cp -vt ~/.zi/polaris/bin ~/.zi/plugins/sharkdp---fd/fd/fd ~/.zi/plugins/sharkdp---bat/bat/bat
-sudo cp -vt /usr/local/bin ~/.zi/polaris/bin/{bat,fd}
+cp -vt ~/.zi/polaris/bin ~/.zi/plugins/sharkdp---fd/fd/fd ~/.zi/plugins/sharkdp---bat/bat/bat ~/.zi/plugins/BurntSushi---ripgrep/ripgrep/rg
+sudo cp -vt /usr/local/bin ~/.zi/polaris/bin/{bat,fd,rg}
 
 # javascript tool manager, installs node.js runtimes, npm and Yarn package managers or any binary from npm
 volta install node@lts # installs latest LTS; node@20 installs latest node 20 version
