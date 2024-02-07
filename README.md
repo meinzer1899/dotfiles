@@ -4,6 +4,11 @@ My Linux dotfiles.
 
 ![Work Environment](image/linux_environment.png "Linux Work Environment")
 
+# Setup new machine
+
+1. Install git
+2. Install stow
+
 ## Remap CAPSLOCK to ctrl
 
 https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys#comment1154797_521734
@@ -166,6 +171,8 @@ https://github.com/MaskRay/ccls/wiki/Build
 https://github.com/MaskRay/ccls/wiki/Install
 
 ### CMake
+
+Installed via zi.
 
 https://github.com/foonathan/docker/blob/a18a54c3f04df077419fc21853e219375b2bb58a/common/install-cmake.sh
 

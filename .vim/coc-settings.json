@@ -121,6 +121,7 @@
   "suggest.languageSourcePriority": 90,
   "suggest.maxCompleteItemCount": 100,
   "suggest.triggerCompletionWait": 0,
+  "signature.preferShownAbove": false,
   "links.highlight": true,
   "list.insertMappings": {
     "<C-c>": "do:exit",
