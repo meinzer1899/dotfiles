@@ -7,7 +7,7 @@ My Linux dotfiles.
 # Setup new machine
 
 1. Install git
-2. Install stow
+2. Install stow, run `stow .`.
 
 ## Remap CAPSLOCK to ctrl
 
@@ -34,6 +34,13 @@ can associate commit with user.
 
 https://github.com/bigH/git-fuzzy
 https://github.com/gitleaks/gitleaks
+
+## alacritty
+
+https://github.com/alacritty/alacritty/blob/master/INSTALL.md
+```bash
+cargo build --release
+```
 
 ## TMUX
 
