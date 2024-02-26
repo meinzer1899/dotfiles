@@ -91,7 +91,7 @@ zi wait lucid as'program' from'gh-r' for \
   mv'delta* -> delta' \
   sbin'**/delta -> delta' \
   pick'$ZPFX/bin/delta' \
-  @dandavison/delta 
+  @dandavison/delta
 
 # last updated 3 yrs ago...
 zi ice wait lucid as'completion' blockf has'delta'
@@ -211,10 +211,10 @@ zi has'zoxide' wait lucid for \
 zi ice wait lucid as'completion' blockf has'zoxide'
 zi snippet https://github.com/ajeetdsouza/zoxide/blob/main/contrib/completions/_zoxide
 
-  # atpull'%atclone' make'all install' pick'$ZPFX/bin/vim'
+# https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
 zi ice as'program' atclone'rm -f src/auto/config.cache; \
   ./configure --prefix=$ZPFX --enable-python3interp=yes' \
-  atpull'%atclone' make pick'$ZPFX/bin/vim'
+  atpull'%atclone' make'all install' pick'$ZPFX/bin/vim'
 zi light vim/vim
 
 zi wait lucid as'program' from'gh-r' for \
