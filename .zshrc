@@ -14,7 +14,7 @@ zi ice if"[[ -d ${HOME}/.local/share/fonts ]] && [[ $OSTYPE = linux* ]]" \
 zi light ryanoasis/nerd-fonts
 
 ### annexes
-zi light-mode for z-shell/z-a-meta-plugins @annexes @rust-utils
+zi light-mode for z-shell/z-a-meta-plugins @annexes
 zi light z-shell/z-a-bin-gem-node
 
 # https://wiki.zshell.dev/community/gallery/collection/snippets
@@ -34,6 +34,9 @@ zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload
 
 zi wait'0b' lucid as'program' from'gitlab' pick'ufetch-ubuntu' for \
   jschx/ufetch
+zi ice lucid wait as'program' pick'neofetch' \
+  atclone"cp neofetch.1 $ZI[MAN_DIR]/man1" atpull'%atclone'
+zi light dylanaraps/neofetch
 
 zi wait'0b' lucid for \
   OMZP::fancy-ctrl-z
@@ -115,9 +118,6 @@ zi wait lucid for \
 
 # manpages only available in debug build
 # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
-# zi wait lucid as'program' from'gh' for \
-#   atclone'cargo build --release --features "pcre2"; \
-#   ln -sf crates/core/flags/rg.zsh -> _rg' \
 zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf ripgrep/complete/_rg -> _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
@@ -191,11 +191,14 @@ export FZF_DEFAULT_OPTS="\
 export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'"
 
 ### pip
+zi pack"bgn" for pyenv
 # https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5
 zi ice pip'cmake-language-server <- !cmake-language-server -> cmake-language-server' id-as'cmake-language-server' nocompile
 zi load z-shell/0
 
 zi ice pip'ruff <- !ruff -> ruff' id-as'ruff' nocompile
+zi load z-shell/0
+zi ice pip'ruff-lsp <- !ruff-lsp -> ruff-lsp' id-as'ruff-lsp' nocompile
 zi load z-shell/0
 
 # --cmd x is important as zoxide uses z _and_ zi.
@@ -229,7 +232,7 @@ zi wait lucid as'command' from'gh-r' for \
   sbin'grex' \
   @pemistahl/grex
 
-### completions
+## completions
 zi ice wait lucid as"completion"
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitfast
 zi snippet OMZP::gitfast
