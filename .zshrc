@@ -134,11 +134,6 @@ zi wait lucid as'program' from'gh-r' for \
 zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
 zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
 
-### zi pack
-
-# Install latest zsh
-zi pack for zsh
-
 # FZF
 # Download the package with the bin-gem-node annex-utilizing ice list
 # + setting up the key bindings. The "+keys" variants are available for each profile

@@ -6,14 +6,24 @@ My Linux dotfiles.
 
 # Setup new machine
 
-1. Install git
-2. Install stow, run `stow .`.
+. Install git
+. Setup wsl
+. mkdir -p $HOME/.config (otherwise, .config is a symlink to
+   $HOME/dotfiles/.config).
+. Install zsh and zi
+. Install stow, run `stow .`
+. Install tmux
+
+pip
+apt install python3.XX-venv (e.g. 10)
+zsh-system-keyboard
+apt install xclip
 
 ## Remap CAPSLOCK to ctrl
 
 https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys#comment1154797_521734
 sudo vi /etc/default/keyboard and change XKBOPTIONS="ctrl:nocaps"
-setxkbmap -option ctrl:nocaps such that it
+setxkbmap -option ctrl:nocaps
 
 ## VirtualBox
 
@@ -22,15 +32,58 @@ Update GuestAdditions after updating VirtualBox via https://help.ubuntu.com/comm
 sudo apt-get install virtualbox-guest-additions-iso
 ```
 
+## wsl
+
+* Install nerd font via curl https://github.com/ryanoasis/nerd-fonts?tab=readme-ov-file#option-1-release-archive-download.
+* Install alacritty for Windows.
+* Move alacritty.toml.wsl to %APPDATA%\alacritty.
+* Comment out [program] entry when zsh is not installed yet. 
+* map capslock to ctrl: https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10.
+
+## zsh and zi
+
+https://github.com/zsh-users/zsh/blob/master/INSTALL
+
+`$ZPFX`: https://wiki.zshell.dev/docs/guides/customization#ZPFX
+
+Install zsh to $HOME/.zi/polaris, where no sudo is needed.
+
+```bash
+mkdir -p $HOME/.zi/polaris
+./configure --prefix=$HOME/.zi/polaris
+```
+
+zi loader is included in dotfiles (.config/zi); if not, see
+https://wiki.zshell.dev/docs/getting_started/installation => loader.
+
+zshrcs
+https://github.com/Freed-Wu/Freed-Wu/blob/main/.zshrc
+https://github.com/kutsan/dotfiles/blob/master/.config/zsh/config/settings.zsh
+https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
+https://github.com/callistachang/dots/blob/main/dot_zshrc
+https://github.com/casey/dotfiles/blob/master/etc/zshrc
+https://github.com/agkozak/
+https://github.com/seagle0128/dotfiles/blob/master/.zshrc
+
+plugins
+https://github.com/Freed-Wu/fzf-tab-source
+
 ## git
 
 https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
 
 For Ubuntu, this PPA provides the latest stable upstream Git version: https://git-scm.com/download/linux.
 
-Add .gitconfig.local for user entries
-Change local user.email (optionally also user.name) in this repository, so that Github
-can associate commit with user.
+Add .gitconfig.local for user private global entries
+https://git-scm.com/docs/user-manual.html#telling-git-your-name
+
+In this dotfiles repository, change local user.email (optionally also user.name), so that Github
+can associate commit with user!
+
+ssh keys:
+~/.ssh/config
+specify, which key belongs to which host
+(https://stackoverflow.com/a/69764024)
 
 https://github.com/bigH/git-fuzzy
 https://github.com/gitleaks/gitleaks
@@ -51,44 +104,16 @@ sh autogen.sh
 ./configure
 make -j$(nproc) && sudo make install
 ```
-tmux new -s tmux
 
-## zi
-
-https://wiki.zshell.dev/docs/getting_started/installation
-
+`tmux new -s tmux`
 
 ## cargo and rust
 
-Gets installed by zi.
-
-https://doc.rust-lang.org/cargo/getting-started/installation.html
-https://rust-lang.github.io/rustup/installation/index.html #autocompletion
+Managed by zi.
 
 Search rust book via cli:
 
 https://github.com/0xhiro/thebook
-
-## zsh
-
-Gets installed by zi.
-
-On a fresh system, zi cannot install zsh (because zsh is not available), try
-to install zsh in a location, where no sudo privileges are needed (local?)
-https://github.com/zsh-users/zsh/blob/zsh-5.8.1/INSTALL (adapt version)
-don't forget to checkout tagged commit.
-
-zshrcs
-https://github.com/Freed-Wu/Freed-Wu/blob/main/.zshrc
-https://github.com/kutsan/dotfiles/blob/master/.config/zsh/config/settings.zsh
-https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
-https://github.com/callistachang/dots/blob/main/dot_zshrc
-https://github.com/casey/dotfiles/blob/master/etc/zshrc
-https://github.com/agkozak/
-https://github.com/seagle0128/dotfiles/blob/master/.zshrc
-
-plugins
-https://github.com/Freed-Wu/fzf-tab-source
 
 ## fzf
 
@@ -166,9 +191,7 @@ https://github.com/Vimjas/vint
 #### hadolint (Dockerfile linter)
 
 https://github.com/hadolint/hadolint
-* tip: download release binary, cp to /usr/bin
-* vim filetype for Dockerfiles is `dockerfiles`
-* TODO: download & update via zi
+gets installed by zi.
 
 ## C++
 
@@ -179,18 +202,16 @@ https://github.com/MaskRay/ccls/wiki/Install
 
 ### CMake
 
-Installed via zi.
-
-https://github.com/foonathan/docker/blob/a18a54c3f04df077419fc21853e219375b2bb58a/common/install-cmake.sh
+Use install-cmake.sh from foonathan to install to /usr/local. May remove "old" cmake versions, check via `which -a cmake`.
 
 #### misc
 
 [cmake4vim](https://github.com/ilyachur/cmake4vim/)
-[cmake-language-server](https://github.com/regen100/cmake-language-server)
+[cmake-language-server](https://github.com/regen100/cmake-language-server) gets installed via zi and pip.
 
 Determine the minimal required CMake version of a project: [cmake_min_version](https://github.com/nlohmann/cmake_min_version)
 
-### llvm, clang
+### llvm, clang, clangd
 
 https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
 https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
@@ -208,6 +229,7 @@ https://apt.llvm.org/ -> Automatic installation script
 installs *all* llvm packages (also clangd, clang-tidy, include-cleaner etc) at `/bin`.
 Also adds apt.llvm.org to apt package list to automatically get updates.
 
+Need to update alternatives for clang-format, clangd, clang-tidy.
 ```bash
 sudo update-alternatives --install /bin/clang-format clang-format /bin/clang-format-17 20
 ```
@@ -225,6 +247,7 @@ https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-l
 - [ ] Read series https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
 
 ### docker
+
 https://github.com/think-cell/docker
 
 ## asynctask
@@ -239,6 +262,7 @@ https://github.com/EthanJWright/vs-tasks.nvim
 
 ## dotfiles management
 
+- I use stow.
 - Manage dotfiles and any git directories interactively with fzf https://github.com/kazhala/dotbare
 - https://dotfiles.github.io/
 - https://github.com/rhysd/dotfiles
