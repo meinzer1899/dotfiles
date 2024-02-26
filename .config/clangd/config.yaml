@@ -70,6 +70,7 @@ CompileFlags:
 Diagnostics:
   UnusedIncludes: Strict
   MissingIncludes: None
+  FastCheckFilter: Strict
   ClangTidy:
     Add: '*'
     Remove:
@@ -93,10 +94,11 @@ Diagnostics:
       cppcoreguidelines-avoid-do-while.IgnoreMacros: true # for function-like macros as used by unit test frameworks
       readability-operators-representation.BinaryOperators: "and;not;or" # replace: && -> and, ! -> not, || -> or
 InlayHints:
-  BlockEnd: true
+  BlockEnd: false
   Designators: false
   Enabled: false
   ParameterNames: false
-  DeducedTypes: false
+  DeducedTypes: true
+  TypeNameLimit: 0 # 0: no limit
 Index:
     StandardLibrary: No
