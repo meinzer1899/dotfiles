@@ -490,11 +490,12 @@ syntax enable
 
 if !has('gui_running')
     if &t_Co < 256
-        set background=dark
-        colorscheme default
+        set background=light
+        colorscheme onedark
+        let g:onedark_termcolors=16
     else
-        " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-        if has('termguicolors') && $COLORTERM ==# 'truecolor'
+        if has('termguicolors')
+            " set Vim-specific sequences for RGB colors
             let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
             let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
             set termguicolors
@@ -534,7 +535,7 @@ let g:fzf_buffers_jump = 1
 let g:fzf_commits_log_options = '--graph --color=always
             \ --format="%C(yellow)%h%C(red)%d%C(reset)
             \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
-" Preview window is shownn by default. You can toggle it with ctrl-/.
+" Preview window is shown by default. You can toggle it with ctrl-/.
 " It will show on the right with 50% width, but if the width is smaller
 " than 70 columns, it will show above the candidate list
 let g:fzf_preview_window = ['right,50%,<70(up,40%)', 'ctrl-/']
@@ -542,8 +543,7 @@ let g:fzf_preview_window = ['right,50%,<70(up,40%)', 'ctrl-/']
 
 " See `man fzf-tmux` for available options
 if exists('$TMUX')
-    let g:fzf_layout = { 'tmux': '-p90%,60%' } 
-    " let g:fzf_layout = { 'window': { 'width': 1, 'height': 0.4, 'yoffset': 1, 'border': 'top' } }
+    let g:fzf_layout = { 'tmux': '-p90%,60%' }
 else
     " Adapt fzf preview window layout (non-floating, dont push content of current
     " screen to the top (https://github.com/junegunn/fzf.vim/issues/942)
