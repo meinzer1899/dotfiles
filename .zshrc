@@ -1,9 +1,10 @@
-if [[ -r "$HOME/.config/zi/init.zsh" ]]; then
-  source "$HOME/.config/zi/init.zsh" && zzinit
+if [[ -r "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" ]]; then
+  source "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" && zzinit
 fi
 
 # https://wiki.zshell.dev/community/gallery/collection/themes
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
+
 # When running: zi update will:
 #     if an update is available, will update the fonts.
 #     repeat the install process to update fonts.
