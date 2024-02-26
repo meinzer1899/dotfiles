@@ -8,7 +8,7 @@
 " This must be first, because it changes other options as a side effect.
 set encoding=utf-8
 set termencoding=utf-8
-set fileencoding=utf-8
+set fileencodings^=utf-8
 scriptencoding utf-8
 " This is vim, not vi.
 if exists('+nocompatible')
@@ -94,10 +94,10 @@ set whichwrap=<,>,[,],h,l
 " ================ Folds ============================
 
 " fold based on indent
-set foldmethod=indent
+set foldmethod=syntax
 " deepest fold is 3 levels
 set foldnestmax=3
-" dont fold by default
+" don't fold by default
 set nofoldenable
 
 "" ================ Indentation ======================
@@ -250,8 +250,11 @@ nnoremap g* g*zz
 nnoremap g# g#zz
 nnoremap g; g;zz
 nnoremap g, g,zz
+nnoremap <C-o> <C-o>zz
+nnoremap <C-i> <C-i>zz
 
 inoremap jj <CR>
+
 " ci( or ci{ does not jump automatically to parenthesis, fix with this these
 " lines
 nnoremap ci( f(ci(
@@ -332,6 +335,8 @@ command! -nargs=+ AutocmdFT autocmd MyVimrc FileType <args>
 Autocmd VimEnter,WinEnter .vimrc,.gvimrc,vimrc,gvimrc syn keyword myVimAutocmd Autocmd AutocmdFT contained containedin=vimIsCommand
 Autocmd ColorScheme * highlight def link myVimAutocmd vimAutoCmd
 
+" Trim trailing whitespace from line endings
+Autocmd BufWritePre * :%s/ \+$//e
 Autocmd VimResized * wincmd =
 " When editing a file, always jump to the last known cursor position.
 " Don't do it for commit messages, when the position is invalid, or
@@ -360,7 +365,6 @@ Autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
 " Highlight the symbol and its references
 Autocmd CursorHold * silent call CocActionAsync('highlight')
 " Start in INSERT mode if opening commit message with empty first line
-" Autocmd VimEnter COMMIT_EDITMSG if getline(1) == '' | execute 1 | startinsert | endif
 AutocmdFT gitcommit startinsert!
 " disable automatic comment on newline
 AutocmdFT * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
@@ -506,11 +510,17 @@ if !has('gui_running')
     endif
 endif
 
-" CLIPBOARD
-if has('macunix') || s:on_win
-    set clipboard=unnamed
-elseif has('unix')
-    set clipboard=unnamedplus
+if &term =~ '256color'
+      " disable Background Color Erase (BCE) so that color schemes
+      " render properly when inside 256-color tmux and GNU screen.
+      " see also http://sunaku.github.io/vim-256color-bce.html
+      set t_ut=
+endif
+
+if has('unnamedplus')
+      set clipboard& clipboard+=unnamedplus
+else
+      set clipboard& clipboard+=unnamed
 endif
 
 " FZF
@@ -574,12 +584,13 @@ command! -bang -nargs=* RG call fzf#vim#grep2("rg --column --line-number --no-he
 
 " FZF
 nnoremap <silent> <Leader>,     :Buffers<CR>
-nnoremap <silent> <Leader>rr    :Rg<CR>
-nnoremap <silent> <Leader>aa    :RG<CR>
+nnoremap <silent> <Leader>a     :Rg<CR>
+nnoremap <silent> <Leader>A     :RG<CR>
 " nnoremap <silent> <Leader>aa    :Ag<CR>
 nnoremap <silent> <Leader>t     :Files<CR>
-nnoremap <silent> <Leader>bl     :Lines<CR>
-nnoremap <silent> <Leader>l    :BLines<CR>
+nnoremap <silent> <Leader>T     :GFiles<CR>
+nnoremap <silent> <Leader>bl    :Lines<CR>
+nnoremap <silent> <Leader>l     :BLines<CR>
 nnoremap <silent> <Leader>gf    :GFiles?<CR>
 nnoremap <silent> <Leader>h     :History:<CR>
 nnoremap <silent> <Leader>c     :Commits<CR>
@@ -655,6 +666,9 @@ function GitBranch()
     return " " . FugitiveHead()
 endfunction
 
+let g:coc_status_error_sign = '❌'
+let g:coc_status_warning_sign = "⚠"
+
 " shrink file name when window size falls below threshold
 function! LightlineFileformat()
   if &filetype !=? 'NvimTree' && &filetype !=? 'tagbar' &&
@@ -702,8 +716,9 @@ Autocmd WinLeave * if &buftype !~# 'terminal' | set norelativenumber | endif
 highlight StatusLineNC cterm=bold ctermfg=white ctermbg=darkgray
 " highlight the matches that have been yanked to a register and
 " the system clipboard
-highlight YankedMatches ctermfg=bg ctermbg=196 cterm=bolditalic
-highlight HighlightedyankRegion ctermfg=bg ctermbg=185 cterm=bolditalic
+" disabled for WSL2 (bg not found)
+" highlight YankedMatches ctermfg=bg ctermbg=196 cterm=bolditalic
+" highlight HighlightedyankRegion ctermfg=bg ctermbg=185 cterm=bolditalic
 
 " CODI
 let g:codi#interpreters = {
@@ -883,17 +898,19 @@ let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 " vim indentLine
 let g:indentLine_char = '▏'
 " exclude filetypes
-let g:indentLine_fileTypeExclude = ['coc-explorer', 'man', 'COMMIT_EDITMSG']
+let g:indentLine_fileTypeExclude = ['coc-explorer', 'man', 'gitcommit']
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
 " (default: 2)
 let g:indentLine_color_dark = 1
+" Don't override conceallevel and concealcursor
+let g:indentLine_setConceal = 0
 
 " coc-fzf
 let g:coc_fzf_preview = 'right:40%'
 
 " vim-agriculture
 " search word under cursor
-vnoremap <Leader>rr <Plug>RgRawVisualSelection<cr>
+vnoremap <Leader>a <Plug>RgRawVisualSelection<cr>
 
 " rainbow parenthesis
 " rainbow breakes cmake syntax highlighting
@@ -908,6 +925,9 @@ let g:rainbow_conf = {
 let g:cmake_build_dir = 'build'
 let g:cmake_compile_commands = 1
 let g:cmake_build_executor = 'dispatch'
+
+" Security
+set secure exrc
 
 " User Defined Commands (usr_40, 40.2)
 command -nargs=? -bang Build :Dispatch<bang> -dir=/mnt/build/ make -j$(nproc) <args>
