@@ -90,12 +90,12 @@ history = 100000
 
 [shell]
 args = ["--login"]
-program = "/usr/local/bin/zsh"
+program = "zsh"
 
 [window]
 decorations = "none"
 dynamic_padding = true
-opacity = 0.96
+opacity = 1.00
 startup_mode = "Fullscreen"
 
 [window.padding]
