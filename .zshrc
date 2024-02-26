@@ -142,11 +142,11 @@ zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'g
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf;
   https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf-tmux.1 -> $ZPFX/man/man1/fzf-tmux.1;
   https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZPFX/man/man1/fzf.1;
+  https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-preview.sh -> fzf-preview.sh;
+  https://raw.githubusercontent.com/junegunn/fzf/master/bin/fzf-tmux -> fzf-tmux;
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/key-bindings.zsh -> key-bindings.zsh' \
-    id-as'junegunn/fzf' nocompile pick'/dev/null' sbin'fzf' src'key-bindings.zsh' \
+    id-as'junegunn/fzf' nocompile pick'/dev/null' sbin'fzf(|-tmux)' src'key-bindings.zsh' \
     junegunn/fzf
-# For fzf-tmux to find fzf executable, change
-#   `fzf="$(command -v fzf 2> /dev/null)" || fzf=$HOME/.zi/polaris/bin/fzf`
 
 zi ice lucid wait"0b" pick'fzf-git.sh'
 zi load junegunn/fzf-git.sh
