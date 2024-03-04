@@ -281,21 +281,21 @@ zi wait lucid light-mode for \
 # or for everything
 zstyle ':completion:*' fzf-search-display true
 
-# fzf-tab
-# common options
-# disable sort when completing `git checkout`
-zstyle ':completion:*:git-checkout:*' sort false
-# set descriptions format to enable group support
-# NOTE: don't use escape sequences here, fzf-tab will ignore them
-zstyle ':completion:*:descriptions' format '[%d]'
-# set list-colors to enable filename colorizing
-zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-zstyle ':completion:*' menu no
-# preview directory's content with eza when completing cd
-zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-# switch group using `<` and `>`
-zstyle ':fzf-tab:*' switch-group '<' '>'
+# # fzf-tab
+# # common options
+# # disable sort when completing `git checkout`
+# zstyle ':completion:*:git-checkout:*' sort false
+# # set descriptions format to enable group support
+# # NOTE: don't use escape sequences here, fzf-tab will ignore them
+# zstyle ':completion:*:descriptions' format '[%d]'
+# # set list-colors to enable filename colorizing
+# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
+# # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
+# zstyle ':completion:*' menu no
+# # preview directory's content with eza when completing cd
+# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
+# # switch group using `<` and `>`
+# zstyle ':fzf-tab:*' switch-group '<' '>'
 
 # fzf-tab completions from https://github.com/Aloxaf/fzf-tab/wiki/Preview
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons --group-directories-first --color=always $realpath'
@@ -305,8 +305,8 @@ zstyle ':completion:complete:*:options' sort false
 zstyle ':fzf-tab:*' single-group ''
 # preview git commands
 # it is an example. you can change it
-zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
-	'git diff $word | delta'
+# zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \
+# 	'git diff $word | delta'
 zstyle ':fzf-tab:complete:git-log:*' fzf-preview \
 	'git log --color=always $word'
 zstyle ':fzf-tab:complete:git-help:*' fzf-preview \
@@ -316,12 +316,12 @@ zstyle ':fzf-tab:complete:git-show:*' fzf-preview \
 	"commit tag") git show --color=always $word ;;
 	*) git show --color=always $word | delta ;;
 	esac'
-zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
-	'case "$group" in
-	"modified file") git diff $word | delta ;;
-	"recent commit object name") git show --color=always $word | delta ;;
-	*) git log --color=always $word ;;
-	esac'
+# zstyle ':fzf-tab:complete:git-checkout:*' fzf-preview \
+# 	'case "$group" in
+# 	"modified file") git diff $word | delta ;;
+# 	"recent commit object name") git show --color=always $word | delta ;;
+# 	*) git log --color=always $word ;;
+# 	esac'
 
 zstyle ':fzf-tab:complete:tldr:argument-1' fzf-preview 'tldr --color always $word'
 zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
@@ -332,6 +332,7 @@ export HISTSIZE=1000000   # the number of items for the internal history list
 export SAVEHIST=1000000   # maximum number of items for the history file
 
 ### OPTIONS
+# https://www.viget.com/articles/zsh-config-productivity-plugins-for-mac-oss-default-shell/
 # https://wiki.zshell.dev/docs/guides/customization#history-optimization
 setopt append_history         # Allow multiple sessions to append to one Zsh command history.
 setopt extended_history       # Show timestamp in history.
@@ -359,7 +360,9 @@ setopt pushd_ignore_dups    # Don't push multiple copies directory onto the dire
 setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposite.
 
 unsetopt correct # don't correct command spelling
+unsetopt flow_control # Disables the use of ⌃S to stop terminal output and the use of ⌃Q to resume it.
 
+# https://grml.org/zsh/zsh-lovers.html
 # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
 # Fuzzy completion matching
 zstyle ':completion:*' completer _complete _match _approximate
@@ -391,11 +394,14 @@ zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX
 
 # Use cache for slow functions
 zstyle ':completion:*' use-cache on
+zstyle ':completion:*' cache-path $ZI[CACHE_DIR]
 zstyle ':completion:*' rehash true
 # Ignore completion for non-existant commands
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # https://wiki.zshell.dev/docs/guides/customization#do-menu-driven-completion
 # zstyle ':completion:*' menu select
+# If you end up using a directory as argument, this will remove the trailing slash (useful in ln)
+zstyle ':completion:*' squeeze-slashes true
 
 # Smart case-y completion
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
@@ -468,6 +474,7 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias _="sudo "
+alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git Root
 
 ## add aliases for all recipes in ~/.user.justfile
 for recipe in `just --justfile ~/.user.justfile --summary 2> /dev/null`; do
