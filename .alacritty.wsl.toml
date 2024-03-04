@@ -1,0 +1,12 @@
+# WSL2
+# # start into default wsl and cd to ~
+[shell]
+program = "C:\\Windows\\System32\\wsl.exe ~"
+
+# Fix C-Space (TMUX prefix)
+# don't know what went wrong, but here is the answer:
+# https://github.com/alacritty/alacritty/issues/1703#issuecomment-1788983973
+[[keyboard.bindings]]
+chars = "\u0000"
+key = "Space"
+mods = "Control"
