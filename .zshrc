@@ -203,14 +203,13 @@ export FZF_DEFAULT_OPTS="\
 export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'"
 
 ### pip
-zi pack"bgn" for pyenv
 # https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5
-zi ice pip'cmake-language-server <- !cmake-language-server -> cmake-language-server' id-as'cmake-language-server' nocompile
+zi ice has'pip' pip'cmake-language-server <- !cmake-language-server -> cmake-language-server' id-as'cmake-language-server' nocompile
 zi load z-shell/0
 
-zi ice pip'ruff <- !ruff -> ruff' id-as'ruff' nocompile
+zi ice has'pip' pip'ruff <- !ruff -> ruff' id-as'ruff' nocompile
 zi load z-shell/0
-zi ice pip'ruff-lsp <- !ruff-lsp -> ruff-lsp' id-as'ruff-lsp' nocompile
+zi ice has'pip' pip'ruff-lsp <- !ruff-lsp -> ruff-lsp' id-as'ruff-lsp' nocompile
 zi load z-shell/0
 
 # --cmd x is important as zoxide uses z _and_ zi.
