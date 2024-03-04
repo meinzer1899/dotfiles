@@ -257,19 +257,24 @@ zi snippet https://github.com/alacritty/alacritty/blob/master/extra/completions/
 ### PLUGINS WHICH HAS TO BE LOADED LAST
 
 # fzf-tab needs to be loaded after compinit, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting!!
-zi ice wait lucid has'fzf' atload"zicompinit; zicdreplay" blockf
+zi ice wait lucid has'fzf' blockf
 zi light Aloxaf/fzf-tab
 
 # # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
 # faster than zi light-mode for @zsh-users+fast TODO: start thread at https://github.com/orgs/z-shell/discussions/
 # use ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20 according to https://github.com/zsh-users/zsh-autosuggestions.
-zi wait lucid depth"1" for \
+# https://wiki.zshell.dev/docs/getting_started/overview#the-completion-management
+# as'completion' blockf \
+#   z-shell/zsh-fancy-completions \
+
+# https://wiki.zshell.dev/docs/guides/syntax/for
+zi wait lucid light-mode for \
   atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay" \
   zsh-users/zsh-syntax-highlighting \
-  as'completion' blockf \
-  zsh-users/zsh-completions \
   atload"!_zsh_autosuggest_start; ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
-  zsh-users/zsh-autosuggestions
+  zsh-users/zsh-autosuggestions \
+  blockf atpull'zi creinstall -q .' \
+  zsh-users/zsh-completions
 
 # only for git
 # zstyle ':completion:*:*:git:*' fzf-search-display true
