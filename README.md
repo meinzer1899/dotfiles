@@ -36,8 +36,8 @@ sudo apt-get install virtualbox-guest-additions-iso
 
 * Install nerd font via curl https://github.com/ryanoasis/nerd-fonts?tab=readme-ov-file#option-1-release-archive-download.
 * Install alacritty for Windows.
-* Move alacritty.toml.wsl to %APPDATA%\alacritty.
-* Comment out [program] entry when zsh is not installed yet. 
+* Move alacritty.wsl.toml to %APPDATA%\alacritty.
+* Comment out [program] entry when zsh is not installed yet.
 * map capslock to ctrl: https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10.
 
 ## zsh and zi
@@ -107,6 +107,9 @@ make -j$(nproc) && sudo make install
 
 `tmux new -s tmux`
 
+tmux.conf:
+https://github.com/mrnugget/dotfiles/blob/master/tmux.conf
+
 ## cargo and rust
 
 Managed by zi.
@@ -116,12 +119,6 @@ Search rust book via cli:
 https://github.com/0xhiro/thebook
 
 ## fzf
-
-Adapt tmux-fzf to find fzf:
-```bash
-- fzf="$(command -v fzf 2> /dev/null)" || fzf="$(dirname "$0")/fzf"
-+ fzf="$(command -v fzf 2> /dev/null)" || fzf=$HOME/.zi/polaris/bin/fzf
-```
 
 To auto-accept entry on Enter when searching with CTRL-R, use
 https://github.com/junegunn/fzf/issues/477#issuecomment-444053054
@@ -141,6 +138,7 @@ https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ## vim
 
+https://github.com/mrnugget/vimconfig/blob/master/vimrc
 https://github.com/skywind3000/vim/blob/master/init/unix.vim
 https://github.com/trapd00r/configs/blob/master/vim/vimrc
 https://github.com/suy/configs/blob/master/vimrc
