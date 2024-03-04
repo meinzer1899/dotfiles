@@ -24,6 +24,14 @@ zi wait lucid for \
   OMZP::git \
   OMZL::completion.zsh
 
+# Setup ssh agent (vs code uses this to share git credentials in devcontainer)
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md
+zi wait lucid for \
+  atload"zstyle :omz:plugins:ssh-agent agent-forwarding yes; \
+  zstyle :omz:plugins:ssh-agent lazy yes; \
+  zstyle :omz:plugins:ssh-agent identities id_ed25519" \
+  OMZP::ssh-agent
+
 # :prompt:pure:prompt:* changes the color for both `prompt:success` and `prompt:error`
 zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload" \
   PURE_PROMPT_SYMBOL='▶'; PURE_PROMPT_VICMD_SYMBOL='◀'; \
