@@ -2,6 +2,20 @@
 
 My Linux dotfiles.
 
+```bash
+▶ for _ in $(seq 1 10); do time $SHELL -i -c exit; done
+$SHELL -i -c exit  0.05s user 0.01s system 51% cpu 0.124 total
+$SHELL -i -c exit  0.05s user 0.02s system 49% cpu 0.137 total
+$SHELL -i -c exit  0.07s user 0.00s system 52% cpu 0.125 total
+$SHELL -i -c exit  0.05s user 0.01s system 49% cpu 0.126 total
+$SHELL -i -c exit  0.05s user 0.02s system 48% cpu 0.132 total
+$SHELL -i -c exit  0.05s user 0.01s system 50% cpu 0.125 total
+$SHELL -i -c exit  0.06s user 0.00s system 51% cpu 0.123 total
+$SHELL -i -c exit  0.05s user 0.01s system 50% cpu 0.126 total
+$SHELL -i -c exit  0.06s user 0.00s system 54% cpu 0.119 total
+$SHELL -i -c exit  0.06s user 0.00s system 49% cpu 0.124 total
+```
+
 ![Work Environment](image/linux_environment.png "Linux Work Environment")
 
 # Setup new machine
