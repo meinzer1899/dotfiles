@@ -1,3 +1,6 @@
+# See man zshall for all settings
+
+# zinit loader
 if [[ -r "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" ]]; then
   source "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" && zzinit
 fi
@@ -15,7 +18,7 @@ zi light ryanoasis/nerd-fonts
 
 ### annexes
 zi light-mode for z-shell/z-a-meta-plugins @annexes
-zi light z-shell/z-a-bin-gem-node
+zi light-mode for z-shell/z-a-bin-gem-node
 
 # https://wiki.zshell.dev/community/gallery/collection/snippets
 zi wait lucid for \
@@ -40,11 +43,10 @@ zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload
   " \
   sindresorhus/pure
 
-zi wait'0b' lucid as'program' from'gitlab' pick'ufetch-ubuntu' for \
-  jschx/ufetch
-zi ice lucid wait as'program' pick'neofetch' \
-  atclone"cp neofetch.1 $ZI[MAN_DIR]/man1" atpull'%atclone'
-zi light dylanaraps/neofetch
+zi wait"0b" lucid for \
+  as'program' pick'neofetch' \
+  atclone"cp neofetch.1 $ZI[MAN_DIR]/man1" atpull'%atclone' \
+  dylanaraps/neofetch
 
 zi wait'0b' lucid for \
   OMZP::fancy-ctrl-z
@@ -56,7 +58,9 @@ zi light cowboyd/zsh-volta
 # zi wait lucid for \
 #   OMZP::volta
 
-zi wait'0b' lucid for atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" @djui/alias-tips
+zi wait'0b' lucid for \
+ atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" \
+ @djui/alias-tips
 
 ### programs
 zi wait lucid as'program' from'gh-r' for \
@@ -161,8 +165,8 @@ zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'g
     id-as'junegunn/fzf' nocompile pick'/dev/null' sbin'fzf(|-tmux)' src'key-bindings.zsh' \
     junegunn/fzf
 
-zi ice lucid wait"0b" pick'fzf-git.sh'
-zi load junegunn/fzf-git.sh
+# zi ice lucid wait"0b" pick'fzf-git.sh'
+# zi load junegunn/fzf-git.sh
 
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'eza -1 --icons=always --group-directories-first --color=always --all {} | head -200'"
@@ -241,8 +245,8 @@ zi wait lucid as'command' from'gh-r' for \
   @pemistahl/grex
 
 ## completions
-zi ice wait lucid as"completion"
 # https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitfast
+zi ice wait lucid as"completion"
 zi snippet OMZP::gitfast
 
 zi ice wait lucid as"completion"
