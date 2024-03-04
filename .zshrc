@@ -111,9 +111,14 @@ zi wait lucid for \
   has'eza' atinit'AUTOCD=1' \
   @z-shell/zsh-eza
 
+# speed improvement: disable default maps and bindkey manually
 zi wait lucid for \
   if'(($+commands[xsel] || $+commands[xclip] || $+commands[wl-copy]))' \
-  atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true' \
+  atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true; \
+  ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=true;
+  # Bind Y to yank until end of line \
+  bindkey -M vicmd Y zsh-system-clipboard-vicmd-vi-yank-eol; \
+  ' \
   @kutsan/zsh-system-clipboard
 
 # manpages only available in debug build

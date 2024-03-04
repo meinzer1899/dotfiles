@@ -39,8 +39,9 @@ if exists('+relativenumber')
     set relativenumber
 endif
 
-" No sounds
+" No bells whatsoever
 set visualbell
+set noerrorbells
 " disable the more-prompt
 set nomore
 " Reload files changed outside vim
@@ -491,6 +492,8 @@ if !has('gui_running') && $TMUX !=# ''
 endif
 
 syntax enable
+" Make syntax highlighting faster
+syntax sync minlines=256
 
 if !has('gui_running')
     if &t_Co < 256
@@ -523,6 +526,13 @@ else
       set clipboard& clipboard+=unnamed
 endif
 
+" WSL copy pasting with system clipboard
+" Does not need vim compiled with +clipboard support
+" https://vi.stackexchange.com/a/20231
+if system('uname -r') =~ "Microsoft"
+    Autocmd TextYankPost * :call system('clip.exe ',@")
+endif
+
 " FZF
 if executable('rg')
     " use the same as in.zshrc
@@ -530,7 +540,7 @@ if executable('rg')
     " https://github.com/BurntSushi/ripgrep/issues/425
     set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
     set grepformat+=%f:%l:%c:%m
-    inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files')
+    inoremap <expr> <c-x><c-f> fzf#vim#complete#path('rg --files --hidden')
 endif
 
 if executable('fd')
@@ -925,6 +935,10 @@ let g:rainbow_conf = {
 let g:cmake_build_dir = 'build'
 let g:cmake_compile_commands = 1
 let g:cmake_build_executor = 'dispatch'
+
+" In visual mode don't include the newline-character when jumping to end-of-line
+" with $
+vnoremap $ $h
 
 " Security
 set secure exrc
