@@ -52,9 +52,6 @@ set noautowrite
 " Trigger checktime to get updates on file change more often
 au FocusGained * :checktime
 
-" Set Blowfish for encryption method, but only on Vim >=7.3.
-if has('cryptv') && v:version >= 703 | set cryptmethod=blowfish | endif
-
 " Show current mode down the bottom
 set showmode
 " Don't show commands as you type them
