@@ -1,4 +1,5 @@
-# See man zshall for all settings
+#!/usr/bin/env zsh
+# See man zshell for all settings
 
 # zinit loader
 if [[ -r "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" ]]; then
@@ -474,19 +475,9 @@ alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias _="sudo "
-alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git Root
+alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git root
 
-## add aliases for all recipes in ~/.user.justfile
-for recipe in `just --justfile ~/.user.justfile --summary 2> /dev/null`; do
-  alias $recipe="just --justfile ~/.user.justfile --working-directory .
-  $recipe"
-done
-
-### export
-# https://zameermanji.com/blog/2012/12/30/using-vim-as-manpager/
-export MANPAGER="vim +MANPAGER -R --not-a-term -"
-export MANWIDTH="100"
-export EDITOR="vim"
-export VISUAL="vim"
-export BLOCKSIZE="K" # show blocks as kilobytes
-unset MAILCHECK # don't check for mails
+# ## add aliases for all recipes in ~/.user.justfile
+# for recipe in `just --justfile ~/.user.justfile --summary 2> /dev/null`; do
+#   alias $recipe="just --justfile ~/.user.justfile --working-directory . $recipe"
+# done
