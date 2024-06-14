@@ -1,12 +1,28 @@
 {
+  // https://github.com/neoclide/coc.nvim/wiki/Debug-language-server
   "languageserver": {
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
       "filetypes": ["sh"],
       "ignoredRootPaths": ["~"]
+    },
+    "cmake": {
+      "command": "neocmakelsp",
+      "args": ["--stdio"],
+      "filetypes": ["cmake"],
+      "rootPatterns": [".git", "CMakeLists.txt"],
+      "initializationOptions": {
+        "scan_cmake_in_package": true,
+        "semantic_token": true,
+      },
+    },
+    "tmux": {
+      "command": "tmux-language-server",
+      "filetypes": ["tmux"]
     }
   },
+  // map entries from here https://github.com/iamcco/coc-diagnostic/blob/master/src/config.ts
   "diagnostic-languageserver.filetypes": {
     "vim": "vint",
     "cmake": "cmake-lint",
@@ -66,6 +82,8 @@
   "coc.source.file.ignoreHidden": false,
   // lint only via coc-ruff, not via coc-pyright
   "python.linting.enabled": false,
+  "ruff.useDetectRuffCommand": false,
+  "ruff.path": ["$HOME/.zi/plugins/ruff/venv/bin/ruff"],
   "pyright.disableDiagnostics": true,
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",

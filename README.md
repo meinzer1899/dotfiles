@@ -39,6 +39,8 @@ https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys
 sudo vi /etc/default/keyboard and change XKBOPTIONS="ctrl:nocaps"
 setxkbmap -option ctrl:nocaps
 
+https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10
+
 ## VirtualBox
 
 Update GuestAdditions after updating VirtualBox via https://help.ubuntu.com/community/VirtualBox/GuestAdditions.
@@ -51,7 +53,6 @@ sudo apt-get install virtualbox-guest-additions-iso
 * Install nerd font via curl https://github.com/ryanoasis/nerd-fonts?tab=readme-ov-file#option-1-release-archive-download.
 * Install alacritty for Windows.
 * Move alacritty.wsl.toml to %APPDATA%\alacritty.
-* Comment out [program] entry when zsh is not installed yet.
 * map capslock to ctrl: https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10.
 
 ## zsh and zi
@@ -70,7 +71,12 @@ mkdir -p $HOME/.zi/polaris
 zi loader is included in dotfiles (.config/zi); if not, see
 https://wiki.zshell.dev/docs/getting_started/installation => loader.
 
+https://registerspill.thorstenball.com/p/how-fast-is-your-shell
+
 zshrcs
+https://github.com/ctrueden/dotfiles/blob/main/zshrc
+https://github.com/itchyny/dotfiles/blob/main/.zshrc
+https://github.com/timtyrrell/dotfiles-chezmoi/blob/master/dot_zshrc
 https://github.com/Freed-Wu/Freed-Wu/blob/main/.zshrc
 https://github.com/kutsan/dotfiles/blob/master/.config/zsh/config/settings.zsh
 https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
@@ -121,7 +127,9 @@ make -j$(nproc) && sudo make install
 
 `tmux new -s tmux`
 
-tmux.conf:
+.tmux.conf:
+https://github.com/doronbehar/.tmux/tree/master
+https://gist.github.com/adibhanna/979461c5f7d906daf24925fbd9b255eb
 https://github.com/mrnugget/dotfiles/blob/master/tmux.conf
 
 ## cargo and rust
@@ -152,6 +160,11 @@ https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ## vim
 
+https://github.com/mrnugget/vimconfig/tree/master
+https://github.com/itchyny/dotfiles/blob/main/.vimrc
+https://github.com/mischavandenburg/dotfiles/blob/main/vim/.vimrc
+https://github.com/doronbehar/.config_nvim/tree/master
+https://github.com/habamax/.vim/blob/master/vimrc (vim maintainer)
 https://github.com/mrnugget/vimconfig/blob/master/vimrc
 https://github.com/skywind3000/vim/blob/master/init/unix.vim
 https://github.com/trapd00r/configs/blob/master/vim/vimrc
@@ -205,7 +218,15 @@ https://github.com/Vimjas/vint
 https://github.com/hadolint/hadolint
 gets installed by zi.
 
-## C++
+## C++ cpp
+
+https://github.com/HappyCerberus/daily-bite-cpp (especially Modern-only C++ Course)
+[Playlist: Modern C++ Series - Mike Shah](https://www.youtube.com/playlist?list=PLvv0ScY6vfd8j-tlhYVPYgiIyXduu6m-L)
+https://akrzemi1.wordpress.com/
+https://www.meetingcpp.com/blog/blogroll/
+
+playground
+[HU print chunks 0001'0203'...'0e0f](https://godbolt.org/z/98zvoc7Eb)
 
 ### ccls
 
@@ -215,6 +236,14 @@ https://github.com/MaskRay/ccls/wiki/Install
 ### CMake
 
 Use install-cmake.sh from foonathan to install to /usr/local. May remove "old" cmake versions, check via `which -a cmake`.
+
+https://blog.feabhas.com/category/build-systems/
+with https://github.com/feabhas/cmake-presets-blog
+
+https://github.com/philips-software/amp-devcontainer/tree/main/.devcontainer/cpp
+https://github.com/intel/cicd-repo-infrastructure/
+https://github.com/StableCoder/cmake-scripts
+https://github.com/cpp-best-practices/cmake_template
 
 #### misc
 
@@ -260,6 +289,7 @@ https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-l
 
 ### docker
 
+https://github.com/StableCoder/docker-build-core
 https://github.com/think-cell/docker
 
 ## asynctask
@@ -283,50 +313,22 @@ https://github.com/EthanJWright/vs-tasks.nvim
 
 CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
-## neovim
+## neovim nvim
 
+[The Laziest Neovim (NeovimConf 2023) | Speed Up Neovim](https://www.youtube.com/watch?v=FMa3eURbgQ8)
+[Neovim for Newbs. FREE COURSE](https://youtube.com/playlist?list=PLsz00TDipIffreIaUNk64KxTIkQaGguqn&si=rAgKT6KALr0KLg-J)
+[The Only Video You Need to Get Started with Neovim](https://youtube.com/watch?v=m8C0Cq9Uv9o&si=vBLbYpfQiMMLgm4d)
+[The perfect Neovim setup for C++](https://youtube.com/watch?v=lsFoZIg-oDs&si=Ek-FGDD2BUq4zHJM)
+[C++ Coding with Neovim - Prateek Raman - CppCon 2022](https://youtube.com/watch?v=nzRnWUjGJl8&si=0djsLRaeer54Zc8G)
 Neovim for C++: https://www.youtube.com/watch?v=lsFoZIg-oDs
 
 Use FZF instead of telescope
 https://github.com/ibhagwan/fzf-lua#why-fzf-lua
+https://github.com/deathmaz/fzf-lua-asynctasks
 https://github.com/ibhagwan/nvim-lua
 
 https://www.youtube.com/watch?v=stqUbv-5u2s TJ De Vries  Effective Neovim: Instant IDE
-https://github.com/nvim-lua/kickstart.nvim
-
-lazy nvim
-https://github.com/thieung/nvim
-
-AstroNvim
-https://github.com/AstroNvim/AstroNvim
-https://astronvim.com/Recipes/advanced_lsp
-
-https://github.com/askfiy/nvim
-
-https://github.com/kutsan/dotfiles/blob/master/.config/nvim/plugin/settings.lua
-https://github.com/nicknisi/dotfiles
-https://github.com/disrupted/dotfiles/tree/master/.config/nvim
-https://github.com/danymat/champagne
-https://toroid.org/modern-neovim
-https://github.com/joshukraine/dotfiles/tree/master/nvim
-
-https://nvchad.com/
-https://github.com/artart222/CodeArt
-https://github.com/p00f/clangd_extensions.nvim
-https://github.com/shaun-mathew/Chameleon.nvim
-https://github.com/phaazon/hop.nvim
-https://github.com/lukas-reineke/indent-blankline.nvim
-https://github.com/RRethy/nvim-base16
-https://github.com/chriskempson/base16-shell
-https://github.com/yamatsum/nvim-nonicons
 https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
-https://github.com/ibhagwan/fzf-lua
-https://github.com/deathmaz/fzf-lua-asynctasks
-https://github.com/ggandor/leap.nvim vim sneak alternative
-https://github.com/aserowy/tmux.nvim
-https://gitlab.com/ivan-cukic/nvim-telescope-zeal-cli
-https://github.com/jedrzejboczar/toggletasks.nvim
-https://github.com/sindrets/diffview.nvim
 
 ### other
 
