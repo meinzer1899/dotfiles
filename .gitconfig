@@ -32,12 +32,17 @@
 	cmd = vim -f -c Gdiff $MERGED
 [pull]
 	rebase = false
+[push]
+	default = simple
+	autoSetupRemote = true
 [fetch]
 	prune = true
 	pruneTags = true
 	recurseSubmodules = on-demand
 	# 0 gives reasonable default, see https://git-scm.com/docs/git-config#Documentation/git-config.txt-fetchparallel
 	parallel = 0
+[rerere]
+	enabled = true
 [status]
 	submoduleSummary = true
 	showUntrackedFiles = all
