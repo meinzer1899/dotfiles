@@ -1,6 +1,6 @@
 # https://github.com/koalaman/shellcheck/wiki/optional
 
-shell=sh
+shell=bash
 
 enable=avoid-nullary-conditions  # Suggest explicitly using -n in `[ $var ]`
 enable=deprecate-which           # Suggest `command -v` instead of `which`
