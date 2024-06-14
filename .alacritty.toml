@@ -1,5 +1,6 @@
 live_config_reload = true
 
+# https://github.com/alacritty/alacritty-theme
 [colors]
 transparent_background_colors = true
 
