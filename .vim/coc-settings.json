@@ -17,10 +17,6 @@
         "semantic_token": true,
       },
     },
-    "tmux": {
-      "command": "tmux-language-server",
-      "filetypes": ["tmux"]
-    }
   },
   // map entries from here https://github.com/iamcco/coc-diagnostic/blob/master/src/config.ts
   "diagnostic-languageserver.filetypes": {
