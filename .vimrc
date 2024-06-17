@@ -186,7 +186,7 @@ endif
 set history=200
 
 " Use a colored column to mark the textwidh+1 column
-set textwidth=80
+set textwidth=110
 set colorcolumn=+1
 
 " Searching
@@ -310,10 +310,8 @@ map '' ``
 "   - reset colorcolumn
 "   - redraw screen
 nnoremap <silent> <C-l>
-            \ :call HLNextOff()                   <BAR>
             \ :nohl                               <BAR>
             \ :hi clear YankedMatches             <BAR>
-            \ :call HighlightCurrentLine('clear') <BAR>
             \ :set colorcolumn&                   <BAR>
             \ :redraw <CR>
 
@@ -739,9 +737,7 @@ Autocmd VimEnter,FilterWritePre * if &diff | GitGutterDisable | endif
 " bdelete all buffers except the buffer in the current window
 nnoremap <silent><Leader>bdo :Bdelete other<CR>
 " bdelete buffers not visible in a window
-nnoremap <silent><Leader>bdh :Bdelete hidden<CR>:redraw<CR>
-" Clear and redraw the screen. Defaulted to <C-L>.
-nmap <C-L> :redraw!<CR>
+nnoremap <silent><Leader>bdh :Bdelete hidden<CR><C-L>
 
 " Disable rnumbers on inactive buffers for active screen indication
 " but not for terminal buffers because of ugly formatting when leaving and
