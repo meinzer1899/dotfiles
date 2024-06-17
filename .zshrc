@@ -67,8 +67,7 @@ zi wait'0b' lucid for \
 ### programs
 zi wait lucid as'program' from'gh-r' for \
   mv'hadolint* -> hadolint' \
-  sbin'hadolint -> hadolint' \
-  pick'$ZPFX/bin/hadolint' \
+  sbin'hadolint' \
   @hadolint/hadolint
 
 ## rust
@@ -88,7 +87,6 @@ zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf bat/autocomplete/bat.zsh -> _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
   mv'bat* -> bat' sbin'**/bat(.exe|) -> bat' \
-  pick'$ZPFX/bin/bat' \
   @sharkdp/bat
 
 zi wait lucid as'program' from'gh' has'bat' pick'src/*' for \
@@ -98,13 +96,11 @@ zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf fd/autocomplete/_fd -> _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
   atpull"%atclone" \
   mv'fd* -> fd' sbin'**/fd(.exe|) -> fd' \
-  pick'$ZPFX/bin/fd' \
   @sharkdp/fd
 
 zi wait lucid as'program' from'gh-r' for \
   mv'delta* -> delta' \
   sbin'**/delta -> delta' \
-  pick'$ZPFX/bin/delta' \
   @dandavison/delta
 
 # last updated 3 yrs ago...
@@ -118,7 +114,6 @@ zi wait lucid as'program' from'gh' for \
 	  cp -vf man/*.1.* $ZI[MAN_DIR]/man1; cp -vf man/*.5.* $ZI[MAN_DIR]/man5' \
   atpull'%atclone' \
   sbin'**/eza -> eza' \
-  pick'$ZPFX/bin/eza' \
   @eza-community/eza
 
 zi wait lucid for \
