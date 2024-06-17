@@ -74,6 +74,7 @@ https://wiki.zshell.dev/docs/getting_started/installation => loader.
 https://registerspill.thorstenball.com/p/how-fast-is-your-shell
 
 zshrcs
+https://github.com/doronbehar/dotfiles/blob/master/.zshrc
 https://github.com/ctrueden/dotfiles/blob/main/zshrc
 https://github.com/itchyny/dotfiles/blob/main/.zshrc
 https://github.com/timtyrrell/dotfiles-chezmoi/blob/master/dot_zshrc
@@ -90,6 +91,7 @@ https://github.com/Freed-Wu/fzf-tab-source
 
 ## git
 
+https://github.com/stevearc/dotfiles/blob/master/.githelpers
 https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
 
 For Ubuntu, this PPA provides the latest stable upstream Git version: https://git-scm.com/download/linux.
