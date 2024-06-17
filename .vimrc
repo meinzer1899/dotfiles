@@ -26,7 +26,6 @@ let s:on_mac = has('mac')
 
 " Open new split panes to right and buttom
 set splitbelow
-set lazyredraw
 
 " lightline shows the mode already
 set noshowmode
@@ -42,6 +41,7 @@ endif
 " No bells whatsoever
 set visualbell
 set noerrorbells
+set belloff=all
 " disable the more-prompt
 set nomore
 " Reload files changed outside vim
@@ -65,25 +65,43 @@ set cmdheight=1
 set updatetime=150
 
 " Don't pass messages to |ins-completion-menu| (coc)
-set shortmess+=c
+set shortmess+=Ic
 
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 set signcolumn=yes
 
 " Allow buffer switching even if unsaved
-set hidden
+set hidden confirm
 " Don't display long lines that don't fit in the window as if were broken.
 " Display long lines by showing them in multiple visual lines, not by scrolling.
 " Only affects how the lines look. See 'showbreak' for the visual hint.
 set wrap
 " Wrap lines at convenient points. Only makes sense if wrap is enabled.
 set linebreak
-" help fo-table.  set fo=croq (only format comments, good for code), set fo=tcrq for text
-set fo=croq
-" Add 'j' (remove commentstring when joining) to format options.
-if v:version > 703 | set fo+=j | endif
-" Don't leave two spaces between two sentences (foo.  Bar) when joining lines
+
+" Just the formatoptions defaults, these are changed per filetype by
+" plugins. Most of the utility of all of this has been superceded by the use of
+" modern simplified pandoc for capturing knowledge source instead of
+" arbitrary raw text files.
+set fo-=t   " don't auto-wrap text using text width
+set fo+=c   " autowrap comments using textwidth with leader
+set fo-=r   " don't auto-insert comment leader on enter in insert
+set fo-=o   " don't auto-insert comment leader on o/O in normal
+set fo+=q   " allow formatting of comments with gq
+set fo-=w   " don't use trailing whitespace for paragraphs
+set fo-=a   " disable auto-formatting of paragraph changes
+set fo-=n   " don't recognized numbered lists
+set fo+=j   " delete comment prefix when joining
+set fo-=2   " don't use the indent of second paragraph line
+set fo-=v   " don't use broken 'vi-compatible auto-wrapping'
+set fo-=b   " don't use broken 'vi-compatible auto-wrapping'
+set fo+=l   " long lines not broken in insert mode
+set fo+=m   " multi-byte character line break support
+set fo+=M   " don't add space before or after multi-byte char
+set fo-=B   " don't add space between two multi-byte chars
+set fo+=1   " don't break a line after a one-letter word
+" Don't leave two spaces between two sentences (foo.  Bar) when joining lines (J)
 set nojoinspaces
 
 " Fix Vim's ridiculous line wrapping model
@@ -192,9 +210,10 @@ set modelines=0
 set nomodeline
 
 " ================ Completion =======================
+set completeopt=fuzzy completepopup=highlight:Pmenu
 
 " Activate completion of the command line.
-set wildmenu
+set wildmenu wildoptions=pum,fuzzy pumheight=20
 " Complete longest common string, then each full match
 set wildmode=list:longest,list:full
 set wildignore=*.o,*.obj,*~,*.exe,*.a,*.pdb,*.lib
@@ -318,7 +337,16 @@ set selection=exclusive
 set conceallevel=0
 
 " Limit suggestions when spell checking with z=.
+set nospell spelllang=en,de_20
 set spellsuggest=best,15
+
+set nostartofline
+
+" prevents truncated yanks, deletes, etc.
+set viminfo='20,<1000,s1000
+
+" stop vim from silently messing with files that it shouldn't
+set nofixendofline
 
 " Vimrc augroup
 augroup MyVimrc
@@ -354,6 +382,7 @@ Autocmd BufRead,BufNewFile vimrc.local set filetype=vim
 Autocmd BufRead,BufNewFile .vimrc set filetype=vim
 Autocmd BufRead,BufNewFile CMakeLists.txt set filetype=cmake
 Autocmd BufRead,BufNewFile *.tpp set filetype=cpp
+Autocmd BufRead,BufNewFile .tmux.conf set filetype=tmux
 AutocmdFT cpp setlocal matchpairs+=<:>
 Autocmd BufRead,BufNewFile .clang-format set filetype=yaml
 AutocmdFT {markdown,gitcommit} setlocal spell spelllang=en_us
@@ -478,6 +507,7 @@ nmap <C-r> <Plug>(highlightedundo-redo)
 nmap U     <Plug>(highlightedundo-Undo)
 nmap g-    <Plug>(highlightedundo-gminus)
 nmap g+    <Plug>(highlightedundo-gplus)
+Plug 'wellle/tmux-complete.vim'
 
 " Initialize plugin system
 call plug#end()
