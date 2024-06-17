@@ -10,3 +10,6 @@ export MANWIDTH="100"
 export VISUAL="$EDITOR"
 export BLOCKSIZE="K" # show blocks as kilobytes
 unset MAILCHECK # don't check for mails
+
+# (exit|ls|pkill)
+export HISTORY_IGNORE="(exit)"
