@@ -26,7 +26,8 @@ zi wait lucid for \
   OMZL::git.zsh \
   atload"unalias grv" \
   OMZP::git \
-  OMZL::completion.zsh
+  OMZL::completion.zsh \
+  OMZP::cp
 
 # Setup ssh agent (vs code uses this to share git credentials in devcontainer)
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md
@@ -140,17 +141,20 @@ zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf ripgrep/complete/_rg -> _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
   mv'ripgrep* -> ripgrep' sbin'**/rg(.exe|) -> rg' \
-  pick'$ZPFX/bin/rg' \
   @BurntSushi/ripgrep
 
 zi wait lucid as'program' from'gh-r' for \
   mv'tealdeer* -> tealdeer' \
   sbin'**/tealdeer -> tldr' \
-  pick'$ZPFX/bin/tldr' \
   @dbrgn/tealdeer
 
 zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
 zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
+
+zi wait lucid as'program' from'gh-r' for \
+  mv'neocmakelsp* -> neocmakelsp' \
+  sbin'**/neocmakelsp' \
+  @Decodetalkers/neocmakelsp
 
 # FZF
 # Download the package with the bin-gem-node annex-utilizing ice list
@@ -205,9 +209,6 @@ export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat
 
 ### pip
 # https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5
-zi ice has'pip' pip'cmake-language-server <- !cmake-language-server -> cmake-language-server' id-as'cmake-language-server' nocompile
-zi load z-shell/0
-
 zi ice has'pip' pip'ruff <- !ruff -> ruff' id-as'ruff' nocompile
 zi load z-shell/0
 zi ice has'pip' pip'ruff-lsp <- !ruff-lsp -> ruff-lsp' id-as'ruff-lsp' nocompile
