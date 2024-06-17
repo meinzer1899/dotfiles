@@ -151,16 +151,16 @@ set nobackup                                                               " no 
 set nowritebackup
 set noswapfile
 
-" persistent undo in RAM /tmp/
-" from https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
-if has('persistent_undo')
-    let s:undodir = '/tmp/.undodir_' . $USER
-    if !isdirectory(&undodir)
-        call mkdir(&undodir, "p", 0740)
-    endif
-    let &undodir=s:undodir
-    set undofile
-    " persisent undo for 1024 actions
+" persistent undo :h undotree.txt
+if has("persistent_undo")
+	let target_path = expand('~/.undodir')
+
+	" create the directory and any parent directories
+	" if the location does not exist.
+	if !isdirectory(target_path) | call mkdir(target_path, "p", 0700) | endif
+
+	let &undodir=target_path
+	set undofile
     set undolevels=1024
 endif
 
