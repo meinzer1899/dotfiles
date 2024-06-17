@@ -179,26 +179,36 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # copy command with CTRL-Y (https://github.com/junegunn/fzf/blob/6b99399c41d9818ee4b4fa8968a1249100008e4c/README.md?plain=1#L588)
 export FZF_CTRL_R_OPTS="
 --preview 'echo {}' --preview-window up:3:hidden:wrap
---bind 'ctrl-/:toggle-preview'
+--bind 'ctrl-p:toggle-preview'
 --bind 'ctrl-t:track+clear-query'
 --bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -i -selection clipboard)+abort'
 --color header:italic
---header 'Press CTRL-Y to copy command into clipboard | CTRL-/ to toggle full command preview'
+--header 'Press CTRL-Y to copy command into clipboard | CTRL-p to toggle full command preview'
 "
 
-export FZF_DEFAULT_COLORS='--color=dark'
+# Set --walker options without 'follow' not to follow symbolic links
+FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
+FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
+
+export FZF_DEFAULT_COLORS="\
+  --color=dark
+  --color gutter:-1,selected-bg:238,selected-fg:146,current-fg:189
+"
 
 export FZF_DEFAULT_OPTS="\
-  $FZF_DEFAULT_COLORS \
-  --no-mouse \
-  --height='40%' \
-  --margin='1,3' \
-  --layout='reverse' \
-  --info='inline' \
-  --no-separator \
-  --no-bold \
-  --bind='ctrl-d:half-page-down' \
-  --bind='ctrl-u:half-page-up'"
+  $FZF_DEFAULT_COLORS\
+  --no-mouse
+  --height='40%'
+  --margin='1,3'
+  --layout='reverse'
+  --pointer ▶ --prompt ' '
+  --info='inline'
+  --no-separator
+  --no-bold
+  --bind 'ctrl-d:half-page-down'
+  --bind 'ctrl-u:half-page-up'
+  --bind 'alt-a:toggle-all'
+"
 
 export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'"
 
