@@ -251,7 +251,8 @@ zi wait lucid as'command' from'gh-r' for \
   @pemistahl/grex
 
 ## completions
-# https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/gitfast
+# https://zsh.sourceforge.io/Guide/zshguide06.html
+
 zi ice wait lucid as"completion"
 zi snippet OMZP::gitfast
 
@@ -276,7 +277,7 @@ zi light Aloxaf/fzf-tab
 
 # https://wiki.zshell.dev/docs/guides/syntax/for
 zi wait lucid light-mode for \
-  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay" \
+  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay; ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)" \
   zsh-users/zsh-syntax-highlighting \
   atload"!_zsh_autosuggest_start; ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
   zsh-users/zsh-autosuggestions \
@@ -287,6 +288,8 @@ zi wait lucid light-mode for \
 # zstyle ':completion:*:*:git:*' fzf-search-display true
 # or for everything
 zstyle ':completion:*' fzf-search-display true
+# don't use the old compctl completion system
+zstyle ':completion:*' use-compctl false
 
 # # fzf-tab
 # # common options
@@ -369,6 +372,13 @@ setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposit
 unsetopt correct # don't correct command spelling
 unsetopt flow_control # Disables the use of ⌃S to stop terminal output and the use of ⌃Q to resume it.
 
+# Why would I want to exclude hidden files?
+setopt glob_dots
+# allow more sophisticated glob patterns
+setopt extendedglob
+# enable inline comments
+setopt interactivecomments
+
 # https://grml.org/zsh/zsh-lovers.html
 # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
 # Fuzzy completion matching
@@ -400,7 +410,7 @@ zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX
 # zstyle ':completion:*:man:*' menu yes select
 
 # Use cache for slow functions
-zstyle ':completion:*' use-cache on
+zstyle ':completion:*' use-cache true
 zstyle ':completion:*' cache-path $ZI[CACHE_DIR]
 zstyle ':completion:*' rehash true
 # Ignore completion for non-existant commands
@@ -415,7 +425,6 @@ zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:
 
 # Dircolors on completions
 # https://wiki.zshell.dev/docs/guides/customization#color-completion-for-some-things
-# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 # Zsh colors
 if [[ "$CLICOLOR" != '0' ]]; then
     zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" 'ma=1;30;43'
@@ -423,25 +432,11 @@ fi
 
 ### bindings
 
-bindkey -e
-bindkey "^P" up-line-or-search
-bindkey "^N" down-line-or-search
-bindkey "^H" autosuggest-execute
-# common bind
-bindkey '^a' beginning-of-line
-bindkey '^b' backward-char
-bindkey '^d' delete-char-or-list
-bindkey '^e' end-of-line
-bindkey '^f' forward-char
-# bindkey '^g' send-break # interferes with fzf-git.sh
-bindkey '^w' backward-kill-word
-bindkey '^p' history-beginning-search-backward
-bindkey '^n' history-beginning-search-forward
-bindkey '^y' yank
-
 # use vi keybindings
 # C-j to enter vi mode
 bindkey -v
+# The time lapse between <Esc> and changing to insert mode.
+export KEYTIMEOUT=1
 
 # add custom bindings
 bindkey ' '    magic-space
@@ -472,6 +467,12 @@ bindkey '^Y'   yank-from-x-selection
 bindkey '^Z'   fzf-file-widget
 
 bindkey "^H" autosuggest-execute
+
+# full text editor editing of the command
+autoload edit-command-line && zle -N edit-command-line
+bindkey -M viins "^V" edit-command-line
+bindkey -M vicmd "^V" edit-command-line
+
 ### alias
 alias v="vim"
 alias nv="nvim"
