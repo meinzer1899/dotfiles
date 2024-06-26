@@ -1,6 +1,7 @@
 image
 scripts
 .alacritty.wsl.toml
+wsl.conf
 
 # From: https://www.gnu.org/software/stow/manual/html_node/Types-And-Syntax-Of-Ignore-Lists.html
 # Comments and blank lines are allowed.
