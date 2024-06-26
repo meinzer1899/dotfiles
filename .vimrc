@@ -436,6 +436,9 @@ let g:onedark_terminal_italics=1
 " Plug 'Everblush/everblush.vim'
 " let g:everblush_transp_bg = 1
 Plug 'itchyny/lightline.vim'
+" Plug 'liuchengxu/eleline.vim'
+" let g:eleline_slim = 1
+" let g:eleline_powerline_fonts = 1
 Plug 'airblade/vim-gitgutter'
 let g:gitgutter_set_sign_backgrounds = 1
 " Plug 'pechorin/any-jump.vim'
@@ -484,10 +487,6 @@ Plug 'farmergreg/vim-lastplace'
 " let g:lastplace_ignore_buftype = 'quickfix'
 " Easy text exchange operator for Vim
 " Plug 'tommcdo/vim-exchange'
-" add buffers to tabline
-Plug 'mengelbrecht/lightline-bufferline'
-" always show tabline
-set showtabline=2
 " Plug 'KabbAmine/zeavim.vim'
 " If you don't have nodejs and yarn
 " use pre build, add 'vim-plug' to the filetype list so vim-plug can update this plugin
@@ -645,40 +644,28 @@ nnoremap <Leader>gj :diffget //3<CR>
 nnoremap <Leader>gf :diffget //2<CR>
 
 " LIGHTLINE
-" register compoments:
-call lightline#coc#register()
 
-" switch to buffers using their ordinal number in the bufferline
-let g:lightline#bufferline#show_number  = 2
-nnoremap <Leader>1 <Plug>lightline#bufferline#go(1)
-nnoremap <Leader>2 <Plug>lightline#bufferline#go(2)
-nnoremap <Leader>3 <Plug>lightline#bufferline#go(3)
-nnoremap <Leader>4 <Plug>lightline#bufferline#go(4)
-nnoremap <Leader>5 <Plug>lightline#bufferline#go(5)
-nnoremap <Leader>6 <Plug>lightline#bufferline#go(6)
-nnoremap <Leader>7 <Plug>lightline#bufferline#go(7)
-nnoremap <Leader>8 <Plug>lightline#bufferline#go(8)
-nnoremap <Leader>9 <Plug>lightline#bufferline#go(9)
-nnoremap <Leader>0 <Plug>lightline#bufferline#go(10)
+let g:lightline#coc#indicator_errors = ' '
+let g:lightline#coc#indicator_warnings = ' '
+let g:lightline#coc#indicator_infos = '🛈 '
+let g:lightline#coc#indicator_hints = '! '
+let g:lightline#coc#indicator_ok = ''
 
 let g:lightline.active = {
-            \ 'left': [['mode', 'paste'], ['readonly', 'filename', 'fileformat', 'modified']],
+            \ 'left': [['mode', 'paste'], ['readonly', 'filename', 'fileformat', 'modified'], ['gitbranch']],
             \ 'right': [['lineinfo'], ['percent'], ['readonly',
             \       'linter_warnings', 'linter_errors', 'linter_checking',
-            \       'linter_infos']]
-            \ }
-
-let g:lightline.tabline = {
-            \   'left': [ ['buffers'] ],
-            \   'right': [ ['gitbranch'] ]
+            \       'linter_infos', 'linter_hints']]
             \ }
 
 let g:lightline.component_expand = {
             \   'buffers': 'lightline#bufferline#buffers',
             \   'linter_warnings': 'lightline#coc#warnings',
             \   'linter_errors': 'lightline#coc#errors',
+            \   'linter_infos': 'lightline#coc#infos',
             \   'linter_ok': 'lightline#coc#ok',
             \   'linter_checking': 'lightline#coc#status',
+            \   'linter_hints': 'lightline#coc#hints',
             \ }
 
 let g:lightline.component_type = {
@@ -686,8 +673,8 @@ let g:lightline.component_type = {
             \   'readonly': 'error',
             \   'linter_warnings': 'warning',
             \   'linter_errors': 'error',
-            \   'linter_info': 'info',
-            \   'linter_hints': 'hints',
+            \   'linter_infos': 'info',
+            \   'linter_hints': 'hint',
             \   'linter_ok': 'left',
             \ }
 
@@ -700,9 +687,6 @@ let g:lightline.component_function = {
 function GitBranch()
     return " " . FugitiveHead()
 endfunction
-
-let g:coc_status_error_sign = '❌'
-let g:coc_status_warning_sign = "⚠"
 
 " shrink file name when window size falls below threshold
 function! LightlineFileformat()
