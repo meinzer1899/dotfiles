@@ -16,7 +16,7 @@ tldr --update
 volta install node@lts # installs latest LTS; node@20 installs latest node 20 version
 volta install bash-language-server
 # https://docs.npmjs.com/about-npm-versions recommends to install latest version
-volta install npm@latest # needed for coc plugin install
+volta install npm@bundled # needed for coc plugin install, @latest also available
 # from time to time, uninstall old package versions via rm -rf in ~/.volta/tools/image/[node|npm]
 
 # fails when called outside of tmux session
