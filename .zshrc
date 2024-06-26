@@ -240,7 +240,7 @@ zi snippet https://github.com/ajeetdsouza/zoxide/blob/main/contrib/completions/_
 
 # https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
 zi ice as'program' atclone'rm -f src/auto/config.cache; \
-  ./configure --prefix=$ZPFX --enable-python3interp=yes' \
+  ./configure --quiet --prefix=$ZPFX --enable-python3interp=yes' \
   atpull'%atclone' make'all install' pick'$ZPFX/bin/vim'
 zi light vim/vim
 
