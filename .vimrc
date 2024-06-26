@@ -2,7 +2,7 @@
 
 " Vim guides
 " https://google.github.io/styleguide/vimscriptguide.xml
-" https://rbtnn.hateblo.jp/entry/2014/12/28/010913
+" https://devhints.io/vimscript
 
 " Use Vim settings, rather then Vi settings (much better!).
 " This must be first, because it changes other options as a side effect.
@@ -81,23 +81,23 @@ set linebreak
 " plugins. Most of the utility of all of this has been superceded by the use of
 " modern simplified pandoc for capturing knowledge source instead of
 " arbitrary raw text files.
-set fo-=t   " don't auto-wrap text using text width
-set fo+=c   " autowrap comments using textwidth with leader
-set fo-=r   " don't auto-insert comment leader on enter in insert
-set fo-=o   " don't auto-insert comment leader on o/O in normal
-set fo+=q   " allow formatting of comments with gq
-set fo-=w   " don't use trailing whitespace for paragraphs
-set fo-=a   " disable auto-formatting of paragraph changes
-set fo-=n   " don't recognized numbered lists
-set fo+=j   " delete comment prefix when joining
-set fo-=2   " don't use the indent of second paragraph line
-set fo-=v   " don't use broken 'vi-compatible auto-wrapping'
-set fo-=b   " don't use broken 'vi-compatible auto-wrapping'
-set fo+=l   " long lines not broken in insert mode
-set fo+=m   " multi-byte character line break support
-set fo+=M   " don't add space before or after multi-byte char
-set fo-=B   " don't add space between two multi-byte chars
-set fo+=1   " don't break a line after a one-letter word
+set formatoptions-=t   " don't auto-wrap text using text width
+set formatoptions+=c   " autowrap comments using textwidth with leader
+set formatoptions-=r   " don't auto-insert comment leader on enter in insert
+set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
+set formatoptions+=q   " allow formatoptionsrmatting of comments with gq
+set formatoptions-=w   " don't use trailing whitespace formatoptionsr paragraphs
+set formatoptions-=a   " disable auto-formatoptionsrmatting of paragraph changes
+set formatoptions-=n   " don't recognized numbered lists
+set formatoptions+=j   " delete comment prefix when joining
+set formatoptions-=2   " don't use the indent of second paragraph line
+set formatoptions-=v   " don't use broken 'vi-compatible auto-wrapping'
+set formatoptions-=b   " don't use broken 'vi-compatible auto-wrapping'
+set formatoptions+=l   " long lines not broken in insert mode
+set formatoptions+=m   " multi-byte character line break support
+set formatoptions+=M   " don't add space beformatoptionsre or after multi-byte char
+set formatoptions-=B   " don't add space between two multi-byte chars
+set formatoptions+=1   " don't break a line after a one-letter word
 " Don't leave two spaces between two sentences (foo.  Bar) when joining lines (J)
 set nojoinspaces
 
@@ -173,12 +173,12 @@ set nowritebackup
 set noswapfile
 
 " persistent undo :h undotree.txt
-if has("persistent_undo")
+if has('persistent_undo')
 	let target_path = expand('~/.undodir')
 
 	" create the directory and any parent directories
 	" if the location does not exist.
-	if !isdirectory(target_path) | call mkdir(target_path, "p", 0700) | endif
+	if !isdirectory(target_path) | call mkdir(target_path, 'p', 0700) | endif
 
 	let &undodir=target_path
 	set undofile
@@ -529,7 +529,7 @@ if !has('gui_running')
     endif
 endif
 
-if &term =~ '256color'
+if &term =~? '256color'
       " disable Background Color Erase (BCE) so that color schemes
       " render properly when inside 256-color tmux and GNU screen.
       " see also http://sunaku.github.io/vim-256color-bce.html
@@ -547,7 +547,7 @@ endif
 " WSL copy pasting with system clipboard
 " Not needed if vim is compiled with +clipboard support
 " https://vi.stackexchange.com/a/20231
-if system('uname -r') =~ "Microsoft"
+if system('uname -r') =~? 'microsoft'
     Autocmd TextYankPost * :call system('clip.exe ',@")
 endif
 
@@ -675,7 +675,7 @@ let g:lightline.component_function = {
             \ }
 
 function GitBranch()
-    return " " . FugitiveHead()
+    return ' ' . FugitiveHead()
 endfunction
 
 " shrink file name when window size falls below threshold
@@ -700,7 +700,7 @@ function! ProseMode()
     set spell noci nosi noai nolist noshowmode noshowcmd
     set complete+=s
     colors solarized
-    set bg=light
+    set background=light
 endfunction
 command! ProseMode call ProseMode()
 

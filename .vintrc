@@ -1,0 +1,7 @@
+cmdargs:
+  severity: style-problem
+policies:
+  ProhibitSetNoCompatible:
+    enabled: false
+
+# vim: ft=yaml sw=2 ts=2 et
