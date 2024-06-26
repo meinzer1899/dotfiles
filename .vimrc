@@ -49,9 +49,6 @@ set autoread
 " Better to be noisy than find something unexpected.
 set noautowrite
 
-" Trigger checktime to get updates on file change more often
-au FocusGained * :checktime
-
 " Show current mode down the bottom
 set showmode
 " Don't show commands as you type them
@@ -163,6 +160,12 @@ set listchars+=nbsp:                                                       "  
 set listchars+=precedes:\                                                  "  '- first column when wrap is off
 set listchars+=tab:»\                                                      "  '- tab
 set listchars+=trail:·                                                     "  '- trailing whitespace
+if has('multi_byte') && &encoding ==# 'utf-8'
+    let &fillchars = 'foldopen:▾,foldsep:⏐,foldclose:▸,vert:╎'
+else
+    let &fillchars = 'foldopen:v,foldsep:|,foldclose:>,vert:|'
+endif
+
 
 " --- backup and swap files ---
 set nobackup                                                               " no backups, I have persistent undo
@@ -322,12 +325,6 @@ if has('nvim-0.3.2') || has('patch-8.1.0360')
     set diffopt+=internal,algorithm:histogram,indent-heuristic
 endif
 
-" Set the characters for statusline (& non current stl), vsplit, fold & diff.
-" " TODO: some characters don't work with some colorschemes because use bold,
-" etc.
-" set fillchars=vert:┃,fold:=,diff:·
-set fillchars=vert:┃,fold:═,diff:·
-
 " https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
 set selection=exclusive
 
@@ -335,13 +332,16 @@ set selection=exclusive
 set conceallevel=0
 
 " Limit suggestions when spell checking with z=.
-set nospell spelllang=en,de_20
+" having german (de_20) here, it checks both english and german. Tip: enable german if needed buffer locally (setlocal)
+set nospell spelllang=en
 set spellsuggest=best,15
 
 set nostartofline
 
 " prevents truncated yanks, deletes, etc.
 set viminfo='20,<1000,s1000
+" also search for files recursively (gf)
+set path+=**
 
 " stop vim from silently messing with files that it shouldn't
 set nofixendofline
@@ -373,7 +373,7 @@ Autocmd BufReadPost *
 Autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
 Autocmd BufRead,BufNewFile *.plantuml setlocal filetype=plantuml
 Autocmd BufRead,BufNewFile .{jscs,jshint,eslint}rc set filetype=json
-Autocmd BufRead,BufNewFile aliases.local,zshrc.local,*/zsh/configs/* set filetype=zsh
+Autocmd BufRead,BufNewFile zshrc.local,*.zshrc set filetype=zsh
 Autocmd BufRead,BufNewFile gitconfig.local set filetype=gitconfig
 Autocmd BufRead,BufNewFile tmux.conf.local set filetype=tmux
 Autocmd BufRead,BufNewFile vimrc.local set filetype=vim
@@ -413,7 +413,6 @@ endif
 call plug#begin('~/.vim/plugged')
 Plug 'junegunn/fzf'
 Plug 'junegunn/fzf.vim'
-" Plug 'mileszs/ack.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
@@ -427,23 +426,16 @@ Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
  " Prose Mode
 Plug 'junegunn/goyo.vim'
-" used by prose mode
-" Plug 'altercation/vim-colors-solarized'
- " also nice: EdenEast/nightfox
 Plug 'joshdick/onedark.vim'
 let g:onedark_terminal_italics=1
 " Plug 'catppuccin/vim', { 'as': 'catppuccin' }
-" Plug 'Everblush/everblush.vim'
-" let g:everblush_transp_bg = 1
 Plug 'itchyny/lightline.vim'
 " Plug 'liuchengxu/eleline.vim'
 " let g:eleline_slim = 1
 " let g:eleline_powerline_fonts = 1
 Plug 'airblade/vim-gitgutter'
 let g:gitgutter_set_sign_backgrounds = 1
-" Plug 'pechorin/any-jump.vim'
-" most recently used files
-" Plug 'pbogut/fzf-mru.vim'
+let g:gitgutter_map_keys = 0
 " Hyperfocus writing in Vim
 " Plug 'junegunn/limelight.vim'
 Plug 'honza/vim-snippets'
@@ -545,13 +537,15 @@ if &term =~ '256color'
 endif
 
 if has('unnamedplus')
+      " unnamedplus only available with gui support
       set clipboard& clipboard+=unnamedplus
 else
+      " use the OS clipboard
       set clipboard& clipboard+=unnamed
 endif
 
 " WSL copy pasting with system clipboard
-" Does not need vim compiled with +clipboard support
+" Not needed if vim is compiled with +clipboard support
 " https://vi.stackexchange.com/a/20231
 if system('uname -r') =~ "Microsoft"
     Autocmd TextYankPost * :call system('clip.exe ',@")
@@ -559,8 +553,6 @@ endif
 
 " FZF
 if executable('rg')
-    " use the same as in.zshrc
-    " let $FZF_DEFAULT_COMMAND='rg --files --follow --hidden --no-ignore-dot'
     " https://github.com/BurntSushi/ripgrep/issues/425
     set grepprg=rg\ --vimgrep\ --no-heading\ --smart-case
     set grepformat+=%f:%l:%c:%m
@@ -568,8 +560,6 @@ if executable('rg')
 endif
 
 if executable('fd')
-    " use the same as in.zshrc
-    " let $FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --follow --exclude .git'
     " https://github.com/junegunn/fzf.vim#completion-functions
     " path completion with fd in insert mode
     " inoremap <expr> <c-x><c-f> fzf#vim#complete#path('fd')
@@ -625,7 +615,7 @@ nnoremap <silent> <Leader>t     :Files<CR>
 nnoremap <silent> <Leader>T     :GFiles<CR>
 nnoremap <silent> <Leader>bl    :Lines<CR>
 nnoremap <silent> <Leader>l     :BLines<CR>
-nnoremap <silent> <Leader>gf    :GFiles?<CR>
+nnoremap <silent> <Leader>g     :GFiles?<CR>
 nnoremap <silent> <Leader>h     :History:<CR>
 nnoremap <silent> <Leader>c     :Commits<CR>
 " commits for the current buffer, or current line if a line is selected
@@ -691,7 +681,8 @@ endfunction
 " shrink file name when window size falls below threshold
 function! LightlineFileformat()
   if &filetype !=? 'NvimTree' && &filetype !=? 'tagbar' &&
-  \  &filetype !=? 'taglist' && &filetype !=? 'vista'
+  \  &filetype !=? 'taglist' && &filetype !=? 'vista' &&
+  \  &filetype !=? 'coc-explorer'
     return winwidth(0) > 70 ?
          \ (tolower(&fileformat)) :
          \ ''
@@ -789,11 +780,11 @@ let g:coc_global_extensions = ['coc-explorer', 'coc-json', 'coc-docker', 'coc-ru
 " no select by `"suggest.noselect": true` in your configuration file
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config
-inoremap <silent><expr> <TAB>
+inoremap <silent><expr> <C-j>
       \ coc#pum#visible() ? coc#pum#next(1) :
-      \ CheckBackspace() ? "\<Tab>" :
+      \ CheckBackspace() ? "\<C-j>" :
       \ coc#refresh()
-inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+inoremap <expr><C-k> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
 
 " Make <CR> to accept selected completion item or notify coc.nvim to format
 " <C-g>u breaks current undo, please make your own choice
@@ -955,3 +946,5 @@ command -nargs=0 -bang Test :Dispatch<bang> -dir=/mnt/build/ make -j$(nproc) tes
 command -nargs=0 -bang BuildDoc :Dispatch<bang> -dir=/mnt/build/ make -j$(nproc) doc && grep -v suvcommon doc/doxygen/html/doxygen_warnings.log
 command -nargs=? Prep :Dispatch! rm -rf e3sdk_conandeploy || return && conan install . -g deploy --install-folder e3sdk_conandeploy --profile <args> && mkdir -p build && cd build || exit && rm -rf ./* || return && conan install .. --profile <args> && conan build -c .. && cd -
 command -nargs=0 -bang Cover :Dispatch<bang> -dir=/mnt/build/ cmake -DCMAKE_CXX_FLAGS="-fprofile-arcs -ftest-coverage -g -O0" .. && make tests -j$(nproc) && ctest && /home/e3-user/.local/bin/gcovr --exclude-unreachable-branches --exclude-throw-branches -r .. -e ../src/gen -e ../tests -e ../submodules/e3_subm_dhm_arxml/generated --html-details coverage.html
+
+" vim: ft=vim sw=2 ts=2 et
