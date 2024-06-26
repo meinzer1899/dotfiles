@@ -33,7 +33,6 @@
     // https://github.com/Vimjas/vint/wiki/Config
     "vint": {
       "args": [
-        "--style-problem",
         "--format",
         "{file_path}:{line_number}:{column_number}: {severity}! {description} [{reference}]",
         "-"
