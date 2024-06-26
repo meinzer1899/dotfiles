@@ -1,4 +1,3 @@
-#!/usr/bin/env zsh
 # See man zshell for all settings
 
 # zinit loader
@@ -13,8 +12,8 @@ fi
 #     if an update is available, will update the fonts.
 #     repeat the install process to update fonts.
 zi ice if"[[ -d ${HOME}/.local/share/fonts ]] && [[ $OSTYPE = linux* ]]" \
-  id-as"JetBrainsMono" from"gh-r" bpick"JetBrainsMono.tar.xz" extract nocompile depth"1" \
-  atclone="rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f" atpull"%atclone"
+  id-as'JetBrainsMono' from'gh-r' bpick'JetBrainsMono.tar.xz' extract nocompile depth'1' \
+  atclone="rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f" atpull'%atclone'
 zi light ryanoasis/nerd-fonts
 
 ### annexes
@@ -24,7 +23,7 @@ zi light-mode for z-shell/z-a-bin-gem-node
 # https://wiki.zshell.dev/community/gallery/collection/snippets
 zi wait lucid for \
   OMZL::git.zsh \
-  atload"unalias grv" \
+  atload'unalias grv' \
   OMZP::git \
   OMZL::completion.zsh \
   OMZP::cp
@@ -32,9 +31,9 @@ zi wait lucid for \
 # Setup ssh agent (vs code uses this to share git credentials in devcontainer)
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md
 zi wait lucid for \
-  atload"zstyle :omz:plugins:ssh-agent agent-forwarding yes; \
+  atload'zstyle :omz:plugins:ssh-agent agent-forwarding yes; \
   zstyle :omz:plugins:ssh-agent lazy yes; \
-  zstyle :omz:plugins:ssh-agent identities id_ed25519" \
+  zstyle :omz:plugins:ssh-agent identities id_ed25519' \
   OMZP::ssh-agent
 
 # :prompt:pure:prompt:* changes the color for both `prompt:success` and `prompt:error`
@@ -45,9 +44,9 @@ zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload
   " \
   sindresorhus/pure
 
-zi wait"0b" lucid for \
+zi wait'0b' lucid for \
   as'program' pick'neofetch' \
-  atclone"cp neofetch.1 $ZI[MAN_DIR]/man1" atpull'%atclone' \
+  atclone'cp neofetch.1 $ZI[MAN_DIR]/man1' atpull'%atclone' \
   dylanaraps/neofetch
 
 zi wait'0b' lucid for \
@@ -73,7 +72,7 @@ zi wait lucid as'program' from'gh-r' for \
 ## rust
 ## https://wiki.zshell.dev/ecosystem/annexes/rust
 #Install rust and make it available globally in the system:
-zi id-as"rust" wait=1 as=null sbin="bin/*" lucid rustup nocompile \
+zi id-as'rust' wait=1 as=null sbin='bin/*' lucid rustup nocompile \
   atload="[[ ! -f ${ZI[COMPLETIONS_DIR]}/_cargo ]] && zi creinstall -q rust; \
   export CARGO_HOME=\$PWD; export RUSTUP_HOME=\$PWD/rustup" for \
   z-shell/0
@@ -94,7 +93,7 @@ zi wait lucid as'program' from'gh' has'bat' pick'src/*' for \
 
 zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf fd/autocomplete/_fd -> _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
-  atpull"%atclone" \
+  atpull'%atclone' \
   mv'fd* -> fd' sbin'**/fd(.exe|) -> fd' \
   @sharkdp/fd
 
@@ -205,9 +204,9 @@ export FZF_DEFAULT_OPTS="\
   --info='inline'
   --no-separator
   --no-bold
-  --bind 'ctrl-d:half-page-down'
-  --bind 'ctrl-u:half-page-up'
-  --bind 'alt-a:toggle-all'
+  --bind ctrl-d:half-page-down
+  --bind ctrl-u:half-page-up
+  --bind alt-a:toggle-all
 "
 
 export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'"
@@ -226,7 +225,7 @@ zi load z-shell/0
 #   atclone'ln -sf completions/_zoxide -> _zoxide;
 #   cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd x > init.zsh' \
 #   atpull'%atclone' src'init.zsh' nocompile'!'
-zi ice as'null' from"gh-r" sbin
+zi ice as'null' from'gh-r' sbin
 zi light ajeetdsouza/zoxide
 zi has'zoxide' wait lucid for \
   z-shell/zsh-zoxide
@@ -253,10 +252,10 @@ zi wait lucid as'command' from'gh-r' for \
 ## completions
 # https://zsh.sourceforge.io/Guide/zshguide06.html
 
-zi ice wait lucid as"completion"
+zi ice wait lucid as'completion'
 zi snippet OMZP::gitfast
 
-zi ice wait lucid as"completion"
+zi ice wait lucid as'completion'
 zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
 
 zi ice wait lucid as'completion' blockf has'alacritty'
@@ -277,9 +276,9 @@ zi light Aloxaf/fzf-tab
 
 # https://wiki.zshell.dev/docs/guides/syntax/for
 zi wait lucid light-mode for \
-  atinit"ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay; ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)" \
+  atinit'ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay; ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)' \
   zsh-users/zsh-syntax-highlighting \
-  atload"!_zsh_autosuggest_start; ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20" \
+  atload'!_zsh_autosuggest_start; ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20; ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"' \
   zsh-users/zsh-autosuggestions \
   blockf atpull'zi creinstall -q .' \
   zsh-users/zsh-completions
@@ -488,3 +487,5 @@ alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git root
 # for recipe in `just --justfile ~/.user.justfile --summary 2> /dev/null`; do
 #   alias $recipe="just --justfile ~/.user.justfile --working-directory . $recipe"
 # done
+
+# vim: ft=zsh sw=2 ts=2 et
