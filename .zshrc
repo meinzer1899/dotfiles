@@ -167,10 +167,10 @@ zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'g
 # zi ice lucid wait"0b" pick'fzf-git.sh'
 # zi load junegunn/fzf-git.sh
 
+export FZF_DEFAULT_COMMAND="command fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '!.git' || find ."
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'eza -1 --icons=always --group-directories-first --color=always --all {} | head -200'"
-# follow symbolic links and don't exclude hidden files
-export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '!.git' || find ."
+export FZF_ALT_C_COMMAND='command fd --hidden --no-ignore-vcs --exclude .git --type d'
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Narrow down the list with a query, point to a command,
@@ -209,7 +209,12 @@ export FZF_DEFAULT_OPTS="\
   --bind alt-a:toggle-all
 "
 
-export FZF_CTRL_T_OPTS="--preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'"
+# execute: after exiting $EDITOR, fzf search is still open
+# become: opens $EDITOR in new process and exits old process (-> fzf search not visible after exiting)
+export FZF_CTRL_T_OPTS="\
+  --preview '(bat --style=numbers --color=always {} || cat {} || tree -NC {}) 2> /dev/null | head -200'
+  --bind 'ctrl-v:become($EDITOR {} < /dev/tty > /dev/tty)'
+"
 
 ### pip
 # https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5
