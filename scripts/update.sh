@@ -29,8 +29,9 @@ fi
 # cargo install-update -a
 
 # gets updated via zi
-# pip
-pip install --upgrade pip
+# pip (https://www.mankier.com/1/pip#Commands)
+python3 -m pip install --upgrade pip
+python3 -m pip install --upgrade --pre vim-vint # has to be pre (https://github.com/iamcco/coc-diagnostic/issues/62#issuecomment-735660297)
 # pip freeze --local | tee before_upgrade.txt | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install -U
 
 # vim

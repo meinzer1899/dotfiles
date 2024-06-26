@@ -27,8 +27,18 @@
     "dockerfile": "hadolint",
     "zsh": "zsh",
   },
+  // to partially add configuration options, e.g. disable args (see cmake-lint)
   "diagnostic-languageserver.mergeConfig": true,
   "diagnostic-languageserver.linters": {
+    // https://github.com/Vimjas/vint/wiki/Config
+    "vint": {
+      "args": [
+        "--style-problem",
+        "--format",
+        "{file_path}:{line_number}:{column_number}: {severity}! {description} [{reference}]",
+        "-"
+      ],
+    },
     // https://cmake-format.readthedocs.io/en/latest/cmake-lint.html
     // part of https://github.com/cheshirekow/cmake_format
     "cmake-lint": {
@@ -40,39 +50,6 @@
         "%filename",
       ],
     },
-    "flake8": {
-      "sourceName": "flake8",
-      "command": "flake8",
-      "debounce": 200,
-      "rootPatterns": [".git", "pyproject.toml", "setup.py"],
-      "args": [
-        // "--ignore=E402,C901,W503,W504,E116,E702,C0103,C0114,C0115,C0116,C0103,C0301,W0613,W0102,R0903,R0902,R0914,R0915,R0205,W0703,W0702,W0603",
-        "--select=F,DUO,SIM",
-        "--format=%(row)d,%(col)d,%(code).1s,%(code)s: %(text)s",
-        "-"
-      ],
-      "offsetLine": 0,
-      "offsetColumn": 0,
-      "formatLines": 1,
-      "formatPattern": [
-        "(\\d+),(\\d+),([A-Z]),(.*)(\\r|\\n)*$",
-        {
-          "line": 1,
-          "column": 2,
-          "security": 3,
-          "message": 4
-        }
-      ],
-      "securities": {
-        "W": "warning",
-        "E": "warning",
-        "F": "warning",
-        "D": "warning",
-        "S": "warning",
-        "C": "info",
-        "N": "hint"
-      }
-    }
   },
   "coc.preferences.extensionUpdateCheck": "weekly",
   "coc.source.file.ignoreHidden": false,
