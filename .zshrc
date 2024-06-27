@@ -55,7 +55,7 @@ zi wait'0b' lucid for \
 # fast toolchain as code for JS (e.g. node)
 # volta is much faster than nvm, thus nvm is replaced
 zi light cowboyd/zsh-volta
-# completions -> not working :(
+# completions not working :(
 # zi wait lucid for \
 #   OMZP::volta
 
@@ -65,7 +65,7 @@ zi wait'0b' lucid for \
 
 ### programs
 zi wait lucid as'program' from'gh-r' for \
-  mv'hadolint* -> hadolint' \
+  mv'hadolint* hadolint' \
   sbin'hadolint' \
   @hadolint/hadolint
 
@@ -83,23 +83,23 @@ zi ice wait lucid as'completion' blockf has'rustc'
 zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
 
 zi wait lucid as'program' from'gh-r' for \
-  atclone'ln -sf bat/autocomplete/bat.zsh -> _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
+  atclone'ln -sf bat/autocomplete/bat.zsh _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
-  mv'bat* -> bat' sbin'**/bat(.exe|) -> bat' \
+  mv'bat* bat' sbin'**/bat(.exe|) bat' \
   @sharkdp/bat
 
 zi wait lucid as'program' from'gh' has'bat' pick'src/*' for \
   @eth-p/bat-extras
 
 zi wait lucid as'program' from'gh-r' for \
-  atclone'ln -sf fd/autocomplete/_fd -> _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
+  atclone'ln -sf fd/autocomplete/_fd _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
-  mv'fd* -> fd' sbin'**/fd(.exe|) -> fd' \
+  mv'fd* fd' sbin'**/fd(.exe|) fd' \
   @sharkdp/fd
 
 zi wait lucid as'program' from'gh-r' for \
-  mv'delta* -> delta' \
-  sbin'**/delta -> delta' \
+  mv'delta* delta' \
+  sbin'**/delta delta' \
   @dandavison/delta
 
 # last updated 3 yrs ago...
@@ -112,7 +112,7 @@ zi wait lucid as'program' from'gh' for \
 	  ln -sf completions/zsh/_eza _eza; \
 	  cp -vf man/*.1.* $ZI[MAN_DIR]/man1; cp -vf man/*.5.* $ZI[MAN_DIR]/man5' \
   atpull'%atclone' \
-  sbin'**/eza -> eza' \
+  sbin'target/release/eza eza' \
   @eza-community/eza
 
 zi wait lucid for \
@@ -132,21 +132,21 @@ zi wait lucid for \
 # manpages only available in debug build
 # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
 zi wait lucid as'program' from'gh-r' for \
-  atclone'ln -sf ripgrep/complete/_rg -> _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
+  atclone'ln -sf ripgrep/complete/_rg _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
-  mv'ripgrep* -> ripgrep' sbin'**/rg(.exe|) -> rg' \
+  mv'ripgrep* ripgrep' sbin'**/rg(.exe|) rg' \
   @BurntSushi/ripgrep
 
 zi wait lucid as'program' from'gh-r' for \
-  mv'tealdeer* -> tealdeer' \
-  sbin'**/tealdeer -> tldr' \
+  mv'tealdeer* tealdeer' \
+  sbin'**/tealdeer tldr' \
   @dbrgn/tealdeer
 
-zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer -> _tldr'
+zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer _tldr'
 zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
 
 zi wait lucid as'program' from'gh-r' for \
-  mv'neocmakelsp* -> neocmakelsp' \
+  mv'neocmakelsp* neocmakelsp' \
   sbin'**/neocmakelsp' \
   @Decodetalkers/neocmakelsp
 
@@ -227,7 +227,7 @@ zi load z-shell/0
 # zi is used for zsh zi
 # if remapped, source this file ~/.zi/bin/zi.zsh
 # zi ice as'program' from'gh-r' pick'zoxide' \
-#   atclone'ln -sf completions/_zoxide -> _zoxide;
+#   atclone'ln -sf completions/_zoxide _zoxide;
 #   cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd x > init.zsh' \
 #   atpull'%atclone' src'init.zsh' nocompile'!'
 zi ice as'null' from'gh-r' sbin
@@ -245,8 +245,8 @@ zi ice as'program' atclone'rm -f src/auto/config.cache; \
 zi light vim/vim
 
 zi wait lucid as'program' from'gh-r' for \
-  mv'shellcheck* -> shellcheck' \
-  sbin'**/shellcheck -> shellcheck' \
+  mv'shellcheck* shellcheck' \
+  sbin'**/shellcheck shellcheck' \
   @koalaman/shellcheck
 
 # grex generates regular expressions from user-provided test cases
