@@ -4,7 +4,8 @@
 #
 # @details  Files and directories are excluded when the caller sets a (extended) regex pattern EXCLUDE_PATTERN.
 
-set -euo pipefail
+set -o pipefail -o nounset
+# no -o errexit, because we want clang-format to check all files first independent of error code
 IFS=$'\n\t'
 
 files()
@@ -13,10 +14,9 @@ files()
 }
 
 if [[ -n ${EXCLUDE_PATTERN:=""} ]]; then
-    exclude() { cat; }
+    exclude() { grep -Ev "$EXCLUDE_PATTERN"; }
 else
-    # exclude() { grep -Ev "$EXCLUDE_PATTERN"; }
-    exclude() { printf "hello"; }
+    exclude() { cat; }
 fi;
 
 files=$(files | exclude)
@@ -24,11 +24,14 @@ files=$(files | exclude)
 ret=0
 for FILE in $files
 do
-    # if file exists on target ($CI_DEFAULT_BRANCH) but not in source (local) branch, clang-format emits "No such file or directory"
-    if [[ -e $FILE ]]; then
-        # we want to exit with error code but only after checking all files
-        clang-format --dry-run --ferror-limit=0 --Werror "$FILE" || ret=$?
+    if [[ ! -e $FILE ]]; then
+        # if file exists on target ($CI_DEFAULT_BRANCH) but not in source (local) branch, clang-format emits "No such file or directory"
+        #TODO: investigate if this condition can be removed by using
+        # git diff $(git merge-base origin/main HEAD) in function files()
+        continue
     fi
+    # we set error code but don't care about clang-format error code (which is not documented in man page anyway)
+    clang-format --dry-run --ferror-limit=0 --Werror "$FILE" || ret=1
 done
 
 exit $ret
