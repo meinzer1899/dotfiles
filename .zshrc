@@ -121,7 +121,6 @@ zi wait lucid for \
 
 # speed improvement: disable default maps and bindkey manually
 zi wait lucid for \
-  if'(($+commands[xsel] || $+commands[xclip] || $+commands[wl-copy]))' \
   atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true; \
   ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=true;
   # Bind Y to yank until end of line \
