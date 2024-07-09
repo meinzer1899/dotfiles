@@ -332,6 +332,12 @@ https://github.com/ibhagwan/nvim-lua
 https://www.youtube.com/watch?v=stqUbv-5u2s TJ De Vries  Effective Neovim: Instant IDE
 https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
 
+### Tridactyl
+
+:mktridactylrc => saves settings to rc (location see below)
+
+[location of tridactylrc](https://github.com/tridactyl/native_messenger/blob/000e5f8519b0f94efaa0d8841f3d284e07cdd088/src/native_main.nim#L98-L101)
+
 ### other
 
 https://hackingcpp.com/dev/command_line_tools.html
