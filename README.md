@@ -183,6 +183,13 @@ https://github.com/yuki-yano/fzf-preview.vim
 Gets installed by zi.
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
+### lua support
+
+```bash
+apt install luaX.X libluaX.X-dev luajit
+./configure --enable-luainterp=yes
+```
+
 ### devcontainer
 
 https://www.docker.com/blog/how-to-setup-your-local-node-js-development-environment-using-docker/
