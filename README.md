@@ -4,34 +4,35 @@ My Linux dotfiles.
 
 ```bash
 ▶ for _ in $(seq 1 10); do time $SHELL -i -c exit; done
-$SHELL -i -c exit  0.05s user 0.01s system 51% cpu 0.124 total
-$SHELL -i -c exit  0.05s user 0.02s system 49% cpu 0.137 total
-$SHELL -i -c exit  0.07s user 0.00s system 52% cpu 0.125 total
-$SHELL -i -c exit  0.05s user 0.01s system 49% cpu 0.126 total
-$SHELL -i -c exit  0.05s user 0.02s system 48% cpu 0.132 total
-$SHELL -i -c exit  0.05s user 0.01s system 50% cpu 0.125 total
-$SHELL -i -c exit  0.06s user 0.00s system 51% cpu 0.123 total
-$SHELL -i -c exit  0.05s user 0.01s system 50% cpu 0.126 total
-$SHELL -i -c exit  0.06s user 0.00s system 54% cpu 0.119 total
-$SHELL -i -c exit  0.06s user 0.00s system 49% cpu 0.124 total
+$SHELL -lic exit  0.05s user 0.01s system 59% cpu 0.102 total
+$SHELL -lic exit  0.06s user 0.00s system 57% cpu 0.110 total
+$SHELL -lic exit  0.06s user 0.00s system 56% cpu 0.109 total
+$SHELL -lic exit  0.04s user 0.02s system 55% cpu 0.111 total
+$SHELL -lic exit  0.04s user 0.02s system 56% cpu 0.110 total
+$SHELL -lic exit  0.04s user 0.02s system 58% cpu 0.107 total
+$SHELL -lic exit  0.04s user 0.02s system 56% cpu 0.109 total
+$SHELL -lic exit  0.06s user 0.00s system 56% cpu 0.110 total
+$SHELL -lic exit  0.05s user 0.01s system 57% cpu 0.106 total
+$SHELL -lic exit  0.06s user 0.00s system 56% cpu 0.110 total
 ```
 
 ![Work Environment](image/linux_environment.png "Linux Work Environment")
 
 # Setup new machine
 
-. Install git
-. Setup wsl
-. mkdir -p $HOME/.config (otherwise, .config is a symlink to
-   $HOME/dotfiles/.config).
-. Install zsh and zi
-. Install stow, run `stow .`
-. Install tmux
+1. Install git
+1. Setup WSL
+1. `mkdir -p $HOME/.config` (otherwise, `.config` is a symlink to `$HOME/dotfiles/.config`).
+1. Install zsh and zi
+1. Install stow, run `stow .`
+1. Install tmux
 
-pip
-apt install python3.XX-venv (e.g. 10)
-zsh-system-keyboard
-apt install xclip
+## pip
+
+```bash
+apt install python3.XX-venv # (e.g. 10)
+apt install xclip #zsh-system-keyboard
+```
 
 ## Remap CAPSLOCK to ctrl
 
@@ -52,7 +53,7 @@ sudo apt-get install virtualbox-guest-additions-iso
 
 * Install nerd font via curl https://github.com/ryanoasis/nerd-fonts?tab=readme-ov-file#option-1-release-archive-download.
 * Install alacritty for Windows.
-* Move alacritty.wsl.toml to %APPDATA%\alacritty.
+* Move alacritty.wsl.toml to [`%APPDATA%\alacritty`](https://github.com/alacritty/alacritty?tab=readme-ov-file#configuration).
 * map capslock to ctrl: https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10.
 
 ## zsh and zi
@@ -74,6 +75,7 @@ https://wiki.zshell.dev/docs/getting_started/installation => loader.
 https://registerspill.thorstenball.com/p/how-fast-is-your-shell
 
 zshrcs
+https://github.com/mattmc3/zdotdir
 https://github.com/doronbehar/dotfiles/blob/master/.zshrc
 https://github.com/ctrueden/dotfiles/blob/main/zshrc
 https://github.com/itchyny/dotfiles/blob/main/.zshrc
