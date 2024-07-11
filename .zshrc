@@ -22,11 +22,11 @@ zi light-mode for z-shell/z-a-bin-gem-node
 
 # https://wiki.zshell.dev/community/gallery/collection/snippets
 zi wait lucid for \
+  OMZP::cp \
   OMZL::git.zsh \
   atload'unalias grv' \
   OMZP::git \
   OMZL::completion.zsh \
-  OMZP::cp
 
 # Setup ssh agent (vs code uses this to share git credentials in devcontainer)
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md
@@ -190,16 +190,16 @@ export FZF_CTRL_R_OPTS="
 FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
 FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
 
+# https://github.com/vitormv/fzf-themes
 export FZF_DEFAULT_COLORS="\
   --color=dark
   --color gutter:-1,selected-bg:238,selected-fg:146,current-fg:189
 "
 
-export FZF_DEFAULT_OPTS="\
-  $FZF_DEFAULT_COLORS\
+export FZF_DEFAULT_OPTS="$FZF_DEFAULT_COLORS\
   --no-mouse
   --height='40%'
-  --margin='1,3'
+  --margin='1,0,0,5'
   --layout='reverse'
   --pointer ▶ --prompt ' '
   --info='inline'
@@ -258,6 +258,10 @@ zi wait lucid as'command' from'gh-r' for \
 ## completions
 # https://zsh.sourceforge.io/Guide/zshguide06.html
 
+# https://wiki.zshell.dev/community/gallery/collection/snippets
+zi ice wait lucid as'completion'
+zi snippet OMZL::completion.zsh
+
 zi ice wait lucid as'completion'
 zi snippet OMZP::gitfast
 
@@ -297,20 +301,10 @@ zstyle ':completion:*' fzf-search-display true
 zstyle ':completion:*' use-compctl false
 
 # # fzf-tab
-# # common options
-# # disable sort when completing `git checkout`
-# zstyle ':completion:*:git-checkout:*' sort false
-# # set descriptions format to enable group support
-# # NOTE: don't use escape sequences here, fzf-tab will ignore them
-# zstyle ':completion:*:descriptions' format '[%d]'
-# # set list-colors to enable filename colorizing
-# zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
-# # force zsh not to show completion menu, which allows fzf-tab to capture the unambiguous prefix
-# zstyle ':completion:*' menu no
-# # preview directory's content with eza when completing cd
-# zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --color=always $realpath'
-# # switch group using `<` and `>`
-# zstyle ':fzf-tab:*' switch-group '<' '>'
+# set descriptions format to enable group support
+zstyle ':completion:*:descriptions' format '[%d]'
+# switch group
+zstyle ':fzf-tab:*' switch-group ',' '.'
 
 # fzf-tab completions from https://github.com/Aloxaf/fzf-tab/wiki/Preview
 zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons --group-directories-first --color=always $realpath'
@@ -341,6 +335,12 @@ zstyle ':fzf-tab:complete:git-show:*' fzf-preview \
 zstyle ':fzf-tab:complete:tldr:argument-1' fzf-preview 'tldr --color always $word'
 zstyle ':fzf-tab:complete:-command-:*' fzf-preview \
   '(out=$(tldr --color always "$word") 2>/dev/null && echo $out) || (out=$(MANWIDTH=$FZF_PREVIEW_COLUMNS man "$word") 2>/dev/null && echo $out) || (out=$(which "$word") && echo $out) || echo "${(P)word}"'
+
+# from https://github.com/vitormv/dotfiles/blob/983df2c5f178aedf5d1fe28c81bdc084af14d7f5/home/.zsh_completions
+# preview command used for single files
+single_file_preview='bat --wrap never --pager=never --color=always --line-range :30 --color=always $realpath'
+zstyle ':fzf-tab:complete:bat:*' fzf-preview $single_file_preview
+zstyle ':fzf-tab:complete:cat:*' fzf-preview $single_file_preview
 
 export HISTFILE=~/.histfile
 export HISTSIZE=1000000   # the number of items for the internal history list
@@ -386,10 +386,12 @@ setopt interactivecomments
 
 # https://grml.org/zsh/zsh-lovers.html
 # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
+# https://github.com/mattmc3/zdotdir/blob/main/lib/compstyle.zsh
 # Fuzzy completion matching
 zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*:match:*' original only
-# Allow more errors for longer commands
+# Increase the number of errors based on the length of the typed word. But make
+# sure to cap (at 7) the max-errors to avoid hanging.
 zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
 
 # # https://wiki.zshell.dev/docs/guides/customization#pretty-completions
@@ -400,7 +402,7 @@ zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX
 # zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
 # zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
 # zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
-# zstyle ':completion:*:default' list-prompt '%S%M matches%s'
+zstyle ':completion:*:default' list-prompt '%S%M matches%s'
 # zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
 # zstyle ':completion:*' group-name ''
 # zstyle ':completion:*' verbose yes
@@ -425,7 +427,7 @@ zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # If you end up using a directory as argument, this will remove the trailing slash (useful in ln)
 zstyle ':completion:*' squeeze-slashes true
 
-# Smart case-y completion
+# Case-insensitive (all), partial-word, and then substring completion.
 zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
 
 # Dircolors on completions
@@ -438,8 +440,17 @@ fi
 ### bindings
 
 # use vi keybindings
-# C-j to enter vi mode
 bindkey -v
+bindkey '^J'   vi-cmd-mode
+# Add text object extension -- eg ci" da(:
+# or use https://github.com/jeffreytse/zsh-vi-mode?tab=readme-ov-file
+autoload -U select-quoted
+zle -N select-quoted
+for m in visual viopp;do
+  for c in {a,i}{\',\",\`,\(,\)}; do
+    bindkey -M $m $c select-quoted
+  done
+done
 # The time lapse between <Esc> and changing to insert mode.
 export KEYTIMEOUT=1
 
@@ -458,7 +469,6 @@ bindkey '^B'   backward-char
 bindkey '^E'   end-of-line
 bindkey '^F'   forward-char
 bindkey '^G'   fzf-cd-widget
-bindkey '^J'   vi-cmd-mode
 bindkey '^K'   kill-line-to-x-selection
 bindkey '^N'   down-history
 bindkey '^P'   up-history
@@ -488,6 +498,33 @@ alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias _="sudo "
 alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git root
+
+alias cmake='cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON '
+alias ccmake='ccmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON '
+cores=$(nproc --all)
+alias mj="make -j${cores} -l${cores}"
+alias nj="ninja -j${cores} -l${cores}"
+
+### misc
+# Use built-in paste magic.
+autoload -Uz bracketed-paste-url-magic
+zle -N bracketed-paste bracketed-paste-url-magic
+autoload -Uz url-quote-magic
+zle -N self-insert url-quote-magic
+
+# It's time. Python2 is dead.
+if (( $+commands[python3] )) && ! (( $+commands[python] )); then
+  alias python=python3
+fi
+# https://github.com/microsoft/WSL/issues/2466#issuecomment-370316815
+# https://github.com/microsoft/WSL/issues/2466#issuecomment-653788395
+# https://github.com/microsoft/WSL/issues/2466#issuecomment-662184581
+# alias toast='powershell.exe -command New-BurntToastNotification "-Text '$1'"'
+# notify-send() { powershell.exe -executionpolicy bypass -command New-BurntToastNotification "-Text '${@}'" }
+# alias notify-send='powershell.exe -executionpolicy bypass -command New-BurntToastNotification "-Text '${@}'"'
+# https://github.com/stuartleeks/wsl-notify-send
+# https://stuartleeks.com/posts/wsl-github-cli-windows-notifications-part-1/
+# notify-send() { wsl-notify-send.exe --category $WSL_DISTRO_NAME "${@}"; }
 
 # ## add aliases for all recipes in ~/.user.justfile
 # for recipe in `just --justfile ~/.user.justfile --summary 2> /dev/null`; do
