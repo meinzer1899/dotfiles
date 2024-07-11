@@ -42,6 +42,7 @@ zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload
   zstyle ':prompt:pure:git:stash' show 'yes'; \
   zstyle ':prompt:pure:prompt:*' color 'magenta'; \
   " \
+  nocd \
   sindresorhus/pure
 
 zi wait'0b' lucid for \
@@ -61,6 +62,7 @@ zi light cowboyd/zsh-volta
 
 zi wait'0b' lucid for \
  atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" \
+ nocd \
  @djui/alias-tips
 
 ### programs
@@ -116,7 +118,7 @@ zi wait lucid as'program' from'gh' for \
   @eza-community/eza
 
 zi wait lucid for \
-  has'eza' atinit'AUTOCD=1' \
+  has'eza' atinit'AUTOCD=1' nocd \
   @z-shell/zsh-eza
 
 # speed improvement: disable default maps and bindkey manually
@@ -125,7 +127,7 @@ zi wait lucid for \
   ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=true;
   # Bind Y to yank until end of line \
   bindkey -M vicmd Y zsh-system-clipboard-vicmd-vi-yank-eol; \
-  ' \
+  ' nocd \
   @kutsan/zsh-system-clipboard
 
 # manpages only available in debug build
