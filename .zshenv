@@ -1,3 +1,4 @@
+# sourced on every invocation of zsh
 # https://github.com/doronbehar/dotfiles/blob/master/.zshenv
 
 # https://wiki.zshell.dev/docs/guides/customization#disabling-system-wide-compinit-call-ubuntu
@@ -16,9 +17,18 @@ export VISUAL="$EDITOR"
 export BLOCKSIZE="K" # show blocks as kilobytes
 unset MAILCHECK # don't check for mails
 
-# (exit|ls|pkill)
-export HISTORY_IGNORE="(exit)"
+export HISTORY_IGNORE="([bf]g|clear|exit|history|incognito|l|l[adfls]|pwd|x|\#*)"
+export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+# ignore ones with a length greater than 80 -- thanks to https://github.com/Aloxaf
+export ZSH_AUTOSUGGEST_HISTORY_IGNORE='?(#c80,)'
+# https://github.com/zsh-users/zsh-autosuggestions
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
 
+# pip
 export PATH=$PATH:$HOME/.local/bin
+
+# Treat these characters as part of a word.
+[[ -n "$WORDCHARS" ]] || export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 # vim: ft=zsh sw=2 ts=2 et
