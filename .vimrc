@@ -4,7 +4,7 @@
 " https://google.github.io/styleguide/vimscriptguide.xml
 " https://devhints.io/vimscript
 
-" Use Vim settings, rather then Vi settings (much better!).
+" I use vim, not vi
 " This must be first, because it changes other options as a side effect.
 set encoding=utf-8
 set termencoding=utf-8
@@ -62,6 +62,7 @@ set cmdheight=1
 set updatetime=150
 
 " Don't pass messages to |ins-completion-menu| (coc)
+" I: no vim welcome screen
 set shortmess+=Ic
 
 " Always show the signcolumn, otherwise it would shift the text each time
@@ -81,13 +82,14 @@ set linebreak
 " plugins. Most of the utility of all of this has been superceded by the use of
 " modern simplified pandoc for capturing knowledge source instead of
 " arbitrary raw text files.
+" help fo-table
 set formatoptions-=t   " don't auto-wrap text using text width
 set formatoptions+=c   " autowrap comments using textwidth with leader
 set formatoptions-=r   " don't auto-insert comment leader on enter in insert
 set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
-set formatoptions+=q   " allow formatoptionsrmatting of comments with gq
-set formatoptions-=w   " don't use trailing whitespace formatoptionsr paragraphs
-set formatoptions-=a   " disable auto-formatoptionsrmatting of paragraph changes
+set formatoptions+=q   " allow formatting of comments with gq
+set formatoptions-=w   " don't use trailing whitespace for paragraphs
+set formatoptions-=a   " disable auto-formatting of paragraph changes
 set formatoptions-=n   " don't recognized numbered lists
 set formatoptions+=j   " delete comment prefix when joining
 set formatoptions-=2   " don't use the indent of second paragraph line
@@ -95,9 +97,10 @@ set formatoptions-=v   " don't use broken 'vi-compatible auto-wrapping'
 set formatoptions-=b   " don't use broken 'vi-compatible auto-wrapping'
 set formatoptions+=l   " long lines not broken in insert mode
 set formatoptions+=m   " multi-byte character line break support
-set formatoptions+=M   " don't add space beformatoptionsre or after multi-byte char
+set formatoptions+=M   " don't add space before or after multi-byte char
 set formatoptions-=B   " don't add space between two multi-byte chars
 set formatoptions+=1   " don't break a line after a one-letter word
+set formatoptions+=p   " don't break a line after a one-letter word
 " Don't leave two spaces between two sentences (foo.  Bar) when joining lines (J)
 set nojoinspaces
 
@@ -384,15 +387,15 @@ Autocmd BufRead,BufNewFile .tmux.conf set filetype=tmux
 AutocmdFT cpp setlocal matchpairs+=<:>
 Autocmd BufRead,BufNewFile .clang-format set filetype=yaml
 AutocmdFT {markdown,gitcommit} setlocal spell spelllang=en_us
-" Update signature help on jump placeholder.
-Autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
-" Autocmd User CocLocationsChange call s:coc_qf_jump2loc(g:coc_jump_locations)
-" Highlight the symbol and its references
-Autocmd CursorHold * silent call CocActionAsync('highlight')
+if exists('*CocActionAsync')
+  " Update signature help on jump placeholder.
+  Autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
+  " Autocmd User CocLocationsChange call s:coc_qf_jump2loc(g:coc_jump_locations)
+  " Highlight the symbol and its references
+  Autocmd CursorHold * silent call CocActionAsync('highlight')
+endif
 " Start in INSERT mode if opening commit message with empty first line
 AutocmdFT gitcommit startinsert!
-" disable automatic comment on newline
-AutocmdFT * setlocal formatoptions-=c formatoptions-=r formatoptions-=o
 " number column may cause ugly formatting when entering terminal window via C-w N :(
 Autocmd TerminalWinOpen * setlocal signcolumn=no textwidth=0 winfixheight norelativenumber nonumber
 
@@ -423,6 +426,10 @@ Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sensible'
+" its in sensible.vim ... I should probably have this?
+if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &runtimepath) ==# ''
+    runtime! macros/matchit.vim
+endif
 Plug 'tpope/vim-sleuth'
  " Prose Mode
 Plug 'junegunn/goyo.vim'
@@ -497,6 +504,9 @@ nmap U     <Plug>(highlightedundo-Undo)
 nmap g-    <Plug>(highlightedundo-gminus)
 nmap g+    <Plug>(highlightedundo-gplus)
 Plug 'wellle/tmux-complete.vim'
+if !has('nvim')
+      Plug 'rhysd/vim-healthcheck'
+endif
 
 " Initialize plugin system
 call plug#end()
@@ -600,7 +610,7 @@ let g:fzf_action = {
 " add own flags to command from fzf.vim
 " https://github.com/junegunn/fzf.vim/blob/master/plugin/fzf.vim
 " keep searching for filenames as well: so its possible to select matches in
-" differentt file types (e.g. .cpp)
+" different file types (e.g. .cpp)
 " TODO: use string variable for flags
 " TODO: use bind to toggle --no-ignore
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --trim --no-ignore --hidden --glob '!*.git' -- ".shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
@@ -610,7 +620,6 @@ command! -bang -nargs=* RG call fzf#vim#grep2("rg --column --line-number --no-he
 nnoremap <silent> <Leader>,     :Buffers<CR>
 nnoremap <silent> <Leader>a     :Rg<CR>
 nnoremap <silent> <Leader>A     :RG<CR>
-" nnoremap <silent> <Leader>aa    :Ag<CR>
 nnoremap <silent> <Leader>t     :Files<CR>
 nnoremap <silent> <Leader>T     :GFiles<CR>
 nnoremap <silent> <Leader>bl    :Lines<CR>
@@ -642,7 +651,7 @@ let g:lightline#coc#indicator_hints = '! '
 let g:lightline#coc#indicator_ok = ''
 
 let g:lightline.active = {
-            \ 'left': [['mode', 'paste'], ['readonly', 'filename', 'fileformat', 'modified'], ['gitbranch']],
+            \ 'left': [['mode', 'paste'], ['readonly', 'filename', 'filetype', 'modified', 'gitbranch']],
             \ 'right': [['lineinfo'], ['percent'], ['readonly',
             \       'linter_warnings', 'linter_errors', 'linter_checking',
             \       'linter_infos', 'linter_hints']]
@@ -674,8 +683,12 @@ let g:lightline.component_function = {
             \ 'gitbranch': 'GitBranch',
             \ }
 
-function GitBranch()
-    return ' ' . FugitiveHead()
+function! GitBranch()
+    if !FugitiveIsGitDir() | return '' | endif
+    if &filetype =~# 'terminal' || &filetype =~# 'coc-explorer'
+        return ''
+    endif
+    return matchstr(FugitiveStatusline(), '(.\+)')
 endfunction
 
 " shrink file name when window size falls below threshold
@@ -936,6 +949,10 @@ let g:cmake_build_executor = 'dispatch'
 " In visual mode don't include the newline-character when jumping to end-of-line
 " with $
 vnoremap $ $h
+
+" Visual shifting (does not exit Visual mode)
+vnoremap < <gv
+vnoremap > >gv
 
 " Security
 set secure exrc
