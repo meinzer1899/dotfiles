@@ -255,6 +255,11 @@ zi wait lucid as'command' from'gh-r' for \
   sbin'grex' \
   @pemistahl/grex
 
+# https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
+zi ice as'program' atclone'cmake . -DCMAKE_INSTALL_PREFIX=$ZPFX' \
+  atpull'%atclone' make'all install' pick'$ZPFX/bin/tmux-mem-cpu-load'
+zi light thewtex/tmux-mem-cpu-load
+
 ## completions
 # https://zsh.sourceforge.io/Guide/zshguide06.html
 
