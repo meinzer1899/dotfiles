@@ -257,7 +257,7 @@ nnoremap <silent> <Leader>co :Copen<CR> G<CR>
 nnoremap <silent> <Leader>rc :vs $MYVIMRC<CR>
 
 " enable a simple form of dot repetition over visual line selections
-xnoremap . :norm.<CR>
+xnoremap . :normal!.<CR>
 " clones paragraph and pastes it below copied from paragraph
 nnoremap cp yap<S-}>p
 " Control-v is a common system level shortcut to paste from the clipboard. So why not use it also to paste from the system clipboard when in insert mode.
@@ -370,7 +370,7 @@ Autocmd VimResized * wincmd =
 " when inside an event handler (happens when dropping a file on gvim).
 Autocmd BufReadPost *
                 \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
-                \ exe "normal g`\"" |
+                \ exe "normal! g`\"" |
                 \ endif
 
 Autocmd BufRead,BufNewFile *.md setlocal filetype=markdown
