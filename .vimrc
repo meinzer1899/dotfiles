@@ -261,7 +261,7 @@ xnoremap . :normal!.<CR>
 " clones paragraph and pastes it below copied from paragraph
 nnoremap cp yap<S-}>p
 " Control-v is a common system level shortcut to paste from the clipboard. So why not use it also to paste from the system clipboard when in insert mode.
-inoremap <C-v> <C-r>+
+inoremap <C-v> :set paste<bar><C-r>+<bar>:set nopaste
 
 " mappings to make search results appear in the middle of the screen
 " https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
@@ -357,6 +357,7 @@ augroup MyVimrc
     autocmd!
 augroup END
 
+" https://learnvimscriptthehardway.stevelosh.com/chapters/12.html#autocommand-structure
 command! -nargs=+ Autocmd autocmd MyVimrc <args>
 command! -nargs=+ AutocmdFT autocmd MyVimrc FileType <args>
 Autocmd VimEnter,WinEnter .vimrc,.gvimrc,vimrc,gvimrc syn keyword myVimAutocmd Autocmd AutocmdFT contained containedin=vimIsCommand
@@ -398,6 +399,17 @@ endif
 AutocmdFT gitcommit startinsert!
 " number column may cause ugly formatting when entering terminal window via C-w N :(
 Autocmd TerminalWinOpen * setlocal signcolumn=no textwidth=0 winfixheight norelativenumber nonumber
+" Automatically update vim-fugitive buffer when opened
+" TODO: which one is better?
+AutocmdFT fugitive exe ":Git"
+" Autocmd BufEnter * if &ft == 'fugitive' | exe ":Git" | endif
+
+" Auto indent pasted text
+" nnoremap p p=`]<C-o>
+" nnoremap P P=`]<C-o>
+" sane pasting options with set paste
+" https://stackoverflow.com/questions/7652820/how-to-disable-the-auto-comment-in-shell-script-vi-editing
+Autocmd InsertLeave * set nopaste
 
 " vim as MANPAGER
 " https://muru.dev/2015/08/28/vim-for-man.html
@@ -647,7 +659,7 @@ nnoremap <Leader>gf :diffget //2<CR>
 let g:lightline#coc#indicator_errors = ' '
 let g:lightline#coc#indicator_warnings = ' '
 let g:lightline#coc#indicator_infos = '🛈 '
-let g:lightline#coc#indicator_hints = '! '
+let g:lightline#coc#indicator_hints = '🛈 '
 let g:lightline#coc#indicator_ok = ''
 
 let g:lightline.active = {
