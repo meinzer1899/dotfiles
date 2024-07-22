@@ -242,7 +242,7 @@ zi snippet https://github.com/ajeetdsouza/zoxide/blob/main/contrib/completions/_
 # https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
 zi ice as'program' atclone'rm -f src/auto/config.cache; \
   ./configure --quiet --prefix=$ZPFX --enable-python3interp=yes --enable-luainterp=yes' \
-  atpull'%atclone' make'all install' pick'$ZPFX/bin/vim'
+  atpull'%atclone' make'--quiet all install' pick'$ZPFX/bin/vim'
 zi light vim/vim
 
 zi wait lucid as'program' from'gh-r' for \
@@ -521,15 +521,6 @@ zle -N self-insert url-quote-magic
 if (( $+commands[python3] )) && ! (( $+commands[python] )); then
   alias python=python3
 fi
-# https://github.com/microsoft/WSL/issues/2466#issuecomment-370316815
-# https://github.com/microsoft/WSL/issues/2466#issuecomment-653788395
-# https://github.com/microsoft/WSL/issues/2466#issuecomment-662184581
-# alias toast='powershell.exe -command New-BurntToastNotification "-Text '$1'"'
-# notify-send() { powershell.exe -executionpolicy bypass -command New-BurntToastNotification "-Text '${@}'" }
-# alias notify-send='powershell.exe -executionpolicy bypass -command New-BurntToastNotification "-Text '${@}'"'
-# https://github.com/stuartleeks/wsl-notify-send
-# https://stuartleeks.com/posts/wsl-github-cli-windows-notifications-part-1/
-# notify-send() { wsl-notify-send.exe --category $WSL_DISTRO_NAME "${@}"; }
 
 # ## add aliases for all recipes in ~/.user.justfile
 # for recipe in `just --justfile ~/.user.justfile --summary 2> /dev/null`; do
