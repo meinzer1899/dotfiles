@@ -6,11 +6,8 @@ set -o pipefail -o nounset
 IFS=$'\n\t'
 
 echo "Starting update"
-tldr --update
 
-# https://wiki.zshell.dev/docs/guides/commands
-# zi update --all --parallel --quiet && zi self-update
-# zsh -lic "zi update --all --quiet"
+tldr --update
 
 # javascript tool manager, installs node.js runtimes, npm and Yarn package managers or any binary from npm
 volta install node@lts # installs latest LTS; node@20 installs latest node 20 version
