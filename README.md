@@ -34,6 +34,9 @@ apt install python3.XX-venv # (e.g. 10)
 apt install xclip #zsh-system-keyboard
 ```
 
+Don't upgrade system to use other python version than that available in apt. Can cause other commands
+(e.g. apt-get) to break.
+
 ## Remap CAPSLOCK to ctrl
 
 https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys#comment1154797_521734
@@ -51,10 +54,14 @@ sudo apt-get install virtualbox-guest-additions-iso
 
 ## wsl
 
-* Install nerd font via curl https://github.com/ryanoasis/nerd-fonts?tab=readme-ov-file#option-1-release-archive-download.
+* Install nerd font
+    * on Linux via curl https://github.com/ryanoasis/nerd-fonts?tab=readme-ov-file#option-1-release-archive-download.
+    * on Windows via downloading zip archive and using Settings -> fonts (move font files into dotted square)
 * Install alacritty for Windows.
 * Move alacritty.wsl.toml to [`%APPDATA%\alacritty`](https://github.com/alacritty/alacritty?tab=readme-ov-file#configuration).
 * map capslock to ctrl: https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10.
+* Alternatively, use [MS PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/install#installing-with-microsoft-store) to map Ctrl-M as Enter as well. Cannot map Ctrl-J to down (Ctrl-K up, Ctrl-C Esc) because that conflicts with either Linux or Windows shortcuts. In MS PowerToys dashboard, deactivate all other modules that are not needed.
+* notifications: https://github.com/Windos/BurntToast, call with       `notify-send() { powershell.exe -command New-BurntToastNotification "-Text '${@}'"; }`. Further reading https://stuartleeks.com/posts/wsl-github-cli-windows-notifications-part-1/ and https://github.com/microsoft/WSL/issues/2466.
 
 ## zsh and zi
 
@@ -72,9 +79,11 @@ mkdir -p $HOME/.zi/polaris
 zi loader is included in dotfiles (.config/zi); if not, see
 https://wiki.zshell.dev/docs/getting_started/installation => loader.
 
+### misc
 https://registerspill.thorstenball.com/p/how-fast-is-your-shell
+https://github.com/unixorn/awesome-zsh-plugins
 
-zshrcs
+### zshrcs
 https://github.com/mattmc3/zdotdir
 https://github.com/doronbehar/dotfiles/blob/master/.zshrc
 https://github.com/ctrueden/dotfiles/blob/main/zshrc
@@ -88,9 +97,6 @@ https://github.com/casey/dotfiles/blob/master/etc/zshrc
 https://github.com/agkozak/
 https://github.com/seagle0128/dotfiles/blob/master/.zshrc
 
-plugins
-https://github.com/Freed-Wu/fzf-tab-source
-
 ## git
 
 https://github.com/stevearc/dotfiles/blob/master/.githelpers
@@ -101,14 +107,17 @@ For Ubuntu, this PPA provides the latest stable upstream Git version: https://gi
 Add .gitconfig.local for user private global entries
 https://git-scm.com/docs/user-manual.html#telling-git-your-name
 
-In this dotfiles repository, change local user.email (optionally also user.name), so that Github
-can associate commit with user!
+Add ssh key so that you can push to dotfiles repository with correct user.
+
+In dotfiles repository, change local email to noreply email from Github (preferences, email)
+https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address#setting-your-email-address-for-a-single-repository
 
 ssh keys:
 ~/.ssh/config
 specify, which key belongs to which host
 (https://stackoverflow.com/a/69764024)
 
+https://github.com/gabyx/Githooks
 https://github.com/bigH/git-fuzzy
 https://github.com/gitleaks/gitleaks
 
@@ -163,6 +172,9 @@ completion gets installed automatically by zi
 https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ## vim
+https://learnvimscriptthehardway.stevelosh.com/
+
+https://github.com/mattmc3/neovim-cheatsheet
 
 https://github.com/mrnugget/vimconfig/tree/master
 https://github.com/itchyny/dotfiles/blob/main/.vimrc
@@ -298,7 +310,19 @@ https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-l
 - [ ] update .vimrc with comments from https://github.com/nvim-zh/minimal_vim/blob/master/init.vim
 - [ ] Read series https://jdhao.github.io/2019/03/28/nifty_nvim_techniques_s1/#how-do-we-select-the-current-line-but-not-including-the-newline-character
 
-### docker
+### GDB
+
+```vim
+:packadd termdebug
+:Termdebug
+```
+
+https://developers.redhat.com/articles/2021/10/05/printf-style-debugging-using-gdb-part-1#
+https://developers.redhat.com/articles/2021/10/13/printf-style-debugging-using-gdb-part-2#
+https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
+https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf
+
+## docker
 
 https://github.com/StableCoder/docker-build-core
 https://github.com/think-cell/docker
