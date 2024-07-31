@@ -102,3 +102,6 @@ startup_mode = "Fullscreen"
 [window.padding]
 x = 3
 y = 3
+
+[mouse]# If this is `true`, the cursor is temporarily hidden when typing.
+hide_when_typing = true
