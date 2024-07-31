@@ -1,7 +1,10 @@
-image
-scripts
+# files
+Makefile
 .alacritty.wsl.toml
 wsl.conf
+# folders
+image
+scripts
 
 # From: https://www.gnu.org/software/stow/manual/html_node/Types-And-Syntax-Of-Ignore-Lists.html
 # Comments and blank lines are allowed.
