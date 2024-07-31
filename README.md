@@ -80,27 +80,27 @@ zi loader is included in dotfiles (.config/zi); if not, see
 https://wiki.zshell.dev/docs/getting_started/installation => loader.
 
 ### misc
-https://registerspill.thorstenball.com/p/how-fast-is-your-shell
-https://github.com/unixorn/awesome-zsh-plugins
+* https://registerspill.thorstenball.com/p/how-fast-is-your-shell
+* https://github.com/unixorn/awesome-zsh-plugins
 
 ### zshrcs
-https://github.com/mattmc3/zdotdir
-https://github.com/doronbehar/dotfiles/blob/master/.zshrc
-https://github.com/ctrueden/dotfiles/blob/main/zshrc
-https://github.com/itchyny/dotfiles/blob/main/.zshrc
-https://github.com/timtyrrell/dotfiles-chezmoi/blob/master/dot_zshrc
-https://github.com/Freed-Wu/Freed-Wu/blob/main/.zshrc
-https://github.com/kutsan/dotfiles/blob/master/.config/zsh/config/settings.zsh
-https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
-https://github.com/callistachang/dots/blob/main/dot_zshrc
-https://github.com/casey/dotfiles/blob/master/etc/zshrc
-https://github.com/agkozak/
-https://github.com/seagle0128/dotfiles/blob/master/.zshrc
+* https://github.com/mattmc3/zdotdir
+* https://github.com/doronbehar/dotfiles/blob/master/.zshrc
+* https://github.com/ctrueden/dotfiles/blob/main/zshrc
+* https://github.com/itchyny/dotfiles/blob/main/.zshrc
+* https://github.com/timtyrrell/dotfiles-chezmoi/blob/master/dot_zshrc
+* https://github.com/Freed-Wu/Freed-Wu/blob/main/.zshrc
+* https://github.com/kutsan/dotfiles/blob/master/.config/zsh/config/settings.zsh
+* https://git.sr.ht/~seirdy/dotfiles/tree/master/.config/shell_common/zsh/zinit.zsh
+* https://github.com/callistachang/dots/blob/main/dot_zshrc
+* https://github.com/casey/dotfiles/blob/master/etc/zshrc
+* https://github.com/agkozak/
+* https://github.com/seagle0128/dotfiles/blob/master/.zshrc
 
 ## git
 
-https://github.com/stevearc/dotfiles/blob/master/.githelpers
-https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
+* https://github.com/stevearc/dotfiles/blob/master/.githelpers
+* https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
 
 For Ubuntu, this PPA provides the latest stable upstream Git version: https://git-scm.com/download/linux.
 
@@ -128,6 +128,8 @@ https://github.com/alacritty/alacritty/blob/master/INSTALL.md
 cargo build --release
 ```
 
+Windows: download executable
+
 ## TMUX
 
 https://github.com/tmux/tmux/wiki/Installing#from-version-control
@@ -141,9 +143,9 @@ make -j$(nproc) && sudo make install
 `tmux new -s tmux`
 
 .tmux.conf:
-https://github.com/doronbehar/.tmux/tree/master
-https://gist.github.com/adibhanna/979461c5f7d906daf24925fbd9b255eb
-https://github.com/mrnugget/dotfiles/blob/master/tmux.conf
+* https://github.com/doronbehar/.tmux/tree/master
+* https://gist.github.com/adibhanna/979461c5f7d906daf24925fbd9b255eb
+* https://github.com/mrnugget/dotfiles/blob/master/tmux.conf
 
 ## cargo and rust
 
@@ -176,23 +178,23 @@ https://learnvimscriptthehardway.stevelosh.com/
 
 https://github.com/mattmc3/neovim-cheatsheet
 
-https://github.com/mrnugget/vimconfig/tree/master
-https://github.com/itchyny/dotfiles/blob/main/.vimrc
-https://github.com/mischavandenburg/dotfiles/blob/main/vim/.vimrc
-https://github.com/doronbehar/.config_nvim/tree/master
-https://github.com/habamax/.vim/blob/master/vimrc (vim maintainer)
-https://github.com/mrnugget/vimconfig/blob/master/vimrc
-https://github.com/skywind3000/vim/blob/master/init/unix.vim
-https://github.com/trapd00r/configs/blob/master/vim/vimrc
-https://github.com/suy/configs/blob/master/vimrc
-https://github.com/rhysd/dogfiles/blob/master/vimrc
-https://github.com/fannheyward/init.vim/blob/master/coc-settings.json
-https://github.com/fannheyward/init.vim/blob/master/init.vim
+* https://github.com/mrnugget/vimconfig/tree/master
+* https://github.com/itchyny/dotfiles/blob/main/.vimrc
+* https://github.com/mischavandenburg/dotfiles/blob/main/vim/.vimrc
+* https://github.com/doronbehar/.config_nvim/tree/master
+* https://github.com/habamax/.vim/blob/master/vimrc (vim maintainer)
+* https://github.com/mrnugget/vimconfig/blob/master/vimrc
+* https://github.com/skywind3000/vim/blob/master/init/unix.vim
+* https://github.com/trapd00r/configs/blob/master/vim/vimrc
+* https://github.com/suy/configs/blob/master/vimrc
+* https://github.com/rhysd/dogfiles/blob/master/vimrc
+* https://github.com/fannheyward/init.vim/blob/master/coc-settings.json
+* https://github.com/fannheyward/init.vim/blob/master/init.vim
 
-https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
-https://vimtricks.com/p/category/tips-and-tricks/
-http://vimcasts.org/episodes/search-multiple-files-with-vimgrep/
-https://github.com/yuki-yano/fzf-preview.vim
+* https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
+* https://vimtricks.com/p/category/tips-and-tricks/
+* http://vimcasts.org/episodes/search-multiple-files-with-vimgrep/
+* https://github.com/yuki-yano/fzf-preview.vim
 
 Gets installed by zi.
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
@@ -206,17 +208,17 @@ apt install luaX.X libluaX.X-dev luajit
 
 ### devcontainer
 
-https://www.docker.com/blog/how-to-setup-your-local-node-js-development-environment-using-docker/
-https://stackoverflow.com/questions/51809181/how-to-run-tmux-inside-a-docker-container
-https://wiki.zshell.dev/ecosystem/packages/usage#statically-linked-hermetic-relocatable-zsh
+* https://www.docker.com/blog/how-to-setup-your-local-node-js-development-environment-using-docker/
+* https://stackoverflow.com/questions/51809181/how-to-run-tmux-inside-a-docker-container
+* https://wiki.zshell.dev/ecosystem/packages/usage#statically-linked-hermetic-relocatable-zsh
 
 Login to dev container via ssh; install zsh and copy dotfiles
 https://github.com/dpetersen/dev-container-base
 
-https://gitlab.com/smoores/open-devcontainer
-https://stackoverflow.com/questions/72397020/containerizing-vim-with-plugins
-https://github.com/nemanjan00/dev-environment
-https://github.com/esensar/nvim-dev-container
+* https://gitlab.com/smoores/open-devcontainer
+* https://stackoverflow.com/questions/72397020/containerizing-vim-with-plugins
+* https://github.com/nemanjan00/dev-environment
+* https://github.com/esensar/nvim-dev-container
 
 ### linter
 
@@ -253,8 +255,8 @@ playground
 
 ### ccls
 
-https://github.com/MaskRay/ccls/wiki/Build
-https://github.com/MaskRay/ccls/wiki/Install
+* https://github.com/MaskRay/ccls/wiki/Build
+* https://github.com/MaskRay/ccls/wiki/Install
 
 ### CMake
 
@@ -263,10 +265,10 @@ Use install-cmake.sh from foonathan to install to /usr/local. May remove "old" c
 https://blog.feabhas.com/category/build-systems/
 with https://github.com/feabhas/cmake-presets-blog
 
-https://github.com/philips-software/amp-devcontainer/tree/main/.devcontainer/cpp
-https://github.com/intel/cicd-repo-infrastructure/
-https://github.com/StableCoder/cmake-scripts
-https://github.com/cpp-best-practices/cmake_template
+* https://github.com/philips-software/amp-devcontainer/tree/main/.devcontainer/cpp
+* https://github.com/intel/cicd-repo-infrastructure/
+* https://github.com/StableCoder/cmake-scripts
+* https://github.com/cpp-best-practices/cmake_template
 
 #### misc
 
@@ -277,7 +279,6 @@ Determine the minimal required CMake version of a project: [cmake_min_version](h
 
 ### llvm, clang, clangd
 
-https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
 https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
 ```cmake
 message(STATUS "Address sanitizer enabled")
@@ -317,36 +318,38 @@ https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-l
 :Termdebug
 ```
 
-https://developers.redhat.com/articles/2021/10/05/printf-style-debugging-using-gdb-part-1#
-https://developers.redhat.com/articles/2021/10/13/printf-style-debugging-using-gdb-part-2#
-https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
-https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf
+* https://developers.redhat.com/articles/2021/10/05/printf-style-debugging-using-gdb-part-1#
+* https://developers.redhat.com/articles/2021/10/13/printf-style-debugging-using-gdb-part-2#
+* https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
+* https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf
 
 ## docker
 
-https://github.com/StableCoder/docker-build-core
-https://github.com/think-cell/docker
+* https://github.com/StableCoder/docker-build-core
+* https://github.com/think-cell/docker
 
 ## asynctask
 
-https://github.com/skywind3000/asynctasks.vim
-https://github.com/albertomontesg/lightline-asyncrun
-https://github.com/deathmaz/fzf-lua-asynctasks (neovim)
-https://github.com/voldikss/vim-floaterm#asynctasksvim--asyncrunvim
-https://github.com/skywind3000/vim-terminal-help#integration
-https://github.com/voldikss/coc-extensions/tree/main/packages/coc-tasks
-https://github.com/EthanJWright/vs-tasks.nvim
+* https://github.com/skywind3000/asynctasks.vim
+* https://github.com/albertomontesg/lightline-asyncrun
+* https://github.com/deathmaz/fzf-lua-asynctasks (neovim)
+* https://github.com/voldikss/vim-floaterm#asynctasksvim--asyncrunvim
+* https://github.com/skywind3000/vim-terminal-help#integration
+* https://github.com/voldikss/coc-extensions/tree/main/packages/coc-tasks
+* https://github.com/EthanJWright/vs-tasks.nvim
 
 ## dotfiles management
 
-- I use stow.
-- Manage dotfiles and any git directories interactively with fzf https://github.com/kazhala/dotbare
-- https://dotfiles.github.io/
-- https://github.com/rhysd/dotfiles
+* I use stow.
+* Manage dotfiles and any git directories interactively with fzf https://github.com/kazhala/dotbare
+* https://dotfiles.github.io/
+* https://github.com/rhysd/dotfiles
 
 ## mold
 
+```sh
 CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
+```
 
 ## neovim nvim
 
@@ -358,12 +361,12 @@ CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 Neovim for C++: https://www.youtube.com/watch?v=lsFoZIg-oDs
 
 Use FZF instead of telescope
-https://github.com/ibhagwan/fzf-lua#why-fzf-lua
-https://github.com/deathmaz/fzf-lua-asynctasks
-https://github.com/ibhagwan/nvim-lua
+* https://github.com/ibhagwan/fzf-lua#why-fzf-lua
+* https://github.com/deathmaz/fzf-lua-asynctasks
+* https://github.com/ibhagwan/nvim-lua
 
-https://www.youtube.com/watch?v=stqUbv-5u2s TJ De Vries  Effective Neovim: Instant IDE
-https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
+* https://www.youtube.com/watch?v=stqUbv-5u2s TJ De Vries  Effective Neovim: Instant IDE
+* https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
 
 ### Tridactyl
 
@@ -387,6 +390,6 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 
 ### offline documentation
 
-https://zealdocs.org/
-https://cukic.co/2022/04/02/fuzzy-search-documentation/
-https://gitlab.com/ivan-cukic/zeal-lynx-cli
+* https://zealdocs.org/
+* https://cukic.co/2022/04/02/fuzzy-search-documentation/
+* https://gitlab.com/ivan-cukic/zeal-lynx-cli
