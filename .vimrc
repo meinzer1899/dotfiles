@@ -83,8 +83,9 @@ set linebreak
 " modern simplified pandoc for capturing knowledge source instead of
 " arbitrary raw text files.
 " help fo-table
+set formatoptions=                " start with empty formatoptions (otherwise, c is activated independently of what is specified here)
 set formatoptions-=t   " don't auto-wrap text using text width
-set formatoptions+=c   " autowrap comments using textwidth with leader
+set formatoptions-=c   " autowrap comments using textwidth with leader
 set formatoptions-=r   " don't auto-insert comment leader on enter in insert
 set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
 set formatoptions+=q   " allow formatting of comments with gq
@@ -257,7 +258,7 @@ xnoremap . :normal!.<CR>
 " clones paragraph and pastes it below copied from paragraph
 nnoremap cp yap<S-}>p
 " Control-v is a common system level shortcut to paste from the clipboard. So why not use it also to paste from the system clipboard when in insert mode.
-inoremap <C-v> :set paste<bar><C-r>+<bar>:set nopaste
+inoremap <C-v> <C-r>+
 
 " mappings to make search results appear in the middle of the screen
 " https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
@@ -407,11 +408,41 @@ AutocmdFT fugitive exe ":Git"
 Autocmd InsertLeave * set nopaste
 
 " vim as MANPAGER
-" https://muru.dev/2015/08/28/vim-for-man.html
-" MAN_PN is set to the manpage name
-if !empty($MAN_PN)
-  Autocmd StdinReadPost * set ft=man | file $MAN_PN
+if findfile('plugin/man.vim', &runtimepath) ==# ''
+  runtime! ftplugin/man.vim
+  let g:ft_man_open_mode = 'vert'
 endif
+
+" this is not needed as plugin/man.vim takes care of this
+" https://muru.dev/2015/08/28/vim-for-man.html
+" and https://github.com/muru/vim-manpager/tree/master
+" MAN_PN is set to the manpage name
+" if !empty($MAN_PN)
+"   Autocmd StdinReadPost * set ft=man | file $MAN_PN
+" endif
+" function! PrepManPager()
+"     setlocal modifiable
+"     if !empty ($MAN_PN)
+"         silent %! col -b -x
+"     endif
+"     setlocal nomodified
+"     setlocal nomodifiable
+"     setlocal nolist
+"     setlocal readonly
+"     setlocal buftype=nofile
+"     setlocal bufhidden=hide
+"     setlocal noswapfile
+"     setlocal nobuflisted
+"     setlocal nowrap
+"     setlocal conceallevel=3
+"     setlocal concealcursor=nvic
+"     setlocal signcolumn=no
+"     nnoremap <silent> <buffer> q :qa<CR>
+" endfunction
+
+Autocmd BufWinEnter $MAN_PN nnoremap <silent> <buffer> gq :q<CR>
+" using AutocmdFT, PrepManPager() gets executed for :Man command as well
+AutocmdFT man nnoremap <silent> <buffer> gq :q<CR>
 
 " https://github.com/junegunn/vim-plug/wiki/tips#automatic-installation
 let data_dir = has('nvim') ? stdpath('data') . '/site' : '~/.vim'
