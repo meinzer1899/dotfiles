@@ -31,4 +31,11 @@ export PATH=$PATH:$HOME/.local/bin
 # Treat these characters as part of a word.
 [[ -n "$WORDCHARS" ]] || export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
+# CMake
+export DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+export MAKEFLAGS="-j$(nproc)"
+if (( $+commands[ninja] )); then
+  export CMAKE_GENERATOR=Ninja
+fi
+
 # vim: ft=zsh sw=2 ts=2 et

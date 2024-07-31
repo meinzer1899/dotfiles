@@ -13,7 +13,7 @@ to_lower_comma_operator() {
 }
 
 ##? Check whether a string represents "true" (1, y, yes, t, true, o, on).
-# https://github.com/mattmc3/zdotdir/blob/main/lib/functions.zsh
+# https://github.com/mattmc3/zdotdir/blob/85bdc0f22d250554b2295a8ae812ba4c7d749232/lib/archive/__init__.zsh#L70
 # =~ is regex comparison
 is_true() {
     [[ -n "$1" && "$1" =~ (1|y(es|)|t(rue|)|o(n|)) ]]

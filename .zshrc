@@ -391,8 +391,9 @@ setopt interactivecomments
 
 # https://grml.org/zsh/zsh-lovers.html
 # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
-# https://github.com/mattmc3/zdotdir/blob/main/lib/compstyle.zsh
+# https://github.com/mattmc3/zdotdir/blob/main/lib/archive/completion.zsh
 # Fuzzy completion matching
+# _expand_alias expands alias when hitting enter, e.g. glog<ENTER> => git log --...
 zstyle ':completion:*' completer _complete _match _approximate
 zstyle ':completion:*:match:*' original only
 # Increase the number of errors based on the length of the typed word. But make
@@ -494,21 +495,16 @@ bindkey -M viins "^V" edit-command-line
 bindkey -M vicmd "^V" edit-command-line
 
 ### alias
-alias v="vim"
-alias nv="nvim"
-alias gs="gss"
+unsetopt COMPLETE_ALIASES
+alias v='vim'
+alias nv='nvim'
+alias gs='gss'
 alias -g ...='../..'
 alias -g ....='../../..'
 alias -g .....='../../../..'
 alias -g ......='../../../../..'
-alias _="sudo "
+alias _='sudo '
 alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git root
-
-alias cmake='cmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON '
-alias ccmake='ccmake -G Ninja -DCMAKE_EXPORT_COMPILE_COMMANDS:BOOL=ON '
-cores=$(nproc --all)
-alias mj="make -j${cores} -l${cores}"
-alias nj="ninja -j${cores} -l${cores}"
 
 ### misc
 # Use built-in paste magic.

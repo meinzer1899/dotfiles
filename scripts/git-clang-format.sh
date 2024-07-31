@@ -10,8 +10,7 @@ set -o pipefail -o nounset
 IFS=$'\n\t'
 
 print_message_and_exit() {
-    echo "$1"
-    echo "Exiting."
+    echo -e "$1\nExiting."
     exit 0
 }
 
