@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # https://github.com/foonathan/docker/blob/main/common/install-cmake.sh
-set -eou pipefail
 
-VERSION="3.27.6"
+set -e -o pipefail -o nounset
+
+VERSION="3.30.2"
 MIRROR_URL="https://github.com/Kitware/CMake/releases/download/v$VERSION/"
 DOWNLOAD_X86="cmake-$VERSION-linux-x86_64.sh"
 DOWNLOAD_ARM="cmake-$VERSION-linux-aarch64.sh"
