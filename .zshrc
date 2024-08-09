@@ -94,6 +94,9 @@ zi wait lucid as'program' from'gh-r' for \
   sbin'**/delta delta' \
   @dandavison/delta
 
+zi ice as"program" pick"bin/git-fuzzy"
+zi light bigH/git-fuzzy
+
 # last updated 3 yrs ago...
 zi ice wait lucid as'completion' blockf has'delta'
 zi snippet https://raw.githubusercontent.com/dandavison/delta/master/etc/completion/completion.zsh
@@ -111,14 +114,14 @@ zi wait lucid for \
   has'eza' atinit'AUTOCD=1' nocd \
   @z-shell/zsh-eza
 
-# speed improvement: disable default maps and bindkey manually
-zi wait lucid for \
-  atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true; \
-  ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=true;
-  # Bind Y to yank until end of line \
-  bindkey -M vicmd Y zsh-system-clipboard-vicmd-vi-yank-eol; \
-  ' nocd \
-  @kutsan/zsh-system-clipboard
+# # speed improvement: disable default maps and bindkey manually
+# zi wait lucid for \
+#   atinit'ZSH_SYSTEM_CLIPBOARD_TMUX_SUPPORT=true; \
+#   ZSH_SYSTEM_CLIPBOARD_DISABLE_DEFAULT_MAPS=true;
+#   # Bind Y to yank until end of line \
+#   bindkey -M vicmd Y zsh-system-clipboard-vicmd-vi-yank-eol; \
+#   ' nocd \
+#   @kutsan/zsh-system-clipboard
 
 # manpages only available in debug build
 # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
@@ -244,6 +247,13 @@ zi wait lucid as'program' from'gh-r' for \
 zi wait lucid as'command' from'gh-r' for \
   sbin'grex' \
   @pemistahl/grex
+
+# Use fzf to quickly browse Zsh manuals
+zi wait'0b' lucid as'command' src'zman.zsh' for \
+  @mattmc3/zman
+
+zi wait'0b' lucid as'command' pick'zsh-bench' for \
+  @romkatv/zsh-bench
 
 # https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
 zi ice as'program' atclone'cmake . -DCMAKE_INSTALL_PREFIX=$ZPFX' \
