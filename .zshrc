@@ -21,19 +21,28 @@ zi light-mode for z-shell/z-a-meta-plugins @annexes
 zi light-mode for z-shell/z-a-bin-gem-node
 
 # https://wiki.zshell.dev/community/gallery/collection/snippets
-zi wait lucid for \
-  OMZP::cp \
-  OMZL::git.zsh \
-  atload'unalias grv' \
+# https://wiki.zshell.dev/docs/getting_started/migration#omz-plugins
+# extract:
+# This plugin defines a function called extract that extracts the archive file you pass it, and it supports
+# a wide variety of archive filetypes.
+# clipboard:
+# This file has support for doing system clipboard copy and paste operations
+# from the command line in a generic cross-platform fashion.
+zi wait'0b' lucid for \
+  OMZP::{'cp','fancy-ctrl-z'} \
+    atload'unalias grv' \
   OMZP::git \
-  OMZL::completion.zsh \
+    atload'unalias x' \
+  OMZP::extract \
+  OMZL::{'completion.zsh','clipboard.zsh'}
 
 # Setup ssh agent (vs code uses this to share git credentials in devcontainer)
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md
-zi wait lucid for \
+zi wait'0b' lucid for \
   atload'zstyle :omz:plugins:ssh-agent agent-forwarding yes; \
   zstyle :omz:plugins:ssh-agent lazy yes; \
   zstyle :omz:plugins:ssh-agent identities id_ed25519' \
+  if'[[ -d ~/.ssh ]]' \
   OMZP::ssh-agent
 
 # :prompt:pure:prompt:* changes the color for both `prompt:success` and `prompt:error`
@@ -161,7 +170,7 @@ zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'g
 # zi ice lucid wait"0b" pick'fzf-git.sh'
 # zi load junegunn/fzf-git.sh
 
-export FZF_DEFAULT_COMMAND="command fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '!.git' || find ."
+export FZF_DEFAULT_COMMAND="command fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '\!.git' || find ."
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'eza -1 --icons=always --group-directories-first --color=always --all {} | head -200'"
 export FZF_ALT_C_COMMAND='command fd --hidden --no-ignore-vcs --exclude .git --type d'
@@ -244,7 +253,7 @@ zi wait lucid as'program' from'gh-r' for \
   @koalaman/shellcheck
 
 # grex generates regular expressions from user-provided test cases
-zi wait lucid as'command' from'gh-r' for \
+zi wait'0b' lucid as'command' from'gh-r' for \
   sbin'grex' \
   @pemistahl/grex
 
@@ -262,40 +271,25 @@ zi light thewtex/tmux-mem-cpu-load
 
 ## completions
 # https://zsh.sourceforge.io/Guide/zshguide06.html
-
 # https://wiki.zshell.dev/community/gallery/collection/snippets
-zi ice wait lucid as'completion'
-zi snippet OMZL::completion.zsh
-
-zi ice wait lucid as'completion'
-zi snippet OMZP::gitfast
-
-zi ice wait lucid as'completion'
+zi ice wait lucid as'completion' blockf has'docker'
 zi snippet https://github.com/docker/cli/blob/master/contrib/completion/zsh/_docker
-
-zi ice wait lucid as'completion' blockf has'alacritty'
-zi snippet https://github.com/alacritty/alacritty/blob/master/extra/completions/_alacritty
 
 ### PLUGINS WHICH HAS TO BE LOADED LAST
 
 # fzf-tab needs to be loaded after compinit, but before plugins which will wrap widgets, such as zsh-autosuggestions or fast-syntax-highlighting!!
-zi ice wait lucid has'fzf' blockf
+zi ice wait lucid blockf has'fzf'
 zi light Aloxaf/fzf-tab
 
-# # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
-# faster than zi light-mode for @zsh-users+fast
-# TODO: start thread at https://github.com/orgs/z-shell/discussions/
-# https://wiki.zshell.dev/docs/getting_started/overview#the-completion-management
-# as'completion' blockf \
-#   z-shell/zsh-fancy-completions \
+# load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
 
 # https://wiki.zshell.dev/docs/guides/syntax/for
 zi wait lucid light-mode for \
-  atinit'ZI[COMPINIT_OPTS]=-C; zicompinit_fast; zicdreplay' \
+  atinit'zicompinit; zicdreplay' \
   zsh-users/zsh-syntax-highlighting \
   atload'!_zsh_autosuggest_start' \
   zsh-users/zsh-autosuggestions \
-  blockf atpull'zi creinstall -q .' \
+  atpull'zi creinstall -q .' \
   zsh-users/zsh-completions
 
 # only for git
@@ -461,7 +455,7 @@ done
 export KEYTIMEOUT=1
 
 # add custom bindings
-bindkey ' '    magic-space
+bindkey ' '    magic-space # expand magics, e.g. !! transforms to whats inside !! (the previous command)
 bindkey '\eK'  kill-line-to-system-clipboard
 bindkey '\eY'  yank-from-system-clipboard
 bindkey '\e^?' backward-kill-word
@@ -505,6 +499,7 @@ alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias _='sudo '
 alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git root
+alias grep="grep --color"
 
 ### misc
 # Use built-in paste magic.
