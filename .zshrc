@@ -51,16 +51,6 @@ zi wait'0b' lucid for \
   dylanaraps/neofetch
 
 zi wait'0b' lucid for \
-  OMZP::fancy-ctrl-z
-
-# fast toolchain as code for JS (e.g. node)
-# volta is much faster than nvm, thus nvm is replaced
-zi light cowboyd/zsh-volta
-# completions not working :(
-# zi wait lucid for \
-#   OMZP::volta
-
-zi wait'0b' lucid for \
  atload"ZSH_PLUGINS_ALIAS_TIPS_TEXT='Has alias: '" \
  nocd \
  @djui/alias-tips

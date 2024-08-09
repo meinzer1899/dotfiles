@@ -38,4 +38,9 @@ if (( $+commands[ninja] )); then
   export CMAKE_GENERATOR=Ninja
 fi
 
+# volta (JS toolchain as code)
+# https://docs.volta.sh/guide/getting-started
+export VOLTA_HOME=$HOME/.volta
+export PATH=$VOLTA_HOME/bin:$PATH
+
 # vim: ft=zsh sw=2 ts=2 et
