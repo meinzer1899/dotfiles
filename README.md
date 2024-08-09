@@ -121,9 +121,10 @@ ssh keys:
 specify, which key belongs to which host
 (https://stackoverflow.com/a/69764024)
 
-https://github.com/gabyx/Githooks
-https://github.com/bigH/git-fuzzy
-https://github.com/gitleaks/gitleaks
+[🦎 Githooks: per-repo and shared Git hooks with version control and auto update.](https://github.com/gabyx/Githooks)
+[interactive `git` with the help of `fzf`      ](https://github.com/bigH/git-fuzzy)
+[Protect and discover secrets using Gitleaks 🔑      ](https://github.com/gitleaks/gitleaks)
+[Command-line Git information tool](https://github.com/o2sh/onefetch)
 
 ## alacritty
 
@@ -147,13 +148,12 @@ make -j$(nproc) && sudo make install
 `tmux new -s tmux`
 
 .tmux.conf:
+* https://github.com/sunaku/home/blob/master/.tmux.conf.erb
 * https://github.com/doronbehar/.tmux/tree/master
 * https://gist.github.com/adibhanna/979461c5f7d906daf24925fbd9b255eb
 * https://github.com/mrnugget/dotfiles/blob/master/tmux.conf
 
 ## cargo and rust
-
-Managed by zi.
 
 Search rust book via cli:
 
@@ -164,18 +164,18 @@ https://github.com/0xhiro/thebook
 To auto-accept entry on Enter when searching with CTRL-R, use
 https://github.com/junegunn/fzf/issues/477#issuecomment-444053054
 
-Gets installed by zi
-
-https://github.com/junegunn/fzf
-
-This gets not installed by zi: https://github.com/junegunn/fzf-git.sh
+* https://github.com/junegunn/fzf
+* https://github.com/junegunn/fzf-git.sh
 
 Vim Integration: https://github.com/junegunn/fzf/blob/master/README-VIM.md
 
 ## docker
 
-completion gets installed automatically by zi
-https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
+analyze image size, vulnerabilities and more: https://github.com/wagoodman
+
+* https://github.com/StableCoder/docker-build-core
+* https://github.com/think-cell/docker
+* https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ## vim
 https://learnvimscriptthehardway.stevelosh.com/
@@ -200,7 +200,6 @@ https://github.com/mattmc3/neovim-cheatsheet
 * http://vimcasts.org/episodes/search-multiple-files-with-vimgrep/
 * https://github.com/yuki-yano/fzf-preview.vim
 
-Gets installed by zi.
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
 ### lua support
@@ -245,7 +244,6 @@ https://github.com/Vimjas/vint
 #### hadolint (Dockerfile linter)
 
 https://github.com/hadolint/hadolint
-gets installed by zi.
 
 ## C++ cpp
 
@@ -277,7 +275,7 @@ with https://github.com/feabhas/cmake-presets-blog
 #### misc
 
 [cmake4vim](https://github.com/ilyachur/cmake4vim/)
-[cmake-language-server](https://github.com/regen100/cmake-language-server) gets installed via zi and pip.
+[cmake-language-server](https://github.com/regen100/cmake-language-server)
 
 Determine the minimal required CMake version of a project: [cmake_min_version](https://github.com/nlohmann/cmake_min_version)
 
@@ -326,11 +324,6 @@ https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-l
 * https://developers.redhat.com/articles/2021/10/13/printf-style-debugging-using-gdb-part-2#
 * https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
 * https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf
-
-## docker
-
-* https://github.com/StableCoder/docker-build-core
-* https://github.com/think-cell/docker
 
 ## asynctask
 
