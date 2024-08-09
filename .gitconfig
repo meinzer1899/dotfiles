@@ -21,9 +21,8 @@
 	tool = vimdiff
 	submodule = log
 	# detect renamed files and show only actual differences between them
-	renames = copies
+	renames = true
 [diff "bin"]
-	# Use `hexdump` to diff binary files.
 	textconv = hexdump -v -C
 [merge]
 	conflictstyle = diff3
@@ -36,11 +35,13 @@
 	default = simple
 	autoSetupRemote = true
 [fetch]
-	prune = true
+	# https://git-scm.com/docs/git-fetch#_pruning
 	pruneTags = true
 	recurseSubmodules = on-demand
 	# 0 gives reasonable default, see https://git-scm.com/docs/git-config#Documentation/git-config.txt-fetchparallel
 	parallel = 0
+	 # https://devblogs.microsoft.com/devops/updates-to-the-git-commit-graph-feature/
+	writeCommitGraph = true
 [rerere]
 	enabled = true
 [status]
