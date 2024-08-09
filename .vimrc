@@ -396,7 +396,7 @@ AutocmdFT gitcommit startinsert!
 " number column may cause ugly formatting when entering terminal window via C-w N :(
 Autocmd TerminalWinOpen * setlocal signcolumn=no textwidth=0 winfixheight norelativenumber nonumber
 " Automatically update vim-fugitive buffer when opened
-" TODO: which one is better?
+" TODO: which one is faster?
 AutocmdFT fugitive exe ":Git"
 " Autocmd BufEnter * if &ft == 'fugitive' | exe ":Git" | endif
 
@@ -408,37 +408,10 @@ AutocmdFT fugitive exe ":Git"
 Autocmd InsertLeave * set nopaste
 
 " vim as MANPAGER
-if findfile('plugin/man.vim', &runtimepath) ==# ''
-  runtime! ftplugin/man.vim
+" man.vim loaded by sensible.vim
+if exists('g:loaded_man')
   let g:ft_man_open_mode = 'vert'
 endif
-
-" this is not needed as plugin/man.vim takes care of this
-" https://muru.dev/2015/08/28/vim-for-man.html
-" and https://github.com/muru/vim-manpager/tree/master
-" MAN_PN is set to the manpage name
-" if !empty($MAN_PN)
-"   Autocmd StdinReadPost * set ft=man | file $MAN_PN
-" endif
-" function! PrepManPager()
-"     setlocal modifiable
-"     if !empty ($MAN_PN)
-"         silent %! col -b -x
-"     endif
-"     setlocal nomodified
-"     setlocal nomodifiable
-"     setlocal nolist
-"     setlocal readonly
-"     setlocal buftype=nofile
-"     setlocal bufhidden=hide
-"     setlocal noswapfile
-"     setlocal nobuflisted
-"     setlocal nowrap
-"     setlocal conceallevel=3
-"     setlocal concealcursor=nvic
-"     setlocal signcolumn=no
-"     nnoremap <silent> <buffer> q :qa<CR>
-" endfunction
 
 Autocmd BufWinEnter $MAN_PN nnoremap <silent> <buffer> gq :q<CR>
 " using AutocmdFT, PrepManPager() gets executed for :Man command as well
@@ -457,17 +430,21 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
+" adds many mapping, e.g. ]q for cnext (quickfix)
+nmap < [
+nmap > ]
+omap < [
+omap > ]
+xmap < [
+xmap > ]
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
 " Asynchronous build and test dispatcher
 Plug 'tpope/vim-dispatch'
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-endwise'
+" loads very good defaults, e.g. man.vim or matchit.vim
 Plug 'tpope/vim-sensible'
-" its in sensible.vim ... I should probably have this?
-if !exists('g:loaded_matchit') && findfile('plugin/matchit.vim', &runtimepath) ==# ''
-  runtime! macros/matchit.vim
-endif
 Plug 'tpope/vim-sleuth'
 " Prose Mode
 Plug 'junegunn/goyo.vim'
@@ -485,7 +462,6 @@ let g:gitgutter_map_keys = 0
 " Plug 'junegunn/limelight.vim'
 Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
-Plug 'dyng/ctrlsf.vim'
 " Plug 'metakirby5/codi.vim'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
@@ -501,6 +477,11 @@ Plug 'stsewd/fzf-checkout.vim'
 " Plug 'jpalardy/vim-slime'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
+Plug 'junegunn/vim-easy-align'
+" Start interactive EasyAlign in visual mode (e.g. vipga)
+xmap ga <Plug>(EasyAlign)
+" Start interactive EasyAlign for a motion/text object (e.g. gaip)
+nmap ga <Plug>(EasyAlign)
 " Plug 'dbeniamine/cheat.sh-vim'
 " Plug 'unblevable/quick-scope'
 Plug 'ilyachur/cmake4vim'
@@ -514,6 +495,7 @@ Plug 'rust-lang/rust.vim'
 Plug 'jesseleite/vim-agriculture'
 Plug 'stefandtw/quickfix-reflector.vim'
 Plug 'romainl/vim-qf'
+let g:qf_nowrap = 0
 " let g:qf_bufname_or_text = 2 " filter only on quickfix text, not bufnames
 Plug 'junegunn/vim-peekaboo'
 Plug 'luochen1990/rainbow'
@@ -787,24 +769,6 @@ let g:codi#interpreters = {
       \ },
       \ }
 
-" CtrlSF
-let g:ctrlsf_winsize = '40%'
-let g:ctrlsf_auto_close = 0
-let g:ctrlsf_confirm_save = 0
-let g:ctrlsf_auto_focus = {
-      \ 'at': 'start',
-      \ }
-let g:ctrlsf_search_mode = 'async'
-let g:ctrlsf_populate_qflist = 1
-nnoremap <Leader>n <Plug>CtrlSFCwordPath -hidden<CR>
-vmap     <leader>N <Plug>CtrlSFVwordPath
-
-" autocmd TerminalWinOpen *
-"       \ if &buftype == 'terminal' |
-"   \   resize 16 |
-"   \   setlocal termwinsize=16x0 |
-"   \   setlocal nowrap |
-"   \ endif
 " TERMINAL
 if s:on_win
   noremap <Leader>p :tab term<CR>
