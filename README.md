@@ -3,18 +3,22 @@
 My Linux dotfiles.
 
 ```bash
-▶ for _ in $(seq 1 10); do time $SHELL -i -c exit; done
-$SHELL -lic exit  0.05s user 0.01s system 59% cpu 0.102 total
-$SHELL -lic exit  0.06s user 0.00s system 57% cpu 0.110 total
-$SHELL -lic exit  0.06s user 0.00s system 56% cpu 0.109 total
-$SHELL -lic exit  0.04s user 0.02s system 55% cpu 0.111 total
-$SHELL -lic exit  0.04s user 0.02s system 56% cpu 0.110 total
-$SHELL -lic exit  0.04s user 0.02s system 58% cpu 0.107 total
-$SHELL -lic exit  0.04s user 0.02s system 56% cpu 0.109 total
-$SHELL -lic exit  0.06s user 0.00s system 56% cpu 0.110 total
-$SHELL -lic exit  0.05s user 0.01s system 57% cpu 0.106 total
-$SHELL -lic exit  0.06s user 0.00s system 56% cpu 0.110 total
+▶ zsh-bench
+==> benchmarking login shell of user meinzer1899...
+creates_tty=0
+has_compsys=0
+has_syntax_highlighting=0
+has_autosuggestions=0
+has_git_prompt=0
+first_prompt_lag_ms=26.164
+first_command_lag_ms=113.705
+command_lag_ms=2.420
+input_lag_ms=4.630
+exit_time_ms=106.416
 ```
+
+Although showing 0 `for has_syntax_highlighting`, `has_git_prompt`, `has_autosuggestions`, `has_compsys`, these are
+enabled.
 
 ![Work Environment](image/linux_environment.png "Linux Work Environment")
 
@@ -31,7 +35,7 @@ $SHELL -lic exit  0.06s user 0.00s system 56% cpu 0.110 total
 
 ```bash
 apt install python3.XX-venv # (e.g. 10)
-apt install xclip #zsh-system-keyboard
+apt install xclip #zsh-system-clipboard
 ```
 
 Don't upgrade system to use other python version than that available in apt. Can cause other commands

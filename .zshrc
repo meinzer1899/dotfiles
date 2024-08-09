@@ -1,4 +1,12 @@
+# Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
+# Initialization code that may require console input (password prompts, [y/n]
+# confirmations, etc.) must go above this block; everything else may go below.
+if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
+  source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
+fi
+
 # See man zshell for all settings
+# and use plugin zman
 
 # zinit loader
 if [[ -r "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" ]]; then
@@ -45,14 +53,10 @@ zi wait'0b' lucid for \
   if'[[ -d ~/.ssh ]]' \
   OMZP::ssh-agent
 
-# :prompt:pure:prompt:* changes the color for both `prompt:success` and `prompt:error`
-zi light-mode for compile'(pure|async).zsh' pick'async.zsh' src'pure.zsh' atload" \
-  PURE_PROMPT_SYMBOL='▶'; PURE_PROMPT_VICMD_SYMBOL='◀'; \
-  zstyle ':prompt:pure:git:stash' show 'yes'; \
-  zstyle ':prompt:pure:prompt:*' color 'magenta'; \
-  " \
-  nocd \
-  sindresorhus/pure
+# https://wiki.zshell.dev/community/gallery/collection/themes#thp-romkatv-powerlevel10k
+# .p10k.zsh is the config file
+# Run manually: p10k configure (The file ~/.p10k.zsh is auto sourced if exists).
+zi light-mode for @romkatv
 
 zi wait'0b' lucid for \
   as'program' pick'neofetch' \
@@ -282,8 +286,8 @@ zi ice wait lucid blockf has'fzf'
 zi light Aloxaf/fzf-tab
 
 # load this completions last -> https://wiki.zshell.dev/docs/guides/commands#calling-compinit-with-turbo-mode and https://wiki.zshell.dev/ecosystem/plugins/f-sy-h#-z-shellf-sy-h
-
 # https://wiki.zshell.dev/docs/guides/syntax/for
+# https://github.com/z-shell/z-a-meta-plugins/blob/60a820398cd9ede28f080e11ba51c2811372cdf9/z-a-meta-plugins.plugin.zsh#L11 is _SLOWER!_ than my working configuration. zsh-bench shows autosuggestions true, but the price is high (and I have autosuggestions either way).
 zi wait lucid light-mode for \
   atinit'zicompinit; zicdreplay' \
   zsh-users/zsh-syntax-highlighting \
@@ -370,6 +374,7 @@ setopt interactive_comments # Comments even in interactive shells.
 setopt multios              # Implicit tees or cats when multiple redirections are attempted.
 setopt no_beep              # Don't beep on error.
 setopt prompt_subst         # Substitution of parameters inside the prompt each time the prompt is drawn.
+setopt transient_rprompt    # Remove right prompt artifacts from prior commands.
 setopt pushd_ignore_dups    # Don't push multiple copies directory onto the directory stack.
 setopt pushd_minus          # Swap the meaning of cd +1 and cd -1 to the opposite.
 
