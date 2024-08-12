@@ -1,0 +1,8 @@
+# https://numbat.dev/doc/cli-customization.html#customization-1
+intro-banner = "long"
+prompt = "▶ "
+pretty-print = "auto"
+color = "auto"
+
+[exchange-rates]
+fetching-policy = "on-startup"

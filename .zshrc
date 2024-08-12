@@ -102,6 +102,14 @@ zi wait lucid as'program' from'gh-r' for \
   mv'fd* fd' sbin'**/fd(.exe|) fd' \
   @sharkdp/fd
 
+zi wait lucid as'program' from'gh' for \
+  atclone'export NUMBAT_SYSTEM_MODULE_PATH=$ZI[PLUGINS_DIR]/sharkdp---numbat/numbat/modules; \
+    cargo install -f --path numbat-cli; \
+  ' \
+  atpull'%atclone' \
+  sbin'target/release/numbat numbat' \
+  @sharkdp/numbat
+
 zi wait lucid as'program' from'gh-r' for \
   mv'delta* delta' \
   sbin'**/delta delta' \
