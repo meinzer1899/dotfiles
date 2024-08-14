@@ -396,9 +396,7 @@ AutocmdFT gitcommit startinsert!
 " number column may cause ugly formatting when entering terminal window via C-w N :(
 Autocmd TerminalWinOpen * setlocal signcolumn=no textwidth=0 winfixheight norelativenumber nonumber
 " Automatically update vim-fugitive buffer when opened
-" TODO: which one is faster?
 AutocmdFT fugitive exe ":Git"
-" Autocmd BufEnter * if &ft == 'fugitive' | exe ":Git" | endif
 
 " Auto indent pasted text
 " nnoremap p p=`]<C-o>
@@ -635,6 +633,14 @@ let g:fzf_action = {
 " TODO: use bind to toggle --no-ignore
 command! -bang -nargs=* Rg call fzf#vim#grep("rg --column --line-number --no-heading --color=always --smart-case --trim --no-ignore --hidden --glob '!*.git' -- ".shellescape(<q-args>), fzf#vim#with_preview(), <bang>0)
 command! -bang -nargs=* RG call fzf#vim#grep2("rg --column --line-number --no-heading --color=always --smart-case --trim --no-ignore --hidden --glob '!*.git' -- ", <q-args>, fzf#vim#with_preview(), <bang>0)
+" search manpages with fzf
+" https://github.com/junegunn/fzf.vim/issues/1389#issuecomment-1742038454
+command! -bang -nargs=? Apropos
+            \ call fzf#vim#grep('man --apropos '.fzf#shellescape(<q-args>), {
+            \   'sink': {line -> execute('Man '. join(split(line, ' ')[:1],''))},
+            \   'options': ['--preview', 'echo {1} | awk "{print \$1\$2}" | xargs man']
+            \ }, <bang>0)
+
 
 " FZF
 nnoremap <silent> <Leader>,     :Buffers<CR>
@@ -955,6 +961,14 @@ vnoremap $ $h
 " Visual shifting (does not exit Visual mode)
 vnoremap < <gv
 vnoremap > >gv
+
+" startify
+let g:startify_lists = []
+let g:startify_fortune_use_unicode = 1
+let g:startify_skiplist = [
+      \ 'COMMIT_EDITMSG',
+      \]
+Autocmd User Startified setlocal cursorline
 
 " Security
 set secure exrc
