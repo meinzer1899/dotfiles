@@ -32,7 +32,7 @@ export PATH=$PATH:$HOME/.local/bin
 [[ -n "$WORDCHARS" ]] || export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 # CMake
-export DCMAKE_EXPORT_COMPILE_COMMANDS=ON
+export CMAKE_EXPORT_COMPILE_COMMANDS=ON
 export MAKEFLAGS="-j$(nproc)"
 if (( $+commands[ninja] )); then
   export CMAKE_GENERATOR=Ninja
