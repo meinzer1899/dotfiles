@@ -21,7 +21,7 @@ fi
 #     repeat the install process to update fonts.
 zi ice if"[[ -d ${HOME}/.local/share/fonts ]] && [[ $OSTYPE = linux* ]]" \
   id-as'JetBrainsMono' from'gh-r' bpick'JetBrainsMono.tar.xz' extract nocompile depth'1' \
-  atclone="rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f" atpull'%atclone'
+  atclone='rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f' atpull'%atclone'
 zi light ryanoasis/nerd-fonts
 
 ### annexes
@@ -115,12 +115,12 @@ zi wait lucid as'program' from'gh-r' for \
   sbin'**/delta delta' \
   @dandavison/delta
 
+# last updated 3 yrs ago...
+zi ice wait'0b' lucid as'completion' blockf has'delta'
+zi snippet https://raw.githubusercontent.com/dandavison/delta/master/etc/completion/completion.zsh
+
 zi ice as"program" pick"bin/git-fuzzy"
 zi light bigH/git-fuzzy
-
-# last updated 3 yrs ago...
-zi ice wait lucid as'completion' blockf has'delta'
-zi snippet https://raw.githubusercontent.com/dandavison/delta/master/etc/completion/completion.zsh
 
 # gh, because of completions and man pages
 zi wait lucid as'program' from'gh' for \
@@ -179,7 +179,7 @@ zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'g
     id-as'junegunn/fzf' nocompile pick'/dev/null' sbin'fzf(|-tmux)' src'key-bindings.zsh' \
     junegunn/fzf
 
-# zi ice lucid wait"0b" pick'fzf-git.sh'
+# zi ice lucid wait'0b' pick'fzf-git.sh'
 # zi load junegunn/fzf-git.sh
 
 export FZF_DEFAULT_COMMAND="command fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '\!.git' || find ."
@@ -254,9 +254,11 @@ zi ice wait lucid as'completion' blockf has'zoxide'
 zi snippet https://github.com/ajeetdsouza/zoxide/blob/main/contrib/completions/_zoxide
 
 # https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
+# Cannot run make in parallel, because make targets have to be executed sequentially. Parallel build results
+# in mixed execution, failing when symlinking (ex,vimdiff, etc)
 zi ice as'program' atclone'rm -f src/auto/config.cache; \
-  ./configure --quiet --prefix=$ZPFX --enable-python3interp=yes --enable-luainterp=yes' \
-  atpull'%atclone' make'--quiet all install' pick'$ZPFX/bin/vim'
+  ./configure --quiet --prefix=$ZPFX --enable-python3interp=yes --enable-luainterp=yes --disable-gui' \
+  atpull'%atclone' make'--quiet -j1 all install' pick'$ZPFX/bin/vim'
 zi light vim/vim
 
 zi wait lucid as'program' from'gh-r' for \
@@ -512,7 +514,9 @@ alias -g .....='../../../..'
 alias -g ......='../../../../..'
 alias _='sudo '
 alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git root
-alias grep="grep --color"
+alias grep='grep --color '
+alias mv='mv -v '
+alias cp='cp -rv '
 
 ### misc
 # Use built-in paste magic.
