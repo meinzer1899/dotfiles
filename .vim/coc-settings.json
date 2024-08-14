@@ -1,3 +1,4 @@
+// show debug output via CocCommand workspace.showOutput
 {
   // https://github.com/neoclide/coc.nvim/wiki/Debug-language-server
   "languageserver": {
@@ -67,7 +68,6 @@
   "clangd.disableProgressNotifications": true,
   "clangd.showDBChangedNotification": false,
   // https://github.com/llvm/llvm-project/blob/llvmorg-15.0.6/clang-tools-extra/clangd/tool/ClangdMain.cpp
-  // show debug output via CocCommand workspace.showOutput
   // https://clangd.llvm.org/faq
   //"--query-driver=/bin/clang++",
   "clangd.arguments": [
@@ -80,7 +80,7 @@
     "--header-insertion=never",
     "--offset-encoding=utf-16",
     "--enable-config=true",
-    "--query-driver=/bin/clang++-*,/bin/g++-*,/bin/clang"
+    "--query-driver=/bin/clang++-*,/bin/g++-*"
   ],
   "clangd.path": "/bin/clangd",
   "inlayHint.enable": true,
