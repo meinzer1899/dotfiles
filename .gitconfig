@@ -53,16 +53,11 @@
 	templatedir = ~/.git-templates
 [delta]
 	navigate = true    # use n and N to move between diff sections
-	light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
 	side-by-side = false
 	paging = always
 	line-numbers = true
-	syntax-theme = TwoDark
+	syntax-theme = OneHalfDark
 	width = 1
-	minus-style = syntax "#450a15"
-	minus-emph-style = syntax "#600818"
-	plus-style = syntax "#0b4820"
-	plus-emph-style = syntax "#175c2e"
 	hunk-header-style = syntax bold
 	hunk-header-decoration-style = omit
 	file-style = yellow italic
