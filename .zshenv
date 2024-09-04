@@ -22,8 +22,10 @@ export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
 # ignore ones with a length greater than 80 -- thanks to https://github.com/Aloxaf
 export ZSH_AUTOSUGGEST_HISTORY_IGNORE='?(#c80,)'
 # https://github.com/zsh-users/zsh-autosuggestions
-export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20
+export ZSH_AUTOSUGGEST_BUFFER_MAX_SIZE=20 # recommended
 export ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=242"
+export ZSH_AUTOSUGGEST_STRATEGY=match_prev_cmd  # Match on previous history command also
+export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # pip
 export PATH=$PATH:$HOME/.local/bin
