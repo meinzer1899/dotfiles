@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail; shopt -s failglob # safe mode
+
 printf "Example bash script of using a confirmation dialog\n"
 
 confirm() {

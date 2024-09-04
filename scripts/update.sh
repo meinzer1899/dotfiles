@@ -2,7 +2,7 @@
 
 # enable bash strict mode
 # (http://redsymbol.net/articles/unofficial-bash-strict-mode/)
-set -o pipefail -o nounset
+set -euo pipefail; shopt -s failglob # safe mode
 IFS=$'\n\t'
 
 echo "Starting update"
@@ -15,6 +15,7 @@ volta install node@lts # installs latest LTS; node@20 installs latest node 20 ve
 volta install npm@bundled # needed for coc plugin install, @latest also available
 volta install bash-language-server
 # from time to time, uninstall old package versions via rm -rf in ~/.volta/tools/image/[node|npm]
+tree -L2 "$HOME/.volta/tools/image/"
 
 # fails when called outside of tmux session
 if [[ -n $TMUX  ]]; then

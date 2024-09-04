@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
-set -o pipefail -o nounset
+
+set -euo pipefail; shopt -s failglob # safe mode
 IFS=$'\n\t'
 
 # https://docs.volta.sh/guide/getting-started

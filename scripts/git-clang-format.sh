@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+# see also https://github.com/stephenberry/glaze/blob/main/util/run_clang-format.sh
+
 # @brief  Checks sources formatting with clang-format on files that differ from $CI_DEFAULT_BRANCH (defaults to main if not set).
 
 # @details  Files and directories are excluded when the caller sets a (extended) regex pattern EXCLUDE_PATTERN.

@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
 
+set -euo pipefail; shopt -s failglob # safe mode
+
 # [Returning a boolean from a Bash function](https://stackoverflow.com/questions/5431909/returning-a-boolean-from-a-bash-function/43840545?noredirect=1#comment79132096_5431932)
 # [conditional execution](https://unix.stackexchange.com/a/22738)
 
