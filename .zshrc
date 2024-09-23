@@ -113,11 +113,9 @@ zi wait lucid as'program' from'gh' for \
 zi wait lucid as'program' from'gh-r' for \
   mv'delta* delta' \
   sbin'**/delta delta' \
+  atpull'%atclone' \
+  atclone'./delta/delta --generate-completion zsh > _delta' \
   @dandavison/delta
-
-# last updated 3 yrs ago...
-zi ice wait'0b' lucid as'completion' blockf has'delta'
-zi snippet https://raw.githubusercontent.com/dandavison/delta/master/etc/completion/completion.zsh
 
 zi ice as"program" pick"bin/git-fuzzy"
 zi light bigH/git-fuzzy
