@@ -2,6 +2,12 @@
 
 shell=bash
 
-enable=avoid-nullary-conditions  # Suggest explicitly using -n in `[ $var ]`
-enable=deprecate-which           # Suggest `command -v` instead of `which`
-enable=add-default-case          # Suggest adding a default case in `case` statements
+source-path=SCRIPTDIR
+
+# https://github.com/koalaman/shellcheck/wiki/Optional
+enable=add-default-case             # Suggest adding a default case in `case` statements
+enable=avoid-nullary-conditions     # Suggest explicitly using -n in `[ $var ]`
+enable=check-unassigned-uppercase   # Warn when uppercase variables are unassigne
+enable=check-set-e-suppressed       # Notify when set -e is suppressed during function invocation
+enable=deprecate-which              # Suggest `command -v` instead of `which`
+enable=require-double-brackets      # Require [[ and warn about [ in Bash/Ksh

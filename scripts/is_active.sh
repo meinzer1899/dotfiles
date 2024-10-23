@@ -30,11 +30,11 @@ is_active_regex() {
 }
 
 is_active_short() {
-    [ "$1" == 'on' ] || [ "$1" == 'ok' ]
+    [[ "$1" == 'on' || "$1" == 'ok' ]]
 }
 
 is_active_true() {
-    if [ "$1" == 'on' ] || [ "$1" == 'ok' ]; then
+    if [[ "$1" == 'on' || "$1" == 'ok' ]]; then
         true
     else
         false
@@ -60,7 +60,8 @@ ERROR=0
 
 string_representing_true=(1 y yes t true o on)
 for string in "${string_representing_true[@]}"; do
-    if ! is_true "$string"; then
+    is_true=$(is_true "$string")
+    if ! $is_true; then
         echo "is_true returned \"false\" unexpectedly"
     fi
 done

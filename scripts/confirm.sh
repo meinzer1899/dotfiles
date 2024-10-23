@@ -17,4 +17,4 @@ confirm() {
     esac
 }
 
-confirm "This is an example, check the script for the how. [y/N]" && printf "You confirmed.\n"
+confirm "This is an example, check the script for the how. [y/N]"; printf "You confirmed.\n"
