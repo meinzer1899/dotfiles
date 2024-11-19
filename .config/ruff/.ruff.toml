@@ -1,3 +1,4 @@
+# https://github.com/astral-sh/ruff/blob/main/docs/configuration.md
 select = ["ALL"]
 ignore = [
     "E501",
@@ -42,3 +43,4 @@ exclude = [
 
 # Same as Black.
 line-length = 88
+indent-width = 4

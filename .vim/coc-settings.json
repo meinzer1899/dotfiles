@@ -69,7 +69,6 @@
   "clangd.showDBChangedNotification": false,
   // https://github.com/llvm/llvm-project/blob/llvmorg-15.0.6/clang-tools-extra/clangd/tool/ClangdMain.cpp
   // https://clangd.llvm.org/faq
-  //"--query-driver=/bin/clang++",
   "clangd.arguments": [
     "--all-scopes-completion=true",
     "--background-index=true",
@@ -80,7 +79,7 @@
     "--header-insertion=never",
     "--offset-encoding=utf-16",
     "--enable-config=true",
-    "--query-driver=/bin/clang++-*,/bin/g++-*"
+    "--query-driver=/usr/bin/clang++-*,/usr/bin/g++-*"
   ],
   "clangd.path": "/bin/clangd",
   "inlayHint.enable": true,
