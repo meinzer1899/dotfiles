@@ -368,6 +368,12 @@ set path+=**
 " stop vim from silently messing with files that it shouldn't
 set nofixendofline
 
+" visual
+" allow virtual editing in visual block mode
+set virtualedit+=block
+" visually select most recently pasted text
+nnoremap gV `[v`]
+
 " Vimrc augroup
 augroup MyVimrc
   " Clear all autocommands in the group to avoid defining them multiple
@@ -405,7 +411,7 @@ Autocmd BufRead,BufNewFile *.tpp set filetype=cpp
 Autocmd BufRead,BufNewFile .tmux.conf set filetype=tmux
 AutocmdFT cpp setlocal matchpairs+=<:>
 Autocmd BufRead,BufNewFile .clang-format set filetype=yaml
-AutocmdFT {markdown,gitcommit} setlocal spell spelllang=en_us
+AutocmdFT {markdown,gitcommit,doxygen} setlocal spell spelllang=en_us
 if exists('*CocActionAsync')
   " Update signature help on jump placeholder.
   Autocmd User CocJumpPlaceholder call CocActionAsync('showSignatureHelp')
@@ -450,17 +456,21 @@ Plug 'junegunn/fzf.vim'
 Plug 'tpope/vim-surround'
 Plug 'tpope/vim-repeat'
 Plug 'tpope/vim-commentary'
-" adds many mapping, e.g. ]q for cnext (quickfix)
-nmap < [
-nmap > ]
-omap < [
-omap > ]
-xmap < [
-xmap > ]
+" easier to reach on a german keyboard
+nmap < ]
+nmap > [
+omap < ]
+omap > [
+xmap < ]
+xmap > [
 Plug 'tpope/vim-unimpaired'
 Plug 'tpope/vim-fugitive'
 " Asynchronous build and test dispatcher
 Plug 'tpope/vim-dispatch'
+" open tmux screen on the right
+let g:dispatch_tmux_height = '50% -h'
+" open quickfix list on the right
+AutocmdFT qf wincmd L
 Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-endwise'
 " loads very good defaults, e.g. man.vim or matchit.vim
@@ -485,6 +495,7 @@ Plug 'mhinz/vim-startify'
 " Plug 'metakirby5/codi.vim'
 " Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
+let g:polyglot_disabled = ['autoindent', 'sensible']
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
 Plug 'mbbill/undotree'
@@ -553,6 +564,7 @@ Plug 'ryanoasis/vim-devicons'
 call plug#end()
 
 " COLORS
+" https://github.com/sunaku/.vim/blob/master/plugin/color.vim
 " from https://github.com/rhysd/dogfiles/blob/ba7624a7391da033fb328eaa67bb5743368dab4e/vimrc#L1120
 if !has('gui_running') && $TMUX !=# ''
   set t_Co=256
@@ -688,8 +700,9 @@ command! -bang -nargs=* GGrep
 
 " merge conflict commands in a 3-way-diff with: 1 - middle (BASE), 2 - left (LOCAL), 3 - right side (REMOTE)
 " https://git-scm.com/docs/vimdiff/en
-nnoremap <Leader>gj :diffget //3<CR>
-nnoremap <Leader>gf :diffget //2<CR>
+" https://github.com/sunaku/.vim/blob/master/plugin/diff.vim
+nnoremap <Leader>gj :diffget //3<Bar>diffupdate<CR>
+nnoremap <Leader>gf :diffget //2<Bar>diffupdate<CR>
 
 " LIGHTLINE
 
@@ -803,7 +816,9 @@ if s:on_win
   noremap <Leader>p :tab term<CR>
 else
   if executable('zsh')
-    noremap <silent><leader>p :term ++rows=16<CR>
+    " botright: open far right (splitright)
+    noremap <silent><leader>P :term ++rows=16<CR>
+    noremap <silent><leader>p :botright vert term<CR>
   else
     " set termwinsize=16x0
     noremap <silent><Leader>p :term ++rows=16<CR>source $HOME/.bash_profile<CR>clear<CR>
@@ -937,14 +952,6 @@ let g:slime_target = 'vimterminal'
 let g:slime_vimterminal_cmd = 'python'
 " Send whole file to slime via C-c C-x
 " nnoremap <c-c><c-x> :%SlimeSend<cr>
-
-" coc-yank
-" show list with yanked lines
-nnoremap <silent> <leader>y  :<C-u>CocList -A --normal yank<cr>
-
-" vim-quickscope
-" Trigger a highlight in the appropriate direction when pressing these keys:
-let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " vim indentLine
 let g:indentLine_char = '▏'
