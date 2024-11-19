@@ -264,6 +264,22 @@ nnoremap cp yap<S-}>p
 " Control-v is a common system level shortcut to paste from the clipboard. So why not use it also to paste from the system clipboard when in insert mode.
 inoremap <C-v> <C-r>+
 
+" https://github.com/sunaku/.vim/blob/master/plugin/command.vim
+" enable EMACS-style cursor movement inside command mode
+" https://statico.github.io/vim.html#rudimentary-essentials
+cnoremap <C-A> <Home>
+" cnoremap <C-B> <Left>
+" cnoremap <C-F> <Right>
+cnoremap <C-D> <Delete>
+cnoremap <A-b> <S-Left>
+cnoremap <A-f> <S-Right>
+cnoremap <A-d> <S-Right><Delete>
+cnoremap <C-G> <C-C>
+
+" keep visual selection when (de)indenting
+xnoremap < <gv
+xnoremap > >gv
+
 " mappings to make search results appear in the middle of the screen
 " https://vim.fandom.com/wiki/Make_search_results_appear_in_the_middle_of_the_screen
 nnoremap n nzz
