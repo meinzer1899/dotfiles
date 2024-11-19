@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-set -euo pipefail; shopt -s failglob # safe mode
+set -uo pipefail; shopt -s failglob # safe mode
 
 # [Returning a boolean from a Bash function](https://stackoverflow.com/questions/5431909/returning-a-boolean-from-a-bash-function/43840545?noredirect=1#comment79132096_5431932)
 # [conditional execution](https://unix.stackexchange.com/a/22738)
@@ -14,7 +14,7 @@ to_lower_comma_operator() {
     echo "${1,,}"
 }
 
-##? Check whether a string represents "true" (1, y, yes, t, true, o, on).
+# Check whether a string represents "true" (1, y, yes, t, true, o, on).
 # https://github.com/mattmc3/zdotdir/blob/85bdc0f22d250554b2295a8ae812ba4c7d749232/lib/archive/__init__.zsh#L70
 # =~ is regex comparison
 is_true() {
@@ -56,13 +56,21 @@ is_active_true() {
 #     # returns false implicitly otherwise
 # }
 
+set_error_with_message() {
+    echo "$1"
+    ERROR=1
+}
+
 ERROR=0
 
+# TODO: scripts aborts w/o error message when one of the string does not represent true
+# because of set -e
+# I think here is the explanation: https://mywiki.wooledge.org/BashFAQ/105
 string_representing_true=(1 y yes t true o on)
 for string in "${string_representing_true[@]}"; do
-    is_true=$(is_true "$string")
-    if ! $is_true; then
-        echo "is_true returned \"false\" unexpectedly"
+    istrue=$(is_true "$string")
+    if ! $istrue; then
+        set_error_with_message "is_true returned \"false\" unexpectedly"
     fi
 done
 
@@ -71,10 +79,9 @@ vars=("OK" "Ok" "ON" "On")
 funcs=(to_lower_tr to_lower_comma_operator)
 for f in "${funcs[@]}"; do
     for value in "${vars[@]}"; do
-        lower=$($f "$value")
+        lower="$($f "$value")"
         if ! [[ $lower =~ o[kn] ]]; then
-            echo "Function $f returned \"false\" for \"$value\" unexpectedly"
-            ERROR=1
+            set_error_with_message "Function $f returned \"false\" for \"$value\" unexpectedly"
         fi
     done
 done
@@ -85,8 +92,17 @@ funcs=(is_active_short is_active_regex is_active_true)
 for e in "${funcs[@]}"; do
     for value in "${varsPositive[@]}"; do
         if ! $e "$value"; then
-            echo "Function $e returned \"false\" for \"$value\" unexpectedly"
-            ERROR=1
+            set_error_with_message "Function $e returned \"false\" for \"$value\" unexpectedly"
+        fi
+    done
+done
+
+# Negative test cases
+varsNegative=("off" "no" "asd")
+for e in "${funcs[@]}"; do
+    for value in "${varsNegative[@]}"; do
+        if $e "$value"; then
+            set_error_with_message "Function $e returned \"true\" for \"$value\" unexpectedly"
         fi
     done
 done
@@ -97,8 +113,7 @@ funcs=(is_active_regex_lower_and_upper)
 for e in "${funcs[@]}"; do
     for value in "${varsPositive[@]}"; do
         if ! $e "$value"; then
-            echo "Function $e returned \"false\" for \"$value\" unexpectedly"
-            ERROR=1
+            set_error_with_message "Function $e returned \"false\" for \"$value\" unexpectedly"
         fi
     done
 done
@@ -108,12 +123,11 @@ varsNegative=("off" "no" "asd")
 for e in "${funcs[@]}"; do
     for value in "${varsNegative[@]}"; do
         if $e "$value"; then
-            echo "Function $e returned \"true\" for \"$value\" unexpectedly"
-            ERROR=1
+            set_error_with_message "Function $e returned \"true\" for \"$value\" unexpectedly"
         fi
     done
 done
 
-[[ $ERROR -ne 0 ]] && exit 1
+[[ $ERROR -ne 0 ]] && echo "At least one test failed." && exit 1
 
 echo "All tests passed"

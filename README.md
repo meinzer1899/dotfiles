@@ -101,6 +101,25 @@ https://wiki.zshell.dev/docs/getting_started/installation => loader.
 * https://github.com/agkozak/
 * https://github.com/seagle0128/dotfiles/blob/master/.zshrc
 
+## bash
+
+https://mywiki.wooledge.org/BashPitfalls
+https://mywiki.wooledge.org/BashPitfalls#set_-euo_pipefail recommends against `set -e` because of the various pitfalls especially in conditional evaluation and option `pipefail` and recommends own error handling instead.
+http://redsymbol.net/articles/unofficial-bash-strict-mode/
+and http://redsymbol.net/articles/unofficial-bash-strict-mode/#short-circuiting
+```bash
+set -euo pipefail; shopt -s failglob # safe mode
+```
+
+To release resources, use bash exit traps. http://redsymbol.net/articles/bash-exit-traps/
+
+* https://mywiki.wooledge.org/BashFAQ
+* https://mywiki.wooledge.org/BashGuide
+* https://mywiki.wooledge.org/BashPitfalls
+* https://www.gnu.org/software/bash//manual/html_node/The-Shopt-Builtin.html
+* https://quickref.me/bash
+* https://devhints.io/bash
+
 ## git
 
 * https://github.com/stevearc/dotfiles/blob/master/.githelpers
