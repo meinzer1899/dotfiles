@@ -313,6 +313,7 @@ nnoremap cI> F>ci>
 nnoremap cI> F>ci>
 " Make Y consistent with C and D.  See :help Y.
 nnoremap Y y$
+vnoremap Y <Esc>y$gv
 
 " Return to the previous cursor position
 " " --------------------------------------
@@ -333,9 +334,8 @@ map '' ``
 "   - reset colorcolumn
 "   - redraw screen
 nnoremap <silent> <C-l>
-      \ :nohl                               <BAR>
-      \ :hi clear YankedMatches             <BAR>
-      \ :set colorcolumn&                   <BAR>
+      \ :nohl                               <Bar>
+      \ :set colorcolumn&                   <Bar>
       \ :redraw <CR>
 
 " diffopt
