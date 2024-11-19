@@ -495,7 +495,6 @@ Plug 'stsewd/fzf-checkout.vim'
 " Plug 'bfrg/vim-cpp-modern'
 " REPL environment
 " Plug 'jpalardy/vim-slime'
-Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/gv.vim'
 Plug 'junegunn/vim-easy-align'
 " Start interactive EasyAlign in visual mode (e.g. vipga)
@@ -547,6 +546,8 @@ Plug 'wellle/tmux-complete.vim'
 if !has('nvim')
   Plug 'rhysd/vim-healthcheck'
 endif
+" load devicons at last
+Plug 'ryanoasis/vim-devicons'
 
 " Initialize plugin system
 call plug#end()
