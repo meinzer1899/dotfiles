@@ -168,22 +168,19 @@ endif
 
 
 " --- backup and swap files ---
-set nobackup                                                               " no backups, I have persistent undo
-set nowritebackup
-set noswapfile
-
+" https://github.com/sunaku/.vim/blob/master/plugin/save.vim
 " persistent undo :h undotree.txt
-if has('persistent_undo')
-  let target_path = expand('~/.undodir')
+set nobackup writebackup
+set undofile undodir=$HOME/.vim-undo// undolevels=1024
+set swapfile directory=$HOME/.vim-swap//
 
-  " create the directory and any parent directories
-  " if the location does not exist.
-  if !isdirectory(target_path) | call mkdir(target_path, 'p', 0700) | endif
+" Vim and NeoVim have incompatible undo files, so use different dirs
+let vim = fnamemodify($VIM, ':t')
+execute 'set undodir='.substitute(&undodir, '/\.\zsvim\ze-', vim, '')
 
-  let &undodir=target_path
-  set undofile
-  set undolevels=1024
-endif
+" create undo and swap directories as necessary
+if !isdirectory(&undodir)   | call mkdir(&undodir,   'p', 0700) | endif
+if !isdirectory(&directory) | call mkdir(&directory, 'p', 0700) | endif
 
 " Save a lot more history
 set history=200
@@ -332,10 +329,12 @@ set selection=exclusive
 set conceallevel=0
 
 " Limit suggestions when spell checking with z=.
-" having german (de_20) here, it checks both english and german. Tip: enable german if needed buffer locally (setlocal)
-set nospell spelllang=en
-set spellsuggest=best,15
+" having German (de_20) here, it checks both English and German. Tip: enable German if needed buffer locally (setlocal)
+set nospell spelllang=en_us
+set spelloptions=camel
+set spellsuggest=best,5
 
+" preserves cursor position when switching
 set nostartofline
 
 " prevents truncated yanks, deletes, etc.
@@ -395,7 +394,7 @@ endif
 AutocmdFT gitcommit startinsert!
 " number column may cause ugly formatting when entering terminal window via C-w N :(
 Autocmd TerminalWinOpen * setlocal signcolumn=no textwidth=0 winfixheight norelativenumber nonumber
-" Automatically update vim-fugitive buffer when opened
+" Automatically update vim-fugitive buffer when selected
 AutocmdFT fugitive exe ":Git"
 
 " Auto indent pasted text
