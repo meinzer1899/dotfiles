@@ -2,8 +2,9 @@
 # * CocCommand workspace.showOutput
 # * clangd --log=verbose --check=path/to/file
 # https://clangd.llvm.org/config#diagnostics
+# https://clang.llvm.org/docs/DiagnosticsReference.html
 If:
-  PathMatch: [/usr/include/.*, .*/build/.*]
+  PathMatch: [/usr/include/.*, .*/build*/.*]
 Diagnostics:
   Suppress: '*'
   ClangTidy:
@@ -27,7 +28,7 @@ CompileFlags:
     - -Wpedantic # warn if non-standard C++ is used
     # recommended
     - -Wshadow
-    - -Wconversion # warn on type conversions that may lose data
+    - -Wconversion # warn on type conversions that may lose data, https://clang.llvm.org/docs/DiagnosticsReference.html#wconversion
     - -fsanitize=undefined,address
     - -Wfloat-equal
     - -Wformat-nonliteral
