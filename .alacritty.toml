@@ -56,9 +56,6 @@ yellow = "0xe5c07b"
 background = "0x282c34"
 foreground = "0xabb2bf"
 
-[env]
-TERM = "xterm-256color"
-
 [font]
 size = 13.0
 
