@@ -91,7 +91,7 @@ set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
 set formatoptions+=q   " allow formatting of comments with gq
 set formatoptions-=w   " don't use trailing whitespace for paragraphs
 set formatoptions-=a   " disable auto-formatting of paragraph changes
-set formatoptions-=n   " don't recognized numbered lists
+set formatoptions-=n   " automatically indent numbered lists
 set formatoptions+=j   " delete comment prefix when joining
 set formatoptions-=2   " don't use the indent of second paragraph line
 set formatoptions-=v   " don't use broken 'vi-compatible auto-wrapping'
@@ -105,11 +105,15 @@ set formatoptions+=p   " don't break a line after a one-letter word
 " Don't leave two spaces between two sentences (foo.  Bar) when joining lines (J)
 set nojoinspaces
 
+" errorformat
+" :compiler adjusts errorformat (e.g. gcc for C++)
+" https://flukus.github.io/vim-errorformat-demystified.html
+" https://deardevices.com/2018/04/15/vim-errorformat-challenge/
+
 " Fix Vim's ridiculous line wrapping model
 set whichwrap=<,>,[,],h,l
 
 " ================ Folds ============================
-
 " fold based on indent
 set foldmethod=syntax
 " deepest fold is 3 levels
@@ -118,7 +122,6 @@ set foldnestmax=3
 set nofoldenable
 
 "" ================ Indentation ======================
-"
 " tabstop: Set how many spaces _looks_ a tab.
 set tabstop=4
 " shiftwidth: Number of spaces to use for each step of (auto)indent.
@@ -240,12 +243,16 @@ set sidescrolloff=15
 set sidescroll=1
 
 let g:mapleader = ' '
+" map leader as <space>
+nnoremap <Space> <nop>
+let g:mapleader ="\<Space>"
 nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
-nnoremap <silent> <Leader>s :update<CR>
-nnoremap <silent> <Leader>gs :vertical :Git <CR>:vertical resize 45<CR>:setlocal winfixwidth<CR>
+nnoremap <silent> <Leader>s <c-c>:update<CR>
+nnoremap <silent> <Leader>gs :leftabove vertical Git <CR>:vertical resize 45<CR>:setlocal winfixwidth<CR>:wincmd =<CR>
 nnoremap <silent> <Leader>gp :Git! push<CR>
 nnoremap <silent> <Leader>cc :Commands<CR>
+" execute last ex command
 nnoremap <silent> <Leader>q :@:<CR>
 nnoremap <silent> <Leader>co :Copen<CR> G<CR>
 nnoremap <silent> <Leader>rc :vs $MYVIMRC<CR>
@@ -361,7 +368,7 @@ Autocmd ColorScheme * highlight def link myVimAutocmd vimAutoCmd
 
 " Trim trailing whitespace from line endings
 Autocmd BufWritePre * :%s/ \+$//e
-Autocmd VimResized * wincmd =
+Autocmd VimResized * horizontal wincmd =
   " When editing a file, always jump to the last known cursor position.
   " Don't do it for commit messages, when the position is invalid, or
   " when inside an event handler (happens when dropping a file on gvim).
