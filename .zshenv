@@ -12,7 +12,7 @@ fi
 # https://zameermanji.com/blog/2012/12/30/using-vim-as-manpager/
 export EDITOR="vim"
 export MANPAGER="vim +MANPAGER -R --not-a-term -"
-export MANWIDTH="100"
+export MANWIDTH="999"
 export VISUAL="$EDITOR"
 export BLOCKSIZE="K" # show blocks as kilobytes
 unset MAILCHECK # don't check for mails
