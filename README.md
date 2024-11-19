@@ -10,15 +10,15 @@ has_compsys=0
 has_syntax_highlighting=0
 has_autosuggestions=0
 has_git_prompt=0
-first_prompt_lag_ms=26.164
-first_command_lag_ms=113.705
-command_lag_ms=2.420
-input_lag_ms=4.630
-exit_time_ms=106.416
+first_prompt_lag_ms=26.536
+first_command_lag_ms=115.626
+command_lag_ms=2.363
+input_lag_ms=4.038
+exit_time_ms=101.818
 ```
 
-Although showing 0 `for has_syntax_highlighting`, `has_git_prompt`, `has_autosuggestions`, `has_compsys`, these are
-enabled.
+Although showing `0` for `has_syntax_highlighting`, `has_git_prompt`, `has_autosuggestions`, `has_compsys`,
+these are enabled.
 
 ![Work Environment](image/linux_environment.png "Linux Work Environment")
 
@@ -33,13 +33,21 @@ enabled.
 
 ## pip
 
+* difference python pip install <> vs python -m pip install <> https://stackoverflow.com/questions/25749621/whats-the-difference-between-pip-install-and-python-m-pip-install
+* https://thelinuxcode.com/python-requirements-txt-file/
+
 ```bash
 apt install python3.XX-venv # (e.g. 10)
-apt install xclip #zsh-system-clipboard
 ```
 
 Don't upgrade system to use other python version than that available in apt. Can cause other commands
 (e.g. apt-get) to break.
+
+## clipboard
+
+```bash
+apt install xclip
+```
 
 ## Remap CAPSLOCK to ctrl
 
@@ -84,10 +92,14 @@ zi loader is included in dotfiles (.config/zi); if not, see
 https://wiki.zshell.dev/docs/getting_started/installation => loader.
 
 ### misc
+
 * https://registerspill.thorstenball.com/p/how-fast-is-your-shell
 * https://github.com/unixorn/awesome-zsh-plugins
 
 ### zshrcs
+
+* https://github.com/bew/dotfiles/tree/main/zsh
+* https://github.com/HaleTom/dotfiles/blob/main/zsh/.config/zsh/.zshrc
 * https://github.com/mattmc3/zdotdir
 * https://github.com/doronbehar/dotfiles/blob/master/.zshrc
 * https://github.com/ctrueden/dotfiles/blob/main/zshrc
@@ -122,6 +134,7 @@ To release resources, use bash exit traps. http://redsymbol.net/articles/bash-ex
 
 ## git
 
+* https://github.com/gitleaks/gitleaks Protect and discover secrets using Gitleaks 🔑
 * https://github.com/stevearc/dotfiles/blob/master/.githelpers
 * https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
 
@@ -190,7 +203,8 @@ Vim Integration: https://github.com/junegunn/fzf/blob/master/README-VIM.md
 
 ## docker
 
-analyze image size, vulnerabilities and more: https://github.com/wagoodman
+https://stackoverflow.com/questions/45023363/what-is-docker-io-in-relation-to-docker-ce-and-docker-ee-now-called-mirantis-k
+https://docs.docker.com/engine/install/ubuntu
 
 ```bash
     docker run --detach -v $(pwd):$(pwd) -w $(pwd) --name <name> image:tag sleep infinity # may does not work, if ENTRYPOINT is set in Dockerfile
@@ -199,15 +213,35 @@ analyze image size, vulnerabilities and more: https://github.com/wagoodman
     docker exec -it <name> /bin/bash # attach interactively
     docker stop name # to stop
 ```
+
+* https://github.com/wagoodman analyze image size, vulnerabilities and more
+* https://github.com/kkvh/vim-docker-tools Toolkit for managing docker containers, networks and images in vim.
+
+* https://github.com/lmapii/cproject Example for a C environment with CMake, Docker, Unity, and GitHub Actions.
+* https://github.com/philips-software/amp-devcontainer/tree/main/.devcontainer/cpp
 * https://github.com/StableCoder/docker-build-core
 * https://github.com/think-cell/docker
+* https://github.com/foonathan/docker/tree/main
 * https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
 
 ## vim
-https://learnvimscriptthehardway.stevelosh.com/
 
-https://github.com/mattmc3/neovim-cheatsheet
+* https://github.com/ibhagwan/vim-cheatsheet
+* https://learnvimscriptthehardway.stevelosh.com/
+* https://github.com/mattmc3/neovim-cheatsheet
 
+* https://www.youtube.com/playlist?list=PLrU0uga7kmr0dsc3wWS4TS9mRX0Ue7kn Vim Universe Playlist
+* https://swedishembedded.com/developers/vim-in-minutes Awesome Vim: Modern Guide To A Fully Featured Vim IDE
+* https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
+* https://vimtricks.com/p/category/tips-and-tricks/
+* http://vimcasts.org/episodes/search-multiple-files-with-vimgrep/
+* https://github.com/yuki-yano/fzf-preview.vim
+
+Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
+
+### vimrcs
+
+* https://github.com/sunaku/.vim/tree/master
 * https://github.com/mrnugget/vimconfig/tree/master
 * https://github.com/itchyny/dotfiles/blob/main/.vimrc
 * https://github.com/mischavandenburg/dotfiles/blob/main/vim/.vimrc
@@ -221,13 +255,6 @@ https://github.com/mattmc3/neovim-cheatsheet
 * https://github.com/fannheyward/init.vim/blob/master/coc-settings.json
 * https://github.com/fannheyward/init.vim/blob/master/init.vim
 
-* https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
-* https://vimtricks.com/p/category/tips-and-tricks/
-* http://vimcasts.org/episodes/search-multiple-files-with-vimgrep/
-* https://github.com/yuki-yano/fzf-preview.vim
-
-Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
-
 ### lua support
 
 ```bash
@@ -237,6 +264,7 @@ apt install luaX.X libluaX.X-dev luajit
 
 ### devcontainer
 
+* https://github.com/stepchowfun/toast Containerize your development and continuous integration environments. 🥂
 * https://www.docker.com/blog/how-to-setup-your-local-node-js-development-environment-using-docker/
 * https://stackoverflow.com/questions/51809181/how-to-run-tmux-inside-a-docker-container
 * https://wiki.zshell.dev/ecosystem/packages/usage#statically-linked-hermetic-relocatable-zsh
@@ -273,18 +301,31 @@ https://github.com/hadolint/hadolint
 
 ## C++ cpp
 
-https://github.com/HappyCerberus/daily-bite-cpp (especially Modern-only C++ Course)
+compiler warnings
+* https://clang.llvm.org/docs/DiagnosticsReference.html
+* https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+
+* https://github.com/stephenberry/glaze Extremely fast, in memory, JSON and interface library for modern C++
+
+* https://github.com/HappyCerberus/daily-bite-cpp (especially Modern-only C++ Course)
 [Playlist: Modern C++ Series - Mike Shah](https://www.youtube.com/playlist?list=PLvv0ScY6vfd8j-tlhYVPYgiIyXduu6m-L)
-https://akrzemi1.wordpress.com/
-https://www.meetingcpp.com/blog/blogroll/
+* https://akrzemi1.wordpress.com/
+* https://www.meetingcpp.com/blog/blogroll/
 
 playground
 [HU print chunks 0001'0203'...'0e0f](https://godbolt.org/z/98zvoc7Eb)
 
-### ccls
+### ccls languageserver
 
 * https://github.com/MaskRay/ccls/wiki/Build
 * https://github.com/MaskRay/ccls/wiki/Install
+
+### [googletest](https://google.github.io/googletest/)
+
+Reduce execution times of unit tests:
+* run CTest in parallel `ctest -j$(nproc)`
+* use `gtest_add_tests` from https://cmake.org/cmake/help/latest/module/GoogleTest.html
+* this executes a list of all _test cases_ instead of _test executables_, which is much faster
 
 ### CMake
 
@@ -293,8 +334,10 @@ Use install-cmake.sh from foonathan to install to /usr/local. May remove "old" c
 https://blog.feabhas.com/category/build-systems/
 with https://github.com/feabhas/cmake-presets-blog
 
-* https://github.com/philips-software/amp-devcontainer/tree/main/.devcontainer/cpp
-* https://github.com/intel/cicd-repo-infrastructure/
+* https://github.com/madduci/moderncpp-project-template A Modern C++ cross-platform Project Template with CMake, conan (optional), cppcheck (optional) and clang-format (optional)
+* https://github.com/filipdutescu/modern-cpp-template A template for modern C++ projects using CMake, Clang-Format, CI, unit testing and more, with support for downstream inclusion.
+* https://github.com/TheLartians/Format.cmake Stylize your code! Automatic clang-format and cmake-format targets for CMake.
+* https://github.com/intel/cicd-repo-infrastructure
 * https://github.com/StableCoder/cmake-scripts
 * https://github.com/cpp-best-practices/cmake_template
 
@@ -305,7 +348,11 @@ with https://github.com/feabhas/cmake-presets-blog
 
 Determine the minimal required CMake version of a project: [cmake_min_version](https://github.com/nlohmann/cmake_min_version)
 
-### llvm, clang, clangd
+### Optimization, performance, profiling
+
+* https://vitaut.net/posts/2024/faster-cpp-compile-times/
+
+### _llvm_, `clang`, `clangd`
 
 https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
 ```cmake
@@ -322,7 +369,7 @@ https://apt.llvm.org/ -> Automatic installation script
 installs *all* llvm packages (also clangd, clang-tidy, include-cleaner etc) at `/bin`.
 Also adds apt.llvm.org to apt package list to automatically get updates.
 
-Need to update alternatives for clang-format, clangd, clang-tidy.
+Need to update alternatives for llvm tools, e.g. clang-format, clangd, clang-tidy, lld.
 ```bash
 sudo update-alternatives --install /bin/clang-format clang-format /bin/clang-format-17 20
 ```
@@ -341,18 +388,21 @@ https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-l
 
 ### GDB
 
+https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html
 ```vim
 :packadd termdebug
-:Termdebug
+:Termdebug " help Termdebug, :Arguments <args, eg. --gtest_filter=<unquoted regex>
 ```
 
+* https://jotavare.github.io/gdb_cheatsheet/
+* https://github.com/sharkdp/dbg-macro A dbg(…) macro for C++
+* Replace .gdbinit with https://github.com/pwndbg/pwndbg Exploit Development and Reverse Engineering with GDB Made Easy
 * https://developers.redhat.com/articles/2021/10/05/printf-style-debugging-using-gdb-part-1#
 * https://developers.redhat.com/articles/2021/10/13/printf-style-debugging-using-gdb-part-2#
-* https://www.dannyadam.com/blog/2019/05/debugging-in-vim/
-* https://gabriellesc.github.io/teaching/resources/GDB-cheat-sheet.pdf
 
 ## asynctask
 
+* https://github.com/mg979/tasks.vim rewrite of asynctasks
 * https://github.com/skywind3000/asynctasks.vim
 * https://github.com/albertomontesg/lightline-asyncrun
 * https://github.com/deathmaz/fzf-lua-asynctasks (neovim)
@@ -363,6 +413,11 @@ https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-l
 
 ## dotfiles management
 
+* https://github.com/yous/dotfiles
+* https://github.com/sunaku/home
+* https://sunaku.github.io/about.html
+* https://github.com/ibhagwan/dots
+* https://github.com/hamvocke/dotfiles
 * I use stow.
 * Manage dotfiles and any git directories interactively with fzf https://github.com/kazhala/dotbare
 * https://dotfiles.github.io/
@@ -383,10 +438,12 @@ CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 [C++ Coding with Neovim - Prateek Raman - CppCon 2022](https://youtube.com/watch?v=nzRnWUjGJl8&si=0djsLRaeer54Zc8G)
 Neovim for C++: https://www.youtube.com/watch?v=lsFoZIg-oDs
 
+https://github.com/kristijanhusak/neovim-config
+
 Use FZF instead of telescope
+* https://github.com/ibhagwan/nvim-lua
 * https://github.com/ibhagwan/fzf-lua#why-fzf-lua
 * https://github.com/deathmaz/fzf-lua-asynctasks
-* https://github.com/ibhagwan/nvim-lua
 
 * https://www.youtube.com/watch?v=stqUbv-5u2s TJ De Vries  Effective Neovim: Instant IDE
 * https://codevion.github.io/#!vim/cpp2.md: (Neo)vim for C++ Part 2: CMake, GTest, File Explorer, etc
@@ -416,3 +473,28 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 * https://zealdocs.org/
 * https://cukic.co/2022/04/02/fuzzy-search-documentation/
 * https://gitlab.com/ivan-cukic/zeal-lynx-cli
+
+## Second Brain, PKM, Personal Knowledge Management, Obsidian
+
+* https://www.ssp.sh/blog/obsidian-note-taking-workflow/
+* https://www.ssp.sh/brain/
+* https://www.ssp.sh/blog/pkm-workflow-for-a-deeper-life/
+
+## Learnings Notes
+
+### Resources
+* https://epage.github.io/dev/
+
+### Code Review
+* https://stackoverflow.blog/2019/09/30/how-to-make-good-code-reviews-better/
+* https://epage.github.io/dev/code-review/
+
+### Commits
+* https://epage.github.io/dev/commits/
+* https://cafkafk.dev/p/conventional-commits/
+
+### Planning, Estimating
+* https://epage.github.io/dev/planning/
+
+### Testing
+* https://epage.github.io/dev/testing/
