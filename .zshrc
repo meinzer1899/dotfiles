@@ -48,10 +48,11 @@ zi wait'0b' lucid for \
 # https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md
 zi wait'0b' lucid for \
   atload'zstyle :omz:plugins:ssh-agent agent-forwarding yes; \
-  zstyle :omz:plugins:ssh-agent lazy yes; \
-  zstyle :omz:plugins:ssh-agent identities id_ed25519' \
+  zstyle :omz:plugins:ssh-agent lazy yes;' \
   if'[[ -d ~/.ssh ]]' \
-  OMZP::ssh-agent
+  OMZP::ssh-agent \
+  if'[[ -d ~/.gnupg ]]' \
+  OMZP::gpg-agent
 
 # https://wiki.zshell.dev/community/gallery/collection/themes#thp-romkatv-powerlevel10k
 # .p10k.zsh is the config file
@@ -130,7 +131,7 @@ zi wait lucid as'program' from'gh' for \
   @eza-community/eza
 
 zi wait lucid for \
-  has'eza' atinit'AUTOCD=1' nocd \
+  has'eza' atinit'AUTOCD=1' \
   @z-shell/zsh-eza
 
 # # speed improvement: disable default maps and bindkey manually
@@ -142,8 +143,10 @@ zi wait lucid for \
 #   ' nocd \
 #   @kutsan/zsh-system-clipboard
 
-# manpages only available in debug build
+# rg binary can generate manpages and completions, see
 # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
+# useful when switching to from'gh' and building with rust compiler
+# see dandavison/delta how to add completions when installed via binary
 zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf ripgrep/complete/_rg _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' \
@@ -180,10 +183,10 @@ zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'g
 # zi ice lucid wait'0b' pick'fzf-git.sh'
 # zi load junegunn/fzf-git.sh
 
-export FZF_DEFAULT_COMMAND="command fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '\!.git' || find ."
+export FZF_DEFAULT_COMMAND="fd --type f --strip-cwd-prefix --hidden --follow --no-ignore-vcs --exclude .git || git ls-tree -r --name-only HEAD || rg --files --hidden --follow --glob '!.git' || find ."
 # The following example uses tree command to show the entries of the directory.
 export FZF_ALT_C_OPTS="--preview 'eza -1 --icons=always --group-directories-first --color=always --all {} | head -200'"
-export FZF_ALT_C_COMMAND='command fd --hidden --no-ignore-vcs --exclude .git --type d'
+export FZF_ALT_C_COMMAND='fd --hidden --no-ignore-vcs --exclude .git --type d'
 # To apply the command to CTRL-T as well
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 # Narrow down the list with a query, point to a command,
@@ -229,6 +232,12 @@ export FZF_CTRL_T_OPTS="\
   --bind 'ctrl-v:become($EDITOR {} < /dev/tty > /dev/tty)'
 "
 
+# # Use fzf inside tmux popup if possible
+# if [ -n $TMUX ]; then
+#   export FZF_TMUX_OPTS="-p80%,60% -- --margin=0,0"
+#   export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS} --preview-window=nohidden"
+# fi
+
 ### pip
 # https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5
 zi ice has'pip' pip'ruff <- !ruff -> ruff' id-as'ruff' nocompile
@@ -245,6 +254,8 @@ zi load z-shell/0
 #   atpull'%atclone' src'init.zsh' nocompile'!'
 zi ice as'null' from'gh-r' sbin
 zi light ajeetdsouza/zoxide
+# changing this to zi ice and zi light decreases zsh-bench performance (especially first command lag and
+# exit_time_ms)?!
 zi has'zoxide' wait lucid for \
   z-shell/zsh-zoxide
 
@@ -269,6 +280,10 @@ zi wait'0b' lucid as'command' from'gh-r' for \
   sbin'grex' \
   @pemistahl/grex
 
+zi wait'0b' lucid as'command' from'gh-r' for \
+  sbin'ninja' \
+  @ninja-build/ninja
+
 # Use fzf to quickly browse Zsh manuals
 zi wait'0b' lucid as'command' src'zman.zsh' for \
   @mattmc3/zman
@@ -277,8 +292,8 @@ zi wait'0b' lucid as'command' pick'zsh-bench' for \
   @romkatv/zsh-bench
 
 # https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
-zi ice as'program' atclone'cmake . -DCMAKE_INSTALL_PREFIX=$ZPFX' \
-  atpull'%atclone' make'all install' pick'$ZPFX/bin/tmux-mem-cpu-load'
+zi ice wait'0b' lucid as'program' atclone'cmake . -B build-ninja -G "Ninja" -DCMAKE_INSTALL_PREFIX=$ZPFX; cmake --build build-ninja' \
+  atpull'%atclone' pick'$ZPFX/bin/tmux-mem-cpu-load'
 zi light thewtex/tmux-mem-cpu-load
 
 ## completions
@@ -390,6 +405,7 @@ unsetopt correct # don't correct command spelling
 unsetopt flow_control # Disables the use of ⌃S to stop terminal output and the use of ⌃Q to resume it.
 
 # Why would I want to exclude hidden files?
+# same as _comp_options+=(globdots)?
 setopt glob_dots
 # allow more sophisticated glob patterns
 setopt extendedglob
@@ -399,35 +415,29 @@ setopt interactivecomments
 # https://grml.org/zsh/zsh-lovers.html
 # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
 # https://github.com/mattmc3/zdotdir/blob/main/lib/archive/completion.zsh
+# https://github.com/bew/dotfiles/blob/badc078dd1ffed98d39310931bfad94333fdac94/zsh/rc/completions.zsh#L84
 # Fuzzy completion matching
 # _expand_alias expands alias when hitting enter, e.g. glog<ENTER> => git log --...
-zstyle ':completion:*' completer _complete _match _approximate
-zstyle ':completion:*:match:*' original only
+# zstyle ':completion:*' completer _complete _match _approximate
+zstyle ':completion:*' completer _expand _complete _ignored _match _correct _approximate _prefix
 # Increase the number of errors based on the length of the typed word. But make
 # sure to cap (at 7) the max-errors to avoid hanging.
-zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
+# zstyle -e ':completion:*:approximate:*' max-errors 'reply=($((($#PREFIX+$#SUFFIX)/3>7?7:($#PREFIX+$#SUFFIX)/3))numeric)'
+# When the _approximate completer is active, allow errors based on the size of the text
+# NOTE: it is case-sensitive, even if you have a matcher-list cfg to make it insensitive
+zstyle -e ':completion:*:approximate:*' max-errors 'reply=( $(( ($#PREFIX + $#SUFFIX) / 3 )) )'
 
 # # https://wiki.zshell.dev/docs/guides/customization#pretty-completions
-# zstyle ':completion:*:matches' group 'yes'
-# zstyle ':completion:*:options' description 'yes'
-# zstyle ':completion:*:options' auto-description '%d'
-# zstyle ':completion:*:corrections' format ' %F{green}-- %d (errors: %e) --%f'
-# zstyle ':completion:*:descriptions' format ' %F{yellow}-- %d --%f'
-# zstyle ':completion:*:messages' format ' %F{purple} -- %d --%f'
-# zstyle ':completion:*:warnings' format ' %F{red}-- no matches found --%f'
 zstyle ':completion:*:default' list-prompt '%S%M matches%s'
-# zstyle ':completion:*' format ' %F{yellow}-- %d --%f'
-# zstyle ':completion:*' group-name ''
-# zstyle ':completion:*' verbose yes
-# zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
-# zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
-# zstyle ':completion:*' use-cache true
-# zstyle ':completion:*' rehash true
 
-# # Complete manual by their section
-# zstyle ':completion:*:manuals' separate-sections true
-# zstyle ':completion:*:manuals.*' insert-sections true
-# zstyle ':completion:*:man:*' menu yes select
+# When corrections are needed/triggered, always give ability to select the original text
+zstyle ':completion:*' original true
+
+# Make completion stops at the first ambiguous component
+zstyle ':completion:*' ambiguous true
+zstyle ':completion:*' insert-unambiguous true
+# Show the first ambiguous char (underlined by default)
+zstyle ':completion:*' show-ambiguity true
 
 # Use cache for slow functions
 zstyle ':completion:*' use-cache true
@@ -436,12 +446,26 @@ zstyle ':completion:*' rehash true
 # Ignore completion for non-existant commands
 zstyle ':completion:*:functions' ignored-patterns '(_*|pre(cmd|exec))'
 # https://wiki.zshell.dev/docs/guides/customization#do-menu-driven-completion
-# zstyle ':completion:*' menu select
+zstyle ':completion:*' menu select 2
 # If you end up using a directory as argument, this will remove the trailing slash (useful in ln)
 zstyle ':completion:*' squeeze-slashes true
-
+zstyle ':completion:*' insert-unambiguous true
+# https://stackoverflow.com/a/24237590/5353461
 # Case-insensitive (all), partial-word, and then substring completion.
-zstyle ':completion:*' matcher-list 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+zstyle ':completion:*' matcher-list '' '+m:{[:lower:]}={[:upper:]}' 'r:|[._-]=* r:|=*' 'l:|=* r:|=*'
+# Include hidden (but not . ..) in file completions
+zstyle ':completion:*' file-patterns '%p(D):globbed-files *(D-/):directories' '*(D):all-files'
+zstyle ':completion:*' verbose true
+# Add `..` in completions when the current prefix is empty, is a single `.', or starts with `../'
+# (from man zshcompsys, in the doc for 'special-dirs' style)
+zstyle -e ':completion:*' special-dirs '[[ $PREFIX = (../)#(|.|..) ]] && reply=(..)'
+
+# sections for man completion
+zstyle ':completion:*:manuals'    separate-sections true
+zstyle ':completion:*:manuals.*'  insert-sections   true
+
+# cd/nvim will never select the parent directory (e.g.: cd ../<TAB>)
+zstyle ':completion:*:(cd|nvim|vim):*' ignore-parents parent pwd
 
 # Dircolors on completions
 # https://wiki.zshell.dev/docs/guides/customization#color-completion-for-some-things
@@ -502,19 +526,44 @@ bindkey -M viins "^V" edit-command-line
 bindkey -M vicmd "^V" edit-command-line
 
 ### alias
+# https://github.com/bew/dotfiles/blob/main/zsh/rc/aliases_and_short_funcs.zsh
 unsetopt COMPLETE_ALIASES
 alias v='vim'
 alias nv='nvim'
 alias gs='gss'
-alias -g ...='../..'
-alias -g ....='../../..'
-alias -g .....='../../../..'
-alias -g ......='../../../../..'
+alias ..="cd ..;"
+alias ...="cd ../..;"
+alias ....="cd ../../..;"
 alias _='sudo '
-alias cdr='cd $(git rev-parse --show-toplevel)' # cd to git root
+alias cdr='git rev-parse && cd "$(git rev-parse --show-toplevel)"' # cd to git root
 alias grep='grep --color '
-alias mv='mv -v '
-alias cp='cp -rv '
+
+# Add verbosity to common commands
+alias rm="rm -vI"
+alias cp="cp -i"
+alias mv="mv -vi"
+alias ln="ln -vi"
+alias mkdir="mkdir -v"
+alias rename="rename -v"
+
+alias todo='rg -i "todo|fixme" --colors=match:fg:yellow --colors=match:style:bold'
+
+# ps
+# # -f : full listing (show process name & args)
+# # --forest : Show a processes hierarchy
+alias pss="ps -f --forest"
+
+function cheatsh
+{
+  curl cht.sh/$1
+}
+
+# global redirection aliases
+# https://wiki.bash-hackers.org/howto/redirection_tutorial
+alias -g NOOUT=">/dev/null"
+alias -g NOERR="2>/dev/null"
+alias -g ERR2OUT="2>&1"
+alias -g NOOUTPUT="NOOUT NOERR"
 
 ### misc
 # Use built-in paste magic.
