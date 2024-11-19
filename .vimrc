@@ -557,6 +557,9 @@ Plug 'wellle/tmux-complete.vim'
 if !has('nvim')
   Plug 'rhysd/vim-healthcheck'
 endif
+" 🥂 Seamless tmux/vim navigation (over SSH too!)
+Plug 'sunaku/tmux-navigate'
+Plug 'dhruvasagar/vim-markify'
 " load devicons at last
 Plug 'ryanoasis/vim-devicons'
 
