@@ -55,14 +55,22 @@
   "coc.source.file.ignoreHidden": false,
   // lint only via coc-ruff, not via coc-pyright
   "python.linting.enabled": false,
-  "ruff.useDetectRuffCommand": false,
+  "pyright.enable": true,
+  "python.linting.ruffEnabled": true,
+  "python.linting.ruffPath": "$HOME/.zi/plugins/ruff/venv/bin/ruff",
+  "pyright.inlayHints.functionReturnTypes": true,
+  "pyright.inlayHints.parameterTypes": false,
+  "pyright.inlayHints.variableTypes": false,
+  // coc-ruff does not find ruff-lsp
+  // "ruff.serverPath": "$HOME/.zi/plugins/ruff-lsp/venv/bin/ruff-lsp",
+  "ruff.useDetectRuffCommand": true,
   "ruff.path": ["$HOME/.zi/plugins/ruff/venv/bin/ruff"],
   "pyright.disableDiagnostics": true,
   "explorer.icon.enableNerdfont": true,
   "explorer.icon.source": "builtin",
   "explorer.file.showHiddenFiles": true,
   // "clangd.compilationDatabasePath": "build/", // compilationDatabaseCandidates is ignored if you specify a value here :(
-  "clangd.compilationDatabaseCandidates": ["build/",  "build/native/debug/", "build/native/release/", "build/cross/release/", "build/release/", "build/cross/debug/"],
+  "clangd.compilationDatabaseCandidates": ["build/", "build-gcc/", "build-cmake/", "build/native/debug/", "build/native/release/", "build/cross/release/", "build/release/", "build/cross/debug/"],
   // install via https://apt.llvm.org/ -> Automatic installation script
   "clangd.checkUpdates": false,
   "clangd.disableProgressNotifications": true,
