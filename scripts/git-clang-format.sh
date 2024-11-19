@@ -2,12 +2,13 @@
 
 # see also https://github.com/stephenberry/glaze/blob/main/util/run_clang-format.sh
 
-# @brief  Checks sources formatting with clang-format on files that differ from $CI_DEFAULT_BRANCH (defaults to main if not set).
+# @brief  Checks sources formatting with clang-format on files that differ from $CI_DEFAULT_BRANCH (defaults
+# to main if not set).
 
 # @details  Files and directories are excluded when the caller sets a (extended) regex pattern EXCLUDE_PATTERN.
 
-# Documentation for set and shopt: https://www.gnu.org/software/bash/manual/html_node/Modifying-Shell-Behavior.html
-# no -o errexit, because grep returns error code if no match was found
+# Documentation for set and shopt: https://www.gnu.org/software/bash/manual/html_node/Modifying-Shell-Behavior.html no -o errexit, because grep
+# returns error code if no match was found
 set -o pipefail -o nounset
 IFS=$'\n\t'
 
@@ -18,9 +19,10 @@ print_message_and_exit() {
 
 files()
 {
+    local filetypes='.*\.([cht]pp|[ch])\b'
     # using merge-base instead of plain origin/main to get rid of check if file is present locally which is
     # not the case if file was added only to remote but is not present in HEAD
-    git diff "$(git merge-base origin/"${CI_DEFAULT_BRANCH:="main"}" HEAD)" --name-only | grep -E '.*\.([cht]pp|[ch])\b';
+    git diff "$(git merge-base origin/"${CI_DEFAULT_BRANCH:="main"}" HEAD)" --name-only | grep -E "$filetypes";
 }
 
 if [[ -n ${EXCLUDE_PATTERN:=""} ]]; then
