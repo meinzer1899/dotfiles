@@ -192,6 +192,13 @@ Vim Integration: https://github.com/junegunn/fzf/blob/master/README-VIM.md
 
 analyze image size, vulnerabilities and more: https://github.com/wagoodman
 
+```bash
+    docker run --detach -v $(pwd):$(pwd) -w $(pwd) --name <name> image:tag sleep infinity # may does not work, if ENTRYPOINT is set in Dockerfile
+    docker start <name> # if container with that name already exists
+    docker exec <name> command # execute command, e.g. via vim-dispatch
+    docker exec -it <name> /bin/bash # attach interactively
+    docker stop name # to stop
+```
 * https://github.com/StableCoder/docker-build-core
 * https://github.com/think-cell/docker
 * https://docs.docker.com/develop/develop-images/dockerfile_best-practices/
