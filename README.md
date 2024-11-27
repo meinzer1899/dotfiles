@@ -88,8 +88,9 @@ mkdir -p $HOME/.zi/polaris
 ./configure --prefix=$HOME/.zi/polaris
 ```
 
-zi loader is included in dotfiles (.config/zi); if not, see
-https://wiki.zshell.dev/docs/getting_started/installation => loader.
+zi loader is included in dotfiles (.config/zi)
+Additional information https://wiki.zshell.dev/docs/getting_started/installation => loader.
+Don't use other installation methods using curl, because of security issues (https://github.com/z-shell/wiki/issues/588).
 
 ### misc
 
