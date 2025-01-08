@@ -194,8 +194,11 @@ https://github.com/0xhiro/thebook
 
 ## fzf
 
-To auto-accept entry on Enter when searching with CTRL-R, use
-https://github.com/junegunn/fzf/issues/477#issuecomment-444053054
+To auto-accept entry on Enter when searching with CTRL-R, use `fzf-accept-on-enter.diff`
+from https://github.com/junegunn/fzf/issues/477#issuecomment-444053054.
+
+`git apply --stat --apply ~/dotfiles/fzf-accept-on-enter.diff`
+`mv fzf-keybindings-new.zsh fzf-key-bindings.zsh`
 
 * https://github.com/junegunn/fzf
 * https://github.com/junegunn/fzf-git.sh
@@ -302,7 +305,8 @@ https://github.com/hadolint/hadolint
 
 ## C++ cpp
 
-compiler warnings
+Compiler warnings
+
 * https://clang.llvm.org/docs/DiagnosticsReference.html
 * https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 
