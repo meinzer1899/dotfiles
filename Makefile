@@ -2,17 +2,23 @@
 # https://github.com/search?q=MAKEFLAGS+language%3AMakefile&type=code
 
 # https://www.gnu.org/software/make/manual/html_node/Special-Targets.html
-# these rules do not correspont to a specific file
-.PHONY:
-# If mentioned as a target with no prerequisites, .SILENT saysnot to print any recipes before executing them.
-# You may also use moreselective ways to silence specific recipe command lines.See Recipe Echoing.  If you
+# If mentioned as a target with no prerequisites, .SILENT says not to print any recipes before executing them.
+# You may also use more selective ways to silence specific recipe command lines.See Recipe Echoing.  If you
 # want to silence all recipes for a particular run of make, use the ‘-s’ or‘--silent’ option (see Summary of
 # Options).
-.SILENT:
+.SILENT :=
+.DEFAULT := all
 
-MAKEFLAGS += --silent \
-	     --warn-undefined-variables \
-             --no-print-directory
+# Recommended flags
+# https://github.com/lgersman/make-recipes-in-different-scripting-languages-demo#some-more-helpful-make-settings
+# --no-builtin-variables: tells make to not create out of the box variables like (CC), (YACC) and stuff
+# --no-builtin-rules: tells make to not create c/c++ standard rules for targeting yacc/c/cc++ files
+MAKEFLAGS +=	--silent \
+		--no-print-directory \
+		--warn-undefined-variables \
+		--no-builtin-variables \
+		--no-builtin-rules
+
 # SHELL = /bin/bash
 # prefer using a shell script when calling multiple (complex) command and set shellflags there
 # .SHELLFLAGS = -o pipefail -o nounset
@@ -24,10 +30,10 @@ help: ## Show this help.
 	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk -F':.*?##' '{printf "%-30s %s\n", $$1, $$2}'
 
 .PHONY: all
-all: update
+all: update ## Updates all the things.
 
 .PHONY: update
-update: apt-update
+update: apt-update ## Updates all the things.
 	./scripts/update.sh
 
 .PHONY: apt-update
@@ -44,8 +50,8 @@ apt-update: ## Update distro.
 .PHONY: zi
 zi: ## Update zi plugins and zi itself.
 	zsh -ic "setopt no_hup && zi update --all --parallel --quiet"
-	zsh -ic "zi self-update"
-	zsh -ic "zi cclear -q"
+	# zsh -ic "zi self-update" # don't activate because of security reasons
+	# zsh -ic "zi cclear -q"
 
 .PHONY: docker
 docker: ## Install docker.

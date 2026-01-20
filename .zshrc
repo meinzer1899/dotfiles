@@ -16,17 +16,22 @@ fi
 # https://wiki.zshell.dev/community/gallery/collection/themes
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 
-# When running: zi update will:
-#     if an update is available, will update the fonts.
-#     repeat the install process to update fonts.
-zi ice if"[[ -d ${HOME}/.local/share/fonts ]] && [[ $OSTYPE = linux* ]]" \
-  id-as'JetBrainsMono' from'gh-r' bpick'JetBrainsMono.tar.xz' extract nocompile depth'1' \
-  atclone='rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f' atpull'%atclone'
-zi light ryanoasis/nerd-fonts
-
 ### annexes
 zi light-mode for z-shell/z-a-meta-plugins @annexes
 zi light-mode for z-shell/z-a-bin-gem-node
+
+# https://wiki.zshell.dev/community/gallery/collection/themes#thp-romkatv-powerlevel10k
+# .p10k.zsh is the config file
+# Run manually: p10k configure (The file ~/.p10k.zsh is auto sourced if exists).
+zi light-mode for @romkatv
+
+# When running: zi update will:
+#     if an update is available, will update the fonts.
+#     repeat the install process to update fonts.
+zi ice wait'0b' lucid if"[[ -d ${HOME}/.local/share/fonts ]] && [[ $OSTYPE = linux* ]]" \
+  id-as'JetBrainsMono' from'gh-r' bpick'JetBrainsMono.tar.xz' extract nocompile depth'1' \
+  atclone='rm -f *Windows*; mv -vf *.ttf ${HOME}/.local/share/fonts; fc-cache -v -f' atpull'%atclone'
+zi light ryanoasis/nerd-fonts
 
 # https://wiki.zshell.dev/community/gallery/collection/snippets
 # https://wiki.zshell.dev/docs/getting_started/migration#omz-plugins
@@ -53,11 +58,6 @@ zi wait'0b' lucid for \
   OMZP::ssh-agent \
   if'[[ -d ~/.gnupg ]]' \
   OMZP::gpg-agent
-
-# https://wiki.zshell.dev/community/gallery/collection/themes#thp-romkatv-powerlevel10k
-# .p10k.zsh is the config file
-# Run manually: p10k configure (The file ~/.p10k.zsh is auto sourced if exists).
-zi light-mode for @romkatv
 
 zi wait'0b' lucid for \
   as'program' pick'neofetch' \
@@ -201,7 +201,7 @@ export FZF_CTRL_R_OPTS="
 --header 'Press CTRL-Y to copy command into clipboard | CTRL-p to toggle full command preview'
 "
 
-# Set --walker options without 'follow' not to follow symbolic links
+# Set --walker options without 'follow' to not follow symbolic links
 FZF_COMPLETION_PATH_OPTS="--walker=file,dir,hidden"
 FZF_COMPLETION_DIR_OPTS="--walker=dir,hidden"
 
@@ -223,6 +223,7 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_COLORS\
   --bind ctrl-d:half-page-down
   --bind ctrl-u:half-page-up
   --bind alt-a:toggle-all
+  --style='minimal'
 "
 
 # execute: after exiting $EDITOR, fzf search is still open
@@ -232,11 +233,11 @@ export FZF_CTRL_T_OPTS="\
   --bind 'ctrl-v:become($EDITOR {} < /dev/tty > /dev/tty)'
 "
 
-# # Use fzf inside tmux popup if possible
-# if [ -n $TMUX ]; then
-#   export FZF_TMUX_OPTS="-p80%,60% -- --margin=0,0"
-#   export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS} --preview-window=nohidden"
-# fi
+# Use fzf inside tmux popup if possible
+if [ -n $TMUX ]; then
+  export FZF_TMUX_OPTS="-p80%,60% -- --margin=0,0"
+  export FZF_CTRL_T_OPTS="${FZF_CTRL_T_OPTS} --preview-window=nohidden"
+fi
 
 ### pip
 # https://wiki.zshell.dev/ecosystem/annexes/bin-gem-node#pip-5

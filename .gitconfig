@@ -1,6 +1,6 @@
 [core]
 	editor = vim
-	pager = delta
+	pager = delta --dark
 	# Speed up commands involving untracked files such as `git status`.
 	# https://git-scm.com/docs/git-update-index#_untracked_cache
 	untrackedCache = true
@@ -50,6 +50,7 @@
 [submodule]
 	recurse = true
 [init]
+	defaultBranch = main
 	templatedir = ~/.git-templates
 [delta]
 	navigate = true    # use n and N to move between diff sections

@@ -17,6 +17,15 @@ input_lag_ms=4.038
 exit_time_ms=101.818
 ```
 
+Is this fast? From https://github.com/romkatv/zsh-bench#how-fast-is-fast
+
+| latency (ms)          | the maximum value indistinguishable from zero |
+|-----------------------|----------------------------------------------:|
+| **first prompt lag**  |                                            50 |
+| **first command lag** |                                           150 |
+| **command lag**       |                                            10 |
+| **input lag**         |                                            20 |
+
 Although showing `0` for `has_syntax_highlighting`, `has_git_prompt`, `has_autosuggestions`, `has_compsys`,
 these are enabled.
 
@@ -24,16 +33,16 @@ these are enabled.
 
 # Setup new machine
 
-1. Install git
+1. Install git and pull dotfiles repository
 1. Setup WSL
 1. `mkdir -p $HOME/.config` (otherwise, `.config` is a symlink to `$HOME/dotfiles/.config`).
 1. Install zsh and zi
-1. Install stow, run `stow .`
+1. Install stow, run `cd dotfiles && stow .`
 1. Install tmux
 
 ## pip
 
-* difference python pip install <> vs python -m pip install <> https://stackoverflow.com/questions/25749621/whats-the-difference-between-pip-install-and-python-m-pip-install
+* difference `python pip install` vs `python -m pip install` https://stackoverflow.com/questions/25749621/whats-the-difference-between-pip-install-and-python-m-pip-install
 * https://thelinuxcode.com/python-requirements-txt-file/
 
 ```bash
@@ -74,6 +83,8 @@ sudo apt-get install virtualbox-guest-additions-iso
 * map capslock to ctrl: https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10.
 * Alternatively, use [MS PowerToys](https://learn.microsoft.com/en-us/windows/powertoys/install#installing-with-microsoft-store) to map Ctrl-M as Enter as well. Cannot map Ctrl-J to down (Ctrl-K up, Ctrl-C Esc) because that conflicts with either Linux or Windows shortcuts. In MS PowerToys dashboard, deactivate all other modules that are not needed.
 * notifications: https://github.com/Windos/BurntToast, call with       `notify-send() { powershell.exe -command New-BurntToastNotification "-Text '${@}'"; }`. Further reading https://stuartleeks.com/posts/wsl-github-cli-windows-notifications-part-1/ and https://github.com/microsoft/WSL/issues/2466.
+* Kill WSL2 (e.g. does not respond): https://github.com/microsoft/WSL/issues/6982#issuecomment-1474994319
+* Configuration: https://learn.microsoft.com/en-us/windows/wsl/wsl-config#user-settings
 
 ## zsh and zi
 
@@ -218,6 +229,8 @@ https://docs.docker.com/engine/install/ubuntu
     docker stop name # to stop
 ```
 
+* https://devopscube.com/reduce-docker-image-size/
+
 * https://github.com/wagoodman analyze image size, vulnerabilities and more
 * https://github.com/kkvh/vim-docker-tools Toolkit for managing docker containers, networks and images in vim.
 
@@ -307,6 +320,8 @@ https://github.com/hadolint/hadolint
 
 Compiler warnings
 
+* https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
+* https://libcxx.llvm.org/Hardening.html
 * https://clang.llvm.org/docs/DiagnosticsReference.html
 * https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
 
@@ -328,9 +343,11 @@ playground
 ### [googletest](https://google.github.io/googletest/)
 
 Reduce execution times of unit tests:
-* run CTest in parallel `ctest -j$(nproc)`
-* use `gtest_add_tests` from https://cmake.org/cmake/help/latest/module/GoogleTest.html
-* this executes a list of all _test cases_ instead of _test executables_, which is much faster
+* run CTest in parallel `ctest --parallel`
+* use `gtest_discover_tests` (scans test executable) `gtest_add_tests` (scans source code for googletest macros) ( from https://cmake.org/cmake/help/latest/module/GoogleTest.html
+* this executes a list of all _test cases_ instead of the whole _test executable_, which is much faster
+* https://cmake.org/cmake/help/latest/manual/ctest.1.html
+* e.g. `ctest --parallel --test-dir <build directory> -R <regex filter for tests> --rerun-failed --output-on-failure`
 
 ### CMake
 
@@ -339,6 +356,10 @@ Use install-cmake.sh from foonathan to install to /usr/local. May remove "old" c
 https://blog.feabhas.com/category/build-systems/
 with https://github.com/feabhas/cmake-presets-blog
 
+* https://cmake.org/cmake/help/latest/module/CTestCoverageCollectGCOV.html
+* https://crascit.com/category/cmake/
+* https://fekir.info/post/conditional-compilation/
+* https://fekir.info/post/dependency-injection-in-cmake/
 * https://github.com/madduci/moderncpp-project-template A Modern C++ cross-platform Project Template with CMake, conan (optional), cppcheck (optional) and clang-format (optional)
 * https://github.com/filipdutescu/modern-cpp-template A template for modern C++ projects using CMake, Clang-Format, CI, unit testing and more, with support for downstream inclusion.
 * https://github.com/TheLartians/Format.cmake Stylize your code! Automatic clang-format and cmake-format targets for CMake.
@@ -346,33 +367,64 @@ with https://github.com/feabhas/cmake-presets-blog
 * https://github.com/StableCoder/cmake-scripts
 * https://github.com/cpp-best-practices/cmake_template
 
-#### misc
+#### Misc
+
+* [Macros usages in C++](https://fekir.info/post/macro-usages-in-cpp/)
 
 [cmake4vim](https://github.com/ilyachur/cmake4vim/)
 [cmake-language-server](https://github.com/regen100/cmake-language-server)
 
 Determine the minimal required CMake version of a project: [cmake_min_version](https://github.com/nlohmann/cmake_min_version)
 
-### Optimization, performance, profiling
+### Online Compiler
 
+* https://build-bench.com/
+* https://godbolt.org/
+* https://cppinsights.io/
+* https://www.perfbench.com/
+* https://quick-bench.com/
+
+### Optimization, performance, profiling, dependencies
+
+* https://github.com/springmeyer/profiling-guide with perf(linux)
+* https://github.com/jmuehlig/perf-cpp
+* https://fekir.info/post/cpp-performance-guidelines/
+* https://fekir.info/post/library-dependency-graphs-in-cmake/
 * https://vitaut.net/posts/2024/faster-cpp-compile-times/
+* https://fekir.info/post/analyze-build-times-with-clang/
+* https://fekir.info/post/analyze-configure-times-with-cmake/
 
-### _llvm_, `clang`, `clangd`
+### _LLVM_, `clang`, `clangd`
 
-https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
+* https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
+* https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
 ```cmake
 message(STATUS "Address sanitizer enabled")
-add_compile_options(-fsanitize=address,undefined)
+add_compile_options(-fsanitize=address,undefined,integer)
+add_compile_options(-fsanitize=unsigned-integer-overflow)
 add_compile_options(-fno-sanitize=signed-integer-overflow)
 add_compile_options(-fno-sanitize-recover=all)
 add_compile_options(-fno-omit-frame-pointer)
-add_link_options(-fsanitize=address,undefined -fuse-ld=gold)
+add_compile_options(-fsanitize-trap=undefined) # stop (TRAP signal) after first occurrence
+add_link_options(-fsanitize=address,undefined)
+add_link_options(-fuse-ld=clang++) # according to UB san documentation for clang
 ```
 
 Installation description:
 https://apt.llvm.org/ -> Automatic installation script
 installs *all* llvm packages (also clangd, clang-tidy, include-cleaner etc) at `/bin`.
 Also adds apt.llvm.org to apt package list to automatically get updates.
+CAUTION:
+if there is a major version update, this gets not added automatically, because the script above adds
+only specified major version to apt list, e.g. https://apt.llvm.org/jammy llvm-toolchain-jammy-18 InRelease.
+For me using Ubuntu 22.04, I called the script again, but it installed 18, not newest 19.
+Section:
+```bash
+wget https://apt.llvm.org/llvm.sh
+chmod +x llvm.sh
+sudo ./llvm.sh <version number> all
+```
+needed to also install clang-tidy etc.
 
 Need to update alternatives for llvm tools, e.g. clang-format, clangd, clang-tidy, lld.
 ```bash
@@ -487,19 +539,29 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 
 ## Learnings Notes
 
+### generic programming
+
+* https://godbolt.org/z/a4ooYbd1P from [Evolution of a Median Algorithm in C++ - Pete Isensee - CppCon 2023](https://www.youtube.com/watch?v=izxuLq_HZHA&pp=ygUcY3BwIGV2b2x1dGlvbiBtZWFuIGFsZ29yaXRobQ%3D%3D)
+
 ### Resources
+
 * https://epage.github.io/dev/
 
 ### Code Review
+
 * https://stackoverflow.blog/2019/09/30/how-to-make-good-code-reviews-better/
 * https://epage.github.io/dev/code-review/
 
 ### Commits
+
 * https://epage.github.io/dev/commits/
 * https://cafkafk.dev/p/conventional-commits/
 
 ### Planning, Estimating
+
 * https://epage.github.io/dev/planning/
 
 ### Testing
+
 * https://epage.github.io/dev/testing/
+* [Kevlin Henney - Programming with GUTs - Meeting C++ 2021](https://www.youtube.com/watch?v=cfh6ZrA19r4)

@@ -2,6 +2,7 @@
 live_config_reload = true
 
 # https://github.com/alacritty/alacritty-theme
+# https://github.com/alacritty/alacritty-theme/blob/master/themes/one_dark.toml
 [colors]
 transparent_background_colors = true
 
@@ -29,33 +30,58 @@ index = 20
 color = "0xb6bdca"
 index = 21
 
+# [colors.bright]
+# black = "0x545862"
+# blue = "0x61afef"
+# cyan = "0x56b6c2"
+# green = "0x98c379"
+# magenta = "0xc678dd"
+# red = "0xe06c75"
+# white = "0xc8ccd4"
+# yellow = "0xe5c07b"
+
+# Bright colors
 [colors.bright]
-black = "0x545862"
-blue = "0x61afef"
-cyan = "0x56b6c2"
-green = "0x98c379"
-magenta = "0xc678dd"
-red = "0xe06c75"
-white = "0xc8ccd4"
-yellow = "0xe5c07b"
+black   = '#5c6370'
+red     = '#e06c75'
+green   = '#98c379'
+yellow  = '#d19a66'
+blue    = '#61afef'
+magenta = '#c678dd'
+cyan    = '#56b6c2'
+white   = '#ffffff'
 
 [colors.cursor]
 cursor = "0xabb2bf"
 text = "0x282c34"
 
+# Normal colors
 [colors.normal]
-black = "0x282c34"
-blue = "0x61afef"
-cyan = "0x56b6c2"
-green = "0x98c379"
-magenta = "0xc678dd"
-red = "0xe06c75"
-white = "0xabb2bf"
-yellow = "0xe5c07b"
+black   = '#1e2127'
+red     = '#e06c75'
+green   = '#98c379'
+yellow  = '#d19a66'
+blue    = '#61afef'
+magenta = '#c678dd'
+cyan    = '#56b6c2'
+white   = '#abb2bf'
+
+# [colors.normal]
+# black = "0x282c34"
+# blue = "0x61afef"
+# cyan = "0x56b6c2"
+# green = "0x98c379"
+# magenta = "0xc678dd"
+# red = "0xe06c75"
+# white = "0xabb2bf"
+# yellow = "0xe5c07b"
 
 [colors.primary]
-background = "0x282c34"
-foreground = "0xabb2bf"
+background = '#282c34'
+foreground = '#abb2bf'
+# [colors.primary]
+# background = "0x282c34"
+# foreground = "0xabb2bf"
 
 [font]
 size = 13.0

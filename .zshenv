@@ -33,7 +33,7 @@ export PATH=$PATH:$HOME/.local/bin
 # Treat these characters as part of a word.
 [[ -n "$WORDCHARS" ]] || export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
-# CMake
+# CMake and Make
 export CMAKE_EXPORT_COMPILE_COMMANDS=ON
 export MAKEFLAGS="-j$(nproc)"
 if (( $+commands[ninja] )); then

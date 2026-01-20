@@ -25,6 +25,7 @@ let s:on_win = has('win32')
 let s:on_mac = has('mac')
 
 " Open new split panes to right and buttom
+set splitright
 set splitbelow
 
 " lightline shows the mode already
@@ -77,33 +78,6 @@ set hidden confirm
 set wrap
 " Wrap lines at convenient points. Only makes sense if wrap is enabled.
 set linebreak
-
-" Just the formatoptions defaults, these are changed per filetype by
-" plugins. Most of the utility of all of this has been superceded by the use of
-" modern simplified pandoc for capturing knowledge source instead of
-" arbitrary raw text files.
-" help fo-table
-set formatoptions=                " start with empty formatoptions (otherwise, c is activated independently of what is specified here)
-set formatoptions-=t   " don't auto-wrap text using text width
-set formatoptions-=c   " autowrap comments using textwidth with leader
-set formatoptions-=r   " don't auto-insert comment leader on enter in insert
-set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
-set formatoptions+=q   " allow formatting of comments with gq
-set formatoptions-=w   " don't use trailing whitespace for paragraphs
-set formatoptions-=a   " disable auto-formatting of paragraph changes
-set formatoptions-=n   " automatically indent numbered lists
-set formatoptions+=j   " delete comment prefix when joining
-set formatoptions-=2   " don't use the indent of second paragraph line
-set formatoptions-=v   " don't use broken 'vi-compatible auto-wrapping'
-set formatoptions-=b   " don't use broken 'vi-compatible auto-wrapping'
-set formatoptions+=l   " long lines not broken in insert mode
-set formatoptions+=m   " multi-byte character line break support
-set formatoptions+=M   " don't add space before or after multi-byte char
-set formatoptions-=B   " don't add space between two multi-byte chars
-set formatoptions+=1   " don't break a line after a one-letter word
-set formatoptions+=p   " don't break a line after a one-letter word
-" Don't leave two spaces between two sentences (foo.  Bar) when joining lines (J)
-set nojoinspaces
 
 " errorformat
 " :compiler adjusts errorformat (e.g. gcc for C++)
@@ -242,10 +216,11 @@ set scrolloff=5
 set sidescrolloff=15
 set sidescroll=1
 
-let g:mapleader = ' '
+" let g:mapleader = ' '
 " map leader as <space>
-nnoremap <Space> <nop>
-let g:mapleader ="\<Space>"
+nnoremap <silent><nowait><space> <nop>
+let g:mapleader = " "
+let g:maplocalleader = " "
 nnoremap <silent> \g :GitGutterToggle<CR>
 nnoremap <silent> \p :ProseMode<CR>
 nnoremap <silent> <Leader>s <c-c>:update<CR>
@@ -424,7 +399,17 @@ AutocmdFT gitcommit startinsert!
 " number column may cause ugly formatting when entering terminal window via C-w N :(
 Autocmd TerminalWinOpen * setlocal signcolumn=no textwidth=0 winfixheight norelativenumber nonumber
 " Automatically update vim-fugitive buffer when selected
-AutocmdFT fugitive exe ":Git"
+" AutocmdFT fugitive exe ":Git"
+" wrap in diffs
+" https://stackoverflow.com/a/16867953/8981617
+Autocmd VimEnter * if &diff | setlocal wrap cursorline | endif
+" disable settings if file is larger than 10MB (performance improvement)
+" https://vim.fandom.com/wiki/Faster_loading_of_large_files
+" with file size detection improvement from https://stackoverflow.com/a/559052/8981617
+" Two settings are set to other values (by plugins?) but performance is still significantly improved:
+" * foldmethod is back to diff in fugitive diffs and
+" * syntax clear has no effect (still syntax highlighting).
+Autocmd BufReadPost * if line2byte(line("$") + 1) > (1024 * 1024 * 10) | syntax clear | setlocal foldmethod=manual noswapfile bufhidden=unload buftype=nowrite undolevels=-1 | endif
 
 " Auto indent pasted text
 " nnoremap p p=`]<C-o>
@@ -477,7 +462,10 @@ Plug 'tpope/vim-endwise'
 Plug 'tpope/vim-sensible'
 Plug 'tpope/vim-sleuth'
 " Prose Mode
-Plug 'junegunn/goyo.vim'
+" Plug 'junegunn/goyo.vim'
+" let g:onedark_color_overrides = {
+"       \ "background": {"gui": "#2F343F", "cterm": "235", "cterm16": "0"}
+"       \ }
 Plug 'joshdick/onedark.vim'
 let g:onedark_terminal_italics=1
 " Plug 'catppuccin/vim', { 'as': 'catppuccin' }
@@ -498,7 +486,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
 let g:polyglot_disabled = ['autoindent', 'sensible']
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'
-Plug 'mbbill/undotree'
+" Plug 'mbbill/undotree'
 Plug 'stsewd/fzf-checkout.vim'
 " Plug 'goerz/jupytext.vim'
 " Plug 'jackguo380/vim-lsp-cxx-highlight'
@@ -514,7 +502,7 @@ xmap ga <Plug>(EasyAlign)
 nmap ga <Plug>(EasyAlign)
 " Plug 'dbeniamine/cheat.sh-vim'
 " Plug 'unblevable/quick-scope'
-Plug 'ilyachur/cmake4vim'
+" Plug 'ilyachur/cmake4vim'
 Plug 'muellan/vim-brace-for-umlauts'
 " Plug 'cohama/lexima.vim'
 Plug 'Yggdroot/indentLine'
@@ -565,6 +553,34 @@ Plug 'ryanoasis/vim-devicons'
 
 " Initialize plugin system
 call plug#end()
+
+" Just the formatoptions defaults, these are changed per filetype by
+" plugins. Most of the utility of all of this has been superceded by the use of
+" modern simplified pandoc for capturing knowledge source instead of
+" arbitrary raw text files.
+" help fo-table
+set formatoptions=                " start with empty formatoptions (otherwise, c is activated independently of what is specified here)
+set formatoptions-=t   " don't auto-wrap text using text width
+set formatoptions-=c   " autowrap comments using textwidth with leader
+set formatoptions-=r   " don't auto-insert comment leader on enter in insert
+set formatoptions-=o   " don't auto-insert comment leader on o/O in normal
+set formatoptions+=q   " allow formatting of comments with gq
+set formatoptions-=w   " don't use trailing whitespace for paragraphs
+set formatoptions-=a   " disable auto-formatting of paragraph changes
+set formatoptions-=n   " automatically indent numbered lists
+set formatoptions+=j   " delete comment prefix when joining
+set formatoptions-=2   " don't use the indent of second paragraph line
+set formatoptions-=v   " don't use broken 'vi-compatible auto-wrapping'
+set formatoptions-=b   " don't use broken 'vi-compatible auto-wrapping'
+set formatoptions+=l   " long lines not broken in insert mode
+set formatoptions+=m   " multi-byte character line break support
+set formatoptions+=M   " don't add space before or after multi-byte char
+set formatoptions-=B   " don't add space between two multi-byte chars
+set formatoptions+=1   " don't break a line after a one-letter word
+set formatoptions+=p   " don't break a line after a one-letter word
+" Don't leave two spaces between two sentences (foo.  Bar) when joining lines (J)
+set nojoinspaces
+
 
 " COLORS
 " https://github.com/sunaku/.vim/blob/master/plugin/color.vim
@@ -688,7 +704,7 @@ nnoremap <silent> <Leader>t     :Files<CR>
 nnoremap <silent> <Leader>T     :GFiles<CR>
 nnoremap <silent> <Leader>bl    :Lines<CR>
 nnoremap <silent> <Leader>l     :BLines<CR>
-nnoremap <silent> <Leader>g     :GFiles?<CR>
+" nnoremap <silent> <Leader>g     :GFiles?<CR>
 nnoremap <silent> <Leader>h     :History:<CR>
 nnoremap <silent> <Leader>c     :Commits<CR>
 " commits for the current buffer, or current line if a line is selected

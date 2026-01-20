@@ -11,7 +11,7 @@ echo "Starting update"
 
 tldr --update
 
-# javascript tool manager, installs node.js runtimes, npm and Yarn package managers or any binary from npm
+# javascript tool manager, installs node.js runtimes, npm or any binary from npm
 volta install node@lts # installs latest LTS; node@20 installs latest node 20 version
 # https://docs.npmjs.com/about-npm-versions recommends to install latest version
 volta install npm@bundled # needed for coc plugin install, @latest also available
@@ -21,8 +21,8 @@ zsh -lc "eza --tree -L2 '$HOME/.volta/tools/image/'"
 
 # fails when called outside of tmux session
 if [[ -n $TMUX  ]]; then
-    ~/.tmux/plugins/tpm/bin/clean_plugins
-    ~/.tmux/plugins/tpm/bin/update_plugins all
+    "$HOME"/.tmux/plugins/tpm/bin/clean_plugins
+    "$HOME"/.tmux/plugins/tpm/bin/update_plugins all
 fi
 
 # cargo install cargo-update is needed
@@ -34,7 +34,7 @@ python3 -m pip install --upgrade pip
 python3 -m pip install git+https://github.com/Vimjas/vint.git  #has to be pre (https://github.com/iamcco/coc-diagnostic/issues/62#issuecomment-735660297)
 
 # vim
-vim +PlugUpdate +CocUpdateSync +PlugClean! +qall
+# vim +PlugUpdate +CocUpdateSync +PlugClean! +qall
 
 # tmux
 # manually via repository

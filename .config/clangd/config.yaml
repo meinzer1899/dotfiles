@@ -55,6 +55,7 @@ CompileFlags:
     # own
     - -Warith-conversion
     - -Wpessimizing-move
+    - -Wstring-conversion # detects implicit conversion that turns string literal into bool
     # from https://github.com/aminya/project_options/blob/main/src/CompilerWarnings.cmake
     - -Wextra-semi
     - -Wnon-virtual-dtor  # warn the user if a class with virtual functions has a non-virtual destructor. This helps
@@ -71,7 +72,6 @@ CompileFlags:
 Diagnostics:
   UnusedIncludes: Strict
   MissingIncludes: None
-  FastCheckFilter: Strict
   ClangTidy:
     Add: '*'
     Remove:
@@ -90,6 +90,7 @@ Diagnostics:
       - fuchsia-*
       - llvmlibc-*
       - readability-avoid-const-params-in-decls # const no effect in function definition
+    FastCheckFilter: Strict
     CheckOptions:
       hicpp-signed-bitwise.IgnorePositiveIntegerLiterals: true
       cppcoreguidelines-avoid-do-while.IgnoreMacros: true # for function-like macros as used by unit test frameworks
