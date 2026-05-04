@@ -154,9 +154,9 @@ zi wait lucid as'program' from'gh-r' for \
   @BurntSushi/ripgrep
 
 zi wait lucid as'program' from'gh-r' for \
-  mv'tealdeer* tealdeer' \
-  sbin'**/tealdeer tldr' \
-  @dbrgn/tealdeer
+  mv'tealdeer* tldr' \
+  sbin'tldr' \
+  @tealdeer-rs/tealdeer
 
 zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer _tldr'
 zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
