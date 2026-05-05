@@ -10,7 +10,7 @@
     },
     "cmake": {
       "command": "neocmakelsp",
-      "args": ["--stdio"],
+      "args": ["stdio"],
       "filetypes": ["cmake"],
       "rootPatterns": [".git", "CMakeLists.txt"],
       "initializationOptions": {
@@ -119,6 +119,7 @@
   "suggest.maxCompleteItemCount": 100,
   "suggest.triggerCompletionWait": 0,
   "signature.preferShownAbove": false,
+  "suggest.removeDuplicateItems": true,
   "links.highlight": true,
   "list.insertMappings": {
     "<C-c>": "do:exit",
