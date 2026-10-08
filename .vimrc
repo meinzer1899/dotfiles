@@ -23,6 +23,7 @@ delfunction s:get_SID
 
 let s:on_win = has('win32')
 let s:on_mac = has('mac')
+let s:inside_tmux = $TMUX !=# ''
 
 " Open new split panes to right and buttom
 set splitright
@@ -585,8 +586,12 @@ set nojoinspaces
 " COLORS
 " https://github.com/sunaku/.vim/blob/master/plugin/color.vim
 " from https://github.com/rhysd/dogfiles/blob/ba7624a7391da033fb328eaa67bb5743368dab4e/vimrc#L1120
-if !has('gui_running') && $TMUX !=# ''
+if !has('gui_running') && s:inside_tmux
   set t_Co=256
+  " this does not work for a reason: when opening a terminal in Vim when inside tmux, echo $TERM shows xterm-256color instead of tmux-256color.
+  " test color output (dotfiles/scripts) shows different output not for colors, but for underline, etc.
+  " what solves this was setting $TERM in zsh (.zshenv)
+  let $TERM='tmux-256color'
 endif
 
 syntax enable
@@ -658,7 +663,7 @@ let g:fzf_preview_window = ['right,50%,<70(up,40%)', 'ctrl-/']
 
 
 " See `man fzf-tmux` for available options
-if exists('$TMUX')
+if s:inside_tmux
   let g:fzf_layout = { 'tmux': '-p90%,60%' }
 else
   " Adapt fzf preview window layout (non-floating, dont push content of current

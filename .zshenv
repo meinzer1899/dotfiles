@@ -9,6 +9,13 @@ if [[ ${OSTYPE} == linux* ]] && [[ -e /etc/debian_version ]]; then
   skip_global_compinit=1
 fi
 
+# enable 256 color
+if [ -n "$TMUX" ]; then
+    export TERM="tmux-256color"
+  else
+    export TERM="xterm-256color"
+fi
+
 # https://zameermanji.com/blog/2012/12/30/using-vim-as-manpager/
 export EDITOR="vim"
 export MANPAGER="vim +MANPAGER -R --not-a-term -"
