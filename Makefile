@@ -19,19 +19,38 @@ MAKEFLAGS +=	--silent \
 		--no-builtin-variables \
 		--no-builtin-rules
 
+# Colors for help output
+RESET := \033[0m
+BOLD := \033[1m
+RED := \033[31m
+GREEN := \033[32m
+YELLOW := \033[33m
+BLUE := \033[34m
+MAGENTA := \033[35m
+CYAN := \033[36m
+
 # SHELL = /bin/bash
 # prefer using a shell script when calling multiple (complex) command and set shellflags there
 # .SHELLFLAGS = -o pipefail -o nounset
 # setting shellflags in a target is as easy as set -e; command | cat
 SUDO := $(shell which sudo)
 
-.PHONY: help
-help: ## Show this help.
-	@grep -hE '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk -F':.*?##' '{printf "%-30s %s\n", $$1, $$2}'
+# Prints target which is currently executed
+TARGET_NAME = echo "[$@]"
 
+##@ Help
+.PHONY: help
+help: ## Display this help message with colored output
+	@awk 'BEGIN {FS = ":.*##"; printf "\n$(BOLD)$(CYAN)Usage:$(RESET)\n  make $(YELLOW)<target>$(RESET)\n"} \
+		/^[a-zA-Z_0-9/-]+:.*?##/ { printf "  $(GREEN)%-20s$(RESET) %s\n", $$1, $$2 } \
+		/^##@/ { printf "\n$(BOLD)$(MAGENTA)%s$(RESET)\n", substr($$0, 5) } \
+		' $(MAKEFILE_LIST)
+
+##@ All
 .PHONY: all
 all: update ## Updates all the things.
 
+##@ Update
 .PHONY: update
 update: apt-update ## Updates all the things.
 	./scripts/update.sh
@@ -53,6 +72,7 @@ zi: ## Update zi plugins and zi itself.
 	# zsh -ic "zi self-update" # don't activate because of security reasons
 	# zsh -ic "zi cclear -q"
 
+##@ Docker
 .PHONY: docker
 docker: ## Install docker.
 	-$(SUDO) apt remove docker docker-engine docker.io containerd runc

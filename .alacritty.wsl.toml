@@ -1,3 +1,5 @@
+# insert stuff from other alacritty.toml here.
+
 # WSL2
 # # start into default wsl and cd to ~
 [terminal.shell]
