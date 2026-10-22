@@ -46,11 +46,7 @@ bind N findnext -1
 
 bind ,<Space> nohlsearch
 
-" Use sensitive case. Smart case would be nice here, but it doesn't work.
-
-set findcase sensitive
-
-
+set findcase smart
 
 " Smooth scrolling, yes please. This is still a bit janky in Tridactyl.
 
