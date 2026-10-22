@@ -461,6 +461,8 @@ Plug 'tpope/vim-obsession'
 Plug 'tpope/vim-endwise'
 " loads very good defaults, e.g. man.vim or matchit.vim
 Plug 'tpope/vim-sensible'
+" Disable automatic detection due to redir error when calling CoC command (e.g. CocUpdate)
+let g:sleuth_automatic = 0
 Plug 'tpope/vim-sleuth'
 " Prose Mode
 " Plug 'junegunn/goyo.vim'
@@ -482,8 +484,8 @@ let g:gitgutter_map_keys = 0
 Plug 'honza/vim-snippets'
 Plug 'mhinz/vim-startify'
 " Plug 'metakirby5/codi.vim'
-" Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+" Plug 'neoclide/coc.nvim', {'branch': 'master', 'do': 'npm ci'}
 let g:polyglot_disabled = ['autoindent', 'sensible']
 Plug 'sheerun/vim-polyglot'
 Plug 'josa42/vim-lightline-coc'

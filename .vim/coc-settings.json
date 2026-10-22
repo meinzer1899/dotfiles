@@ -98,7 +98,6 @@
   "diagnostic.format": "%message [%source]",
   "diagnostic.virtualText": false,
   "diagnostic.checkCurrentLine": true,
-  "diagnostic.separateRelatedInformationAsDiagnostics": true,
   "diagnostic.virtualTextCurrentLineOnly": false,
   "diagnostic.virtualTextLimitInOneLine": 2,
   "diagnostic.messageTarget": "float",
@@ -130,5 +129,8 @@
     "<C-c>": "do:exit",
     "<C-j>": "do:previewdown",
     "<C-k>": "do:previewup"
+  },
+  "json.schemaDownload.trustedDomains": {
+    "https://raw.githubusercontent.com": true
   },
 }
