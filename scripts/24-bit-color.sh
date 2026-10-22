@@ -8,14 +8,40 @@
 # The background escape sequence is ^[48;2;<r>;<g>;<b>m
 # <r> <g> <b> range from 0 to 255 inclusive.
 # The escape sequence ^[0m returns output to default
+
+SEQ1=
+
+if which gseq >/dev/null 2>&1; then
+    SEQ1=gseq
+elif seq --version|grep -q GNU; then
+    SEQ1=seq
+fi
+if [ -n "$SEQ1" ]; then
+    # GNU seq requires a -ve increment if going backwards
+    seq1()
+    {
+        if [ $1 -gt $2 ]; then
+            $SEQ1 $1 -1 $2
+        else
+            $SEQ1 $1 $2
+    fi
+    }
+    SEQ=seq1
+else
+    SEQ=seq
+fi
+
+SEPARATOR=':'
+
 setBackgroundColor()
+
 {
-    echo -en "\x1b[48;2;$1;$2;$3""m"
+    echo -en "\033[48${SEPARATOR}2${SEPARATOR}$1${SEPARATOR}$2${SEPARATOR}$3""m"
 }
 
 resetOutput()
 {
-    echo -en "\x1b[0m\n"
+    echo -en "\033[0m\n"
 }
 
 # Gives a color $1/255 % along HSV
@@ -52,50 +78,50 @@ rainbowColor()
         echo "0 0 0"
     fi
 }
-for i in `seq 0 127`;
+for i in `$SEQ 0 127`;
 do
     setBackgroundColor $i 0 0
     echo -en " "
 done
 
 resetOutput
-for i in `seq 255 128`;
+for i in `$SEQ 255 128`;
 do
     setBackgroundColor $i 0 0
     echo -en " "
 done
 resetOutput
-for i in `seq 0 127`;
+for i in `$SEQ 0 127`;
 do
     setBackgroundColor 0 $i 0
     echo -n " "
 done
 resetOutput
-for i in `seq 255 128`;
+for i in `$SEQ 255 128`;
 do
     setBackgroundColor 0 $i 0
     echo -n " "
 done
 resetOutput
-for i in `seq 0 127`;
+for i in `$SEQ 0 127`;
 do
     setBackgroundColor 0 0 $i
     echo -n " "
 done
 resetOutput
-for i in `seq 255 128`;
+for i in `$SEQ 255 128`;
 do
     setBackgroundColor 0 0 $i
     echo -n " "
 done
 resetOutput
-for i in `seq 0 127`;
+for i in `$SEQ 0 127`;
 do
     setBackgroundColor `rainbowColor $i`
     echo -n " "
 done
 resetOutput
-for i in `seq 255 128`;
+for i in `$SEQ 255 128`;
 do
     setBackgroundColor `rainbowColor $i`
     echo -n " "

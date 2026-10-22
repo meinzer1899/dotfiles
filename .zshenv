@@ -36,6 +36,9 @@ export ZSH_AUTOSUGGEST_USE_ASYNC=1
 
 # pip
 export PATH=$PATH:$HOME/.local/bin
+# https://pydevtools.com/handbook/how-to/how-to-require-a-virtual-for-installing-packages/
+export PIP_REQUIRE_VIRTUALENV=true
+export PYTHONIOENCODING='UTF-8'
 
 # Treat these characters as part of a word.
 [[ -n "$WORDCHARS" ]] || export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'

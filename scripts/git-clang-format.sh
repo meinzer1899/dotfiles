@@ -25,6 +25,8 @@ files()
     git diff "$(git merge-base origin/"${CI_DEFAULT_BRANCH:="main"}" HEAD)" --name-only | grep -E "$filetypes";
 }
 
+# CI_DEFAULT_BRANCH and EXCLUDE_PATTERN are external variables (e.g. specified in interactive shell or
+# provided via CICD). Define default value if not set or declare them "readonly".
 if [[ -n ${EXCLUDE_PATTERN:=""} ]]; then
     exclude() { grep -Ev "$EXCLUDE_PATTERN"; }
 else
