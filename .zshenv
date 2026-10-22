@@ -1,6 +1,9 @@
 # sourced on every invocation of zsh
 # https://github.com/doronbehar/dotfiles/blob/master/.zshenv
 
+# Don't source any global config files from `/etc`.
+unsetopt GLOBAL_RCS
+
 # https://wiki.zshell.dev/docs/guides/customization#disabling-system-wide-compinit-call-ubuntu
 if [[ ${OSTYPE} == linux* ]] && [[ -e /etc/debian_version ]]; then
   # Disable keyboard changes and compinit in /etc/zsh/zshrc.
@@ -44,6 +47,7 @@ export PYTHONIOENCODING='UTF-8'
 [[ -n "$WORDCHARS" ]] || export WORDCHARS='*?_-.[]~&;!#$%^(){}<>'
 
 # CMake and Make
+# https://github.com/rizsotto/Bear Generate compile_commands.json for any C or C++ build
 export CMAKE_EXPORT_COMPILE_COMMANDS=ON
 export MAKEFLAGS="-j$(nproc)"
 if (( $+commands[ninja] )); then

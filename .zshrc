@@ -50,17 +50,18 @@ zi wait'0b' lucid for \
   OMZL::{'completion.zsh','clipboard.zsh'}
 
 # Setup ssh agent (vs code uses this to share git credentials in devcontainer)
-# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md
+# https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/ssh-agent/README.md#powerline-10k-specific-settings
 zi wait'0b' lucid for \
   atload'zstyle :omz:plugins:ssh-agent agent-forwarding yes; \
-  zstyle :omz:plugins:ssh-agent lazy yes;' \
+  zstyle :omz:plugins:ssh-agent lazy yes; \
+  zstyle :omz:plugins:ssh-agent quiet yes;' \
   if'[[ -d ~/.ssh ]]' \
   OMZP::ssh-agent \
   if'[[ -d ~/.gnupg ]]' \
   OMZP::gpg-agent
 
 zi wait'0b' lucid for \
-  as'program' pick'neofetch' \
+  as'program' pick'neofetch' depth'1' \
   atclone'cp neofetch.1 $ZI[MAN_DIR]/man1' atpull'%atclone' \
   dylanaraps/neofetch
 
@@ -90,7 +91,7 @@ zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
 
 zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf bat/autocomplete/bat.zsh _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
-  atpull'%atclone' \
+  atpull'%atclone' depth'1' \
   mv'bat* bat' sbin'**/bat(.exe|) bat' \
   @sharkdp/bat
 
@@ -99,7 +100,7 @@ zi wait lucid as'program' from'gh' has'bat' pick'src/*' for \
 
 zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf fd/autocomplete/_fd _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
-  atpull'%atclone' \
+  atpull'%atclone' depth'1' \
   mv'fd* fd' sbin'**/fd(.exe|) fd' \
   @sharkdp/fd
 
@@ -107,14 +108,14 @@ zi wait lucid as'program' from'gh' for \
   atclone'export NUMBAT_SYSTEM_MODULE_PATH=$ZI[PLUGINS_DIR]/sharkdp---numbat/numbat/modules; \
     cargo install -f --path numbat-cli; \
   ' \
-  atpull'%atclone' \
+  atpull'%atclone' depth'1' \
   sbin'target/release/numbat numbat' \
   @sharkdp/numbat
 
 zi wait lucid as'program' from'gh-r' for \
   mv'delta* delta' \
   sbin'**/delta delta' \
-  atpull'%atclone' \
+  atpull'%atclone' depth'1' \
   atclone'./delta/delta --generate-completion zsh > _delta' \
   @dandavison/delta
 
@@ -126,7 +127,7 @@ zi wait lucid as'program' from'gh' for \
   atclone'cargo build --release; \
 	  ln -sf completions/zsh/_eza _eza; \
 	  cp -vf man/*.1.* $ZI[MAN_DIR]/man1; cp -vf man/*.5.* $ZI[MAN_DIR]/man5' \
-  atpull'%atclone' \
+  atpull'%atclone' depth'1' \
   sbin'target/release/eza eza' \
   @eza-community/eza
 
@@ -149,7 +150,7 @@ zi wait lucid for \
 # see dandavison/delta how to add completions when installed via binary
 zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf ripgrep/complete/_rg _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
-  atpull'%atclone' \
+  atpull'%atclone' depth'1' \
   mv'ripgrep* ripgrep' sbin'**/rg(.exe|) rg' \
   @BurntSushi/ripgrep
 
@@ -164,13 +165,13 @@ zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
 zi wait lucid as'program' from'gh-r' for \
   mv'neocmakelsp* neocmakelsp' \
   sbin'**/neocmakelsp' \
-  @Decodetalkers/neocmakelsp
+  @neocmakelsp/neocmakelsp
 
 # FZF
 # Download the package with the bin-gem-node annex-utilizing ice list
 # + setting up the key bindings. The "+keys" variants are available for each profile
 # zi pack"bgn+keys" for fzf # did not update fzf binary (was 0.30.0 when 0.38.0 (>1year) was available
-zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' from'gh-r' dl'
+zi wait lucid for atclone'mkdir -p $ZPFX/{bin,man/man1}' atpull'%atclone' depth'1' from'gh-r' dl'
   https://raw.githubusercontent.com/junegunn/fzf/master/shell/completion.zsh -> _fzf;
   https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf-tmux.1 -> $ZPFX/man/man1/fzf-tmux.1;
   https://raw.githubusercontent.com/junegunn/fzf/master/man/man1/fzf.1 -> $ZPFX/man/man1/fzf.1;
@@ -223,6 +224,7 @@ export FZF_DEFAULT_OPTS="$FZF_DEFAULT_COLORS\
   --bind ctrl-d:half-page-down
   --bind ctrl-u:half-page-up
   --bind alt-a:toggle-all
+  --bind ctrl-p:toggle-preview
   --style='minimal'
 "
 
@@ -291,6 +293,17 @@ zi wait'0b' lucid as'command' src'zman.zsh' for \
 
 zi wait'0b' lucid as'command' pick'zsh-bench' for \
   @romkatv/zsh-bench
+
+# TODO: migrate to https://mise.jdx.dev/
+# or use this maintained fork
+# using volta.sh install script, might be possible to delete volta binaries in bin (3, starting with volta*)
+# so that the binaries from this fork are used
+# or symlink:
+# atclone'for f in "$PWD"/volta*(N); do ln -sf "$f" "$HOME/.volta/bin/"; done' \
+zi wait'0b' lucid as'program' from'gh-r' for \
+  mv'volta* volta' \
+  sbin'volta' \
+  @chawyehsu/volta
 
 # https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
 zi ice wait'0b' lucid as'program' atclone'cmake . -B build-ninja -G "Ninja" -DCMAKE_INSTALL_PREFIX=$ZPFX; cmake --build build-ninja' \
@@ -378,6 +391,8 @@ export SAVEHIST=1000000   # maximum number of items for the history file
 # https://wiki.zshell.dev/docs/guides/customization#history-optimization
 setopt append_history         # Allow multiple sessions to append to one Zsh command history.
 setopt extended_history       # Show timestamp in history.
+setopt inc_append_history     # Write to the history file immediately, not when the shell exits.
+setopt share_history          # Share history between different instances of the shell.
 setopt hist_expire_dups_first # Expire A duplicate event first when trimming history.
 setopt hist_find_no_dups      # Do not display a previously found event.
 setopt hist_ignore_all_dups   # Remove older duplicate entries from history.
@@ -386,8 +401,6 @@ setopt hist_ignore_space      # Do not record an Event Starting With A Space.
 setopt hist_reduce_blanks     # Remove superfluous blanks from history items.
 setopt hist_save_no_dups      # Do not write a duplicate event to the history file.
 setopt hist_verify            # Do not execute immediately upon history expansion.
-setopt inc_append_history     # Write to the history file immediately, not when the shell exits.
-setopt share_history          # Share history between different instances of the shell.
 
 # https://wiki.zshell.dev/docs/guides/customization#other-tweaks
 setopt auto_cd              # Use cd by typing directory name if it's not a command.
@@ -467,6 +480,12 @@ zstyle ':completion:*:manuals.*'  insert-sections   true
 
 # cd/nvim will never select the parent directory (e.g.: cd ../<TAB>)
 zstyle ':completion:*:(cd|nvim|vim):*' ignore-parents parent pwd
+
+# Provide completion for *all* the running processes and not just the processes
+# running in the current shell.
+zstyle ':completion:*:processes' command 'ps -u $LOGNAME -o pid,user,command -w'
+# Provide more processes in completion of programs like `killall`.
+zstyle ':completion:*:processes-names' command 'ps -c -u $LOGNAME -o command | uniq'
 
 # Dircolors on completions
 # https://wiki.zshell.dev/docs/guides/customization#color-completion-for-some-things
