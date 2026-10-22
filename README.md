@@ -105,11 +105,14 @@ Don't use other installation methods using curl, because of security issues (htt
 
 ### misc
 
+* [Pressing "enter" on an empty buffer displays an information-rich and pretty dashboard.](https://github.com/chrisgrieser/zsh-magic-dashboard)
 * https://registerspill.thorstenball.com/p/how-fast-is-your-shell
 * https://github.com/unixorn/awesome-zsh-plugins
 
 ### zshrcs
 
+* https://github.com/chrisgrieser/.config/tree/main/zsh/config
+* https://github.com/lljbash/dotfiles/blob/master/zshrc
 * https://github.com/bew/dotfiles/tree/main/zsh
 * https://github.com/HaleTom/dotfiles/blob/main/zsh/.config/zsh/.zshrc
 * https://github.com/mattmc3/zdotdir
@@ -125,12 +128,12 @@ Don't use other installation methods using curl, because of security issues (htt
 * https://github.com/agkozak/
 * https://github.com/seagle0128/dotfiles/blob/master/.zshrc
 
-## bash
+## bash, shell
 
-https://mywiki.wooledge.org/BashPitfalls
-https://mywiki.wooledge.org/BashPitfalls#set_-euo_pipefail recommends against `set -e` because of the various pitfalls especially in conditional evaluation and option `pipefail` and recommends own error handling instead.
-http://redsymbol.net/articles/unofficial-bash-strict-mode/
-and http://redsymbol.net/articles/unofficial-bash-strict-mode/#short-circuiting
+* https://www.geeksforgeeks.org/linux-unix/shell-scripting-shell-variables/
+* https://mywiki.wooledge.org/BashPitfalls
+* https://mywiki.wooledge.org/BashPitfalls#set_-euo_pipefail recommends against `set -e` because of the various pitfalls especially in conditional evaluation and option `pipefail` and recommends own error handling instead.
+* http://redsymbol.net/articles/unofficial-bash-strict-mode/ and http://redsymbol.net/articles/unofficial-bash-strict-mode/#short-circuiting
 ```bash
 set -euo pipefail; shopt -s failglob # safe mode
 ```
@@ -192,6 +195,7 @@ make -j$(nproc) && sudo make install
 `tmux new -s tmux`
 
 .tmux.conf:
+* [Toggle-able Terminal in Tmux](https://gist.github.com/pbnj/67c16c37918ba40bbb233b97f3e38456)
 * https://github.com/sunaku/home/blob/master/.tmux.conf.erb
 * https://github.com/doronbehar/.tmux/tree/master
 * https://gist.github.com/adibhanna/979461c5f7d906daf24925fbd9b255eb
@@ -222,6 +226,7 @@ https://stackoverflow.com/questions/45023363/what-is-docker-io-in-relation-to-do
 https://docs.docker.com/engine/install/ubuntu
 
 ```bash
+    # docker run not needed?
     docker run --detach -v $(pwd):$(pwd) -w $(pwd) --name <name> image:tag sleep infinity # may does not work, if ENTRYPOINT is set in Dockerfile
     docker start <name> # if container with that name already exists
     docker exec <name> command # execute command, e.g. via vim-dispatch
@@ -231,10 +236,10 @@ https://docs.docker.com/engine/install/ubuntu
 
 * https://devopscube.com/reduce-docker-image-size/
 
+* https://github.com/wagoodman/dive A tool for exploring each layer in a docker image
 * https://github.com/wagoodman analyze image size, vulnerabilities and more
 * https://github.com/kkvh/vim-docker-tools Toolkit for managing docker containers, networks and images in vim.
 
-* https://github.com/lmapii/cproject Example for a C environment with CMake, Docker, Unity, and GitHub Actions.
 * https://github.com/philips-software/amp-devcontainer/tree/main/.devcontainer/cpp
 * https://github.com/StableCoder/docker-build-core
 * https://github.com/think-cell/docker
@@ -243,6 +248,12 @@ https://docs.docker.com/engine/install/ubuntu
 
 ## vim
 
+* [My Vim-related gists](https://gist.github.com/romainl/4b9f139d2a8694612b924322de1025ce)
+* [Compile Code The Way Vim Intended.](https://www.youtube.com/watch?v=vB3NT9QIXo8)
+* https://swedishembedded.com/developers/vim-in-minutes
+* https://vonheikemen.github.io/devlog/tools/how-to-survive-without-multiple-cursors-in-vim/
+* https://hamvocke.com/blog/ansi-vim-color-scheme/ I prefer defining my terminal color scheme once and having command-line tools inherit it.
+* [Vim Universe - Small videos 1:30 - 8:00 vim commands, tips and tricks](https://www.youtube.com/playlist?list=PLrU0uga7kmr0dsc3wWS4TS9mRX0Ue7kn)
 * https://github.com/ibhagwan/vim-cheatsheet
 * https://learnvimscriptthehardway.stevelosh.com/
 * https://github.com/mattmc3/neovim-cheatsheet
@@ -257,7 +268,12 @@ https://docs.docker.com/engine/install/ubuntu
 Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
 ### vimrcs
+* https://github.com/romainl/idiomatic-vimrc
 
+* [Linting your code, the vanilla way](https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29)
+
+* https://github.com/pbnj/.vim
+* https://github.com/tbouquet/vimconf/blob/master/.vimrc all settings commented
 * https://github.com/sunaku/.vim/tree/master
 * https://github.com/mrnugget/vimconfig/tree/master
 * https://github.com/itchyny/dotfiles/blob/main/.vimrc
@@ -318,21 +334,63 @@ https://github.com/hadolint/hadolint
 
 ## C++ cpp
 
-Compiler warnings
+### resources
 
+* [Reintroduction to Generic Programming for C++ Engineers - Nick DeMarco - C++Now 2024](https:
+    //www.youtube.com/watch?v=tt0-7athgrE)
+* [Developing Better C++ Code by Isolating Decisions - Michael Okyen - C++Now 2024](https:
+    //www.youtube.com/watch?v=UTgxuT2hZY0)
+* https://cppcheatsheet.com and https://github.com/crazyguitar/cppcheatsheet Modern C and C++ programming, suited for LLM
+* [A collection of resources on modern C++.](https://awesomecpp.com/)
+* https://github.com/HappyCerberus/daily-bite-cpp (especially Modern-only C++ Course)
+* [Playlist: Modern C++ Series - Mike Shah](https://www.youtube.com/playlist?list=PLvv0ScY6vfd8j-tlhYVPYgiIyXduu6m-L)
+* [C++performance guidelines ](https://fekir.info/post/cpp-performance-guidelines/)
+
+blogs
+* https://fekir.info/
+* https://www.meetingcpp.com/blog/blogroll/
+* https://lemire.me/blog/ with https://github.com/lemire/Code-used-on-Daniel-Lemire-s-blog
+* https://andreasfertig.com/blog/
+* https://akrzemi1.wordpress.com/
+* https://www.meetingcpp.com/blog/blogroll/
+* https://www.okyensourcesoftware.com/blog/
+* https://www.sandordargo.com/
+
+### Compiler warnings
+
+* https://blog.quarkslab.com/clang-hardening-cheat-sheet-ten-years-later.html
+* [Security in C++ - Hardening Techniques From the Trenches - Louis Dionne - C++Now 2024](https://www.youtube.com/watch?v=t7EJTO0-reg)
 * https://best.openssf.org/Compiler-Hardening-Guides/Compiler-Options-Hardening-Guide-for-C-and-C++.html
 * https://libcxx.llvm.org/Hardening.html
 * https://clang.llvm.org/docs/DiagnosticsReference.html
 * https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+* https://gcc.gnu.org/onlinedocs/gcc-14.1.0/gcc/Instrumentation-Options.html#Instrumentation-Options
+* https://www.phoronix.com/news/GCC-fhardened-Hardening-Option
 
+Security hardening flags
+```Makefile
+HARDENING = -D_FORTIFY_SOURCE=2 \
+-fstack-protector-strong \
+-fPIE \
+-fstack-clash-protection \
+-fcf-protection
+```
+
+Linker hardening flags
+```Makefile
+LDFLAGS = -Wl,-z,relro \
+-Wl,-z,now \
+-Wl,-z,noexecstack \
+-Wl,-z,separate-code \
+-pie
+```
+
+### Projects
+* [WHATWG-compliant and fast URL parser written in modern C++, part of Internet Archive, Node.js, Clickhouse,Redpanda, Kong, Telegram, Adguard, Datadog and Cloudflare Workers](https://github.com/ada-url/ada)
 * https://github.com/stephenberry/glaze Extremely fast, in memory, JSON and interface library for modern C++
+* https://github.com/acts-project/acts  Experiment-independent toolkit for (charged) particle track reconstruction in (high energy) physics experiments implemented in modern C++ (C++23)
 
-* https://github.com/HappyCerberus/daily-bite-cpp (especially Modern-only C++ Course)
-[Playlist: Modern C++ Series - Mike Shah](https://www.youtube.com/playlist?list=PLvv0ScY6vfd8j-tlhYVPYgiIyXduu6m-L)
-* https://akrzemi1.wordpress.com/
-* https://www.meetingcpp.com/blog/blogroll/
-
-playground
+### playground
 [HU print chunks 0001'0203'...'0e0f](https://godbolt.org/z/98zvoc7Eb)
 
 ### ccls languageserver
@@ -340,12 +398,25 @@ playground
 * https://github.com/MaskRay/ccls/wiki/Build
 * https://github.com/MaskRay/ccls/wiki/Install
 
-### [googletest](https://google.github.io/googletest/)
+### API documentation
+
+C++ API Documentation (Doxygen / Breathe / Exhale)
+* Doxygen parses C++ source code in src/bms_monitor/cpp_api/ and generates XML
+* Breathe (Sphinx extension) reads the Doxygen XML
+* Exhale (Sphinx extension) transforms Breathe output into hierarchical reStructuredText for publishing
+* https://sphinx-needs.readthedocs.io/
+* Sphinx-Needs: Generates html, pdf etc. from reStructured text. reStructured text: simple, unobtrusive markup language
+
+### unit tests [googletest](https://google.github.io/googletest/)
+
+* https://shenxianpeng.dev/posts/2021/gcov-example/
+* https://danielsieger.com/blog/2024/08/03/code-coverage-with-cmake.html
 
 Reduce execution times of unit tests:
 * run CTest in parallel `ctest --parallel`
 * use `gtest_discover_tests` (scans test executable) `gtest_add_tests` (scans source code for googletest macros) ( from https://cmake.org/cmake/help/latest/module/GoogleTest.html
 * this executes a list of all _test cases_ instead of the whole _test executable_, which is much faster
+* https://github.com/google/googletest/blob/main/docs/advanced.md#running-a-subset-of-the-tests (gtest_filter)
 * https://cmake.org/cmake/help/latest/manual/ctest.1.html
 * e.g. `ctest --parallel --test-dir <build directory> -R <regex filter for tests> --rerun-failed --output-on-failure`
 
@@ -356,16 +427,36 @@ Use install-cmake.sh from foonathan to install to /usr/local. May remove "old" c
 https://blog.feabhas.com/category/build-systems/
 with https://github.com/feabhas/cmake-presets-blog
 
+TOP
+* https://github.com/TheLartians/ModernCppStarter
+* https://hsf-training.github.io/hsf-training-cmake-webpage/aio/index.html
+* https://github.com/onqtam/awesome-cmake
+* https://cmake.org/cmake/help/book/mastering-cmake/index.html and https://cmake.org/cmake/help/latest/guide/tutorial/index.html
+
+* https://www.youtube.com/watch?v=UH6F6ypdYbw CMake - the essential package
+* https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1 effective_modern_cmake.md
+* https://github.com/bemanproject/exemplar Modern CMake best practices as project and https://github.com/bemanproject/beman/blob/main/docs/beman_standard.md#cmake
 * https://cmake.org/cmake/help/latest/module/CTestCoverageCollectGCOV.html
 * https://crascit.com/category/cmake/
 * https://fekir.info/post/conditional-compilation/
 * https://fekir.info/post/dependency-injection-in-cmake/
 * https://github.com/madduci/moderncpp-project-template A Modern C++ cross-platform Project Template with CMake, conan (optional), cppcheck (optional) and clang-format (optional)
 * https://github.com/filipdutescu/modern-cpp-template A template for modern C++ projects using CMake, Clang-Format, CI, unit testing and more, with support for downstream inclusion.
-* https://github.com/TheLartians/Format.cmake Stylize your code! Automatic clang-format and cmake-format targets for CMake.
 * https://github.com/intel/cicd-repo-infrastructure
 * https://github.com/StableCoder/cmake-scripts
 * https://github.com/cpp-best-practices/cmake_template
+* https://github.com/xtensor-stack/xtensor/blob/f21347a93c77218528521bdce9524e76bb801e31/test/set_compiler_flag.cmake#L1
+Possible to do this instead of generator expressions:
+    ```cmake
+set_compiler_flag(
+    _cxx_std_flag CXX
+    "-std=c++23"  # this should work with GNU, Intel, PGI
+    "/std:c++23"  # this should work with MSVC
+    )
+```
+* http://cliutils.gitlab.io/modern-cmake/ An Introduction to Modern CMake with https://gitlab.com/CLIUtils/modern-cmake
+* https://github.com/schweitzer/modern-cmake-tutorial
+* debug generator expressions: https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#debugging
 
 #### Misc
 
@@ -386,8 +477,12 @@ Determine the minimal required CMake version of a project: [cmake_min_version](h
 
 ### Optimization, performance, profiling, dependencies
 
-* https://github.com/springmeyer/profiling-guide with perf(linux)
-* https://github.com/jmuehlig/perf-cpp
+* https://jotavare.github.io/valgrind_cheatsheet/
+* [An open-source benchmark and tracking library for C++ projects, designed to provide deep insights into
+    function performance with minimal overhead.](https://github.com/Compaile/ctrack)
+* https://github.com/springmeyer/profiling-guide with [perf](https://www.brendangregg.com/perf.html)
+* https://ftp.gnu.org/old-gnu/Manuals/gprof-2.9.1/html_mono/gprof.html
+* https://github.com/jmuehlig/perf-cpp and https://github.com/Compaile/ctrack
 * https://fekir.info/post/cpp-performance-guidelines/
 * https://fekir.info/post/library-dependency-graphs-in-cmake/
 * https://vitaut.net/posts/2024/faster-cpp-compile-times/
@@ -422,6 +517,7 @@ Section:
 ```bash
 wget https://apt.llvm.org/llvm.sh
 chmod +x llvm.sh
+# for latest <version number> check variable CURRENT_LLVM_STABLE in llvh.sh
 sudo ./llvm.sh <version number> all
 ```
 needed to also install clang-tidy etc.
@@ -433,11 +529,9 @@ sudo update-alternatives --install /bin/clang-format clang-format /bin/clang-for
 
 Cache for clang-tidy static analysis results:
 https://github.com/matus-chochlik/ctcache/tree/main
-
 https://stackoverflow.com/questions/51582604/how-to-use-cpplint-code-style-checking-with-cmake
-
-https://github.com/lmapii/run-clang-tidy
-
+https://github.com/lmapii/run-clang-tidy CLI application to run clang-tidy on a set of files specified using globs in a JSON configuration file.
+https://github.com/lljbash/clangd-tidy A faster alternative to clang-tidy
 https://llvm.org/docs/GettingStarted.html#getting-the-source-code-and-building-llvm
 
 - [ ] update .vimrc with comments from https://github.com/nvim-zh/minimal_vim/blob/master/init.vim
@@ -451,6 +545,7 @@ https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html
 :Termdebug " help Termdebug, :Arguments <args, eg. --gtest_filter=<unquoted regex>
 ```
 
+* https://github.com/iztanos/gdb-dojo
 * https://jotavare.github.io/gdb_cheatsheet/
 * https://github.com/sharkdp/dbg-macro A dbg(…) macro for C++
 * Replace .gdbinit with https://github.com/pwndbg/pwndbg Exploit Development and Reverse Engineering with GDB Made Easy
@@ -470,6 +565,7 @@ https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html
 
 ## dotfiles management
 
+* https://github.com/2KAbhishek/dots2k Passionately Crafted CLI Setup 🐧❤️
 * https://github.com/yous/dotfiles
 * https://github.com/sunaku/home
 * https://sunaku.github.io/about.html
@@ -537,15 +633,26 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 * https://www.ssp.sh/brain/
 * https://www.ssp.sh/blog/pkm-workflow-for-a-deeper-life/
 
-## Learnings Notes
+## Learning Notes
 
-### generic programming
+### software engineering, coding, programming
 
+* [Driving compilers - A 5-part series on how compiler drivers, preprocessors, compilers, linkers, and loaders turn source code into executables](https://fabiensanglard.net/dc/index.php)
 * https://godbolt.org/z/a4ooYbd1P from [Evolution of a Median Algorithm in C++ - Pete Isensee - CppCon 2023](https://www.youtube.com/watch?v=izxuLq_HZHA&pp=ygUcY3BwIGV2b2x1dGlvbiBtZWFuIGFsZ29yaXRobQ%3D%3D)
+* https://www.codesmells.org/ A Curated Catalog of Code Smells. Every named code smell in one place — classified, connected, and fixable.
+
+### sw architecture, sw design
+
+* https://refactoring.guru/design-patterns/
+
+### collaboration, code review
+
+* [Code review skills for emotionally intelligent developers](https://www.oreilly.com/videos/code-review-skills/0636920335535/0636920335535-video327095/)
 
 ### Resources
 
 * https://epage.github.io/dev/
+* https://registerspill.thorstenball.com/
 
 ### Code Review
 
@@ -555,7 +662,9 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 ### Commits
 
 * https://epage.github.io/dev/commits/
-* https://cafkafk.dev/p/conventional-commits/
+* [Conventional Commits Util to generate Semantic Version and Markdown Change Log and Validate Commit Messages](https://github.com/qoomon/git-conventional-commitsGit)
+* [cz-git | czg 🛠️ DX first and more engineered, lightweight, customizable, standard output format Commitizen adapter and CLI](https://github.com/Zhengqbbb/cz-git)
+* https://www.conventionalcommits.org/en/v1.0.0/
 
 ### Planning, Estimating
 
@@ -565,3 +674,7 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 
 * https://epage.github.io/dev/testing/
 * [Kevlin Henney - Programming with GUTs - Meeting C++ 2021](https://www.youtube.com/watch?v=cfh6ZrA19r4)
+
+### Presentations
+
+* https://tidyfirst.substack.com/p/start-presentations-on-the-second
