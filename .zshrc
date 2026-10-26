@@ -148,6 +148,8 @@ zi wait lucid for \
 # https://github.com/BurntSushi/ripgrep/blob/master/FAQ.md#manpage
 # useful when switching to from'gh' and building with rust compiler
 # see dandavison/delta how to add completions when installed via binary
+# [rga: ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, etc.](https:
+# //github.com/phiresky/ripgrep-all)
 zi wait lucid as'program' from'gh-r' for \
   atclone'ln -sf ripgrep/complete/_rg _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' depth'1' \
@@ -340,7 +342,7 @@ zstyle ':completion:*' fzf-search-display true
 # don't use the old compctl completion system
 zstyle ':completion:*' use-compctl false
 
-# # fzf-tab
+# fzf-tab
 # set descriptions format to enable group support
 zstyle ':completion:*:descriptions' format '[%d]'
 # switch group
@@ -352,6 +354,7 @@ zstyle ':fzf-tab:complete:cd:*' fzf-preview 'eza -1 --icons --group-directories-
 zstyle ':completion:complete:*:options' sort false
 # use input as query string when completing zlua
 zstyle ':fzf-tab:*' single-group ''
+# Generate previews: https://github.com/coderabbitai/dotfiles/blob/72e660f2e457b5079d891a53a4c7ad1bc5801594/dot_zshrc#L405
 # preview git commands
 # it is an example. you can change it
 # zstyle ':fzf-tab:complete:git-(add|diff|restore):*' fzf-preview \

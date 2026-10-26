@@ -8,6 +8,8 @@
       "filetypes": ["sh"],
       "ignoredRootPaths": ["~"]
     },
+    // Optional: use config file https://neocmakelsp.github.io/docs/config.html
+    // use Gersemi as CMake format linter
     "cmake": {
       "command": "neocmakelsp",
       "args": ["stdio"],

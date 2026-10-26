@@ -14,7 +14,7 @@ tldr --update
 # javascript tool manager, installs node.js runtimes, npm or any binary from npm
 volta install node@lts # installs latest LTS; node@20 installs latest node 20 version
 # https://docs.npmjs.com/about-npm-versions recommends to install latest version
-volta install npm@bundled # needed for coc plugin install, @latest also available
+volta install npm # needed for coc plugin install, @latest also available
 volta install bash-language-server
 
 # fails when called outside of tmux session
@@ -29,6 +29,7 @@ fi
 # gets updated via zi
 # pip (https://www.mankier.com/1/pip#Commands)
 # TODO: replace pip with uv
+# https://github.com/osprey-oss/migrate-to-uv
 export PIP_REQUIRE_VIRTUALENV=false && python3 -m pip install --upgrade pip
 #has to be pre (https://github.com/iamcco/coc-diagnostic/issues/62#issuecomment-735660297)
 export PIP_REQUIRE_VIRTUALENV=false && python3 -m pip install git+https://github.com/Vimjas/vint.git

@@ -15,6 +15,10 @@
 [branch]
 	# Show most recently changed branches first.
 	sort = -committerdate
+# https://github.com/mfontanini/dotfiles/blob/master/.gitconfig#L41
+[alias]
+      # follow a blame trail
+      follow= "!sh -c 'git log --topo-order -u -L $2,${3:-$2}:"$1"'" -
 [diff]
 	algorithm = histogram
 	colorMoved = default

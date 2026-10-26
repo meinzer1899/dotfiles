@@ -29,6 +29,7 @@ unset MAILCHECK # don't check for mails
 
 export HISTORY_IGNORE="([bf]g|clear|exit|history|incognito|l|l[adfls]|pwd|x|\#*)"
 export ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+# https://github.com/hlissner/dotfiles/blob/254aea2230e1350409a7ae7b6566bcd98f5b5360/config/zsh/completion.zsh#L1
 # ignore ones with a length greater than 80 -- thanks to https://github.com/Aloxaf
 export ZSH_AUTOSUGGEST_HISTORY_IGNORE='?(#c80,)'
 # https://github.com/zsh-users/zsh-autosuggestions

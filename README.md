@@ -60,6 +60,7 @@ apt install xclip
 
 ## Remap CAPSLOCK to ctrl
 
+https://github.com/ian-howell/.dotfiles/blob/main/src/remap_capslock.sh
 https://askubuntu.com/questions/33774/how-do-i-remap-the-caps-lock-and-ctrl-keys#comment1154797_521734
 sudo vi /etc/default/keyboard and change XKBOPTIONS="ctrl:nocaps"
 setxkbmap -option ctrl:nocaps
@@ -111,6 +112,8 @@ Don't use other installation methods using curl, because of security issues (htt
 
 ### zshrcs
 
+* https://github.com/lljbash/dotfiles/blob/212623dd3f1693ef273bc0e5dce91693797f1a2f/zshrc#L1
+* https://github.com/hlissner/dotfiles/blob/254aea2230e1350409a7ae7b6566bcd98f5b5360/config/zsh/completion.zsh#L1
 * https://github.com/chrisgrieser/.config/tree/main/zsh/config
 * https://github.com/lljbash/dotfiles/blob/master/zshrc
 * https://github.com/bew/dotfiles/tree/main/zsh
@@ -130,6 +133,11 @@ Don't use other installation methods using curl, because of security issues (htt
 
 ## bash, shell
 
+* [A full-featured BDD unit testing framework for bash, ksh, zsh, dash and all POSIX shells](https://github.com/shellspec/shellspec)
+* [A collection of Bash scripts for creating safe and useful command line programs.](https://github.com/xwmx/bash-boilerplate)
+* https://dwheeler.com/essays/filenames-in-shell.html 2025, Shell quoting,Filename splitting,NUL-delimited filenames,Leading-dash filenames,Shell globbing,find -print0 ,xargs -0
+* https://www.golinuxcloud.com/linux-commands-cheat-sheet/
+* [Easy, repeatable testing of CLI programs/commands](https://github.com/simonmichael/shelltestrunner)
 * https://www.geeksforgeeks.org/linux-unix/shell-scripting-shell-variables/
 * https://mywiki.wooledge.org/BashPitfalls
 * https://mywiki.wooledge.org/BashPitfalls#set_-euo_pipefail recommends against `set -e` because of the various pitfalls especially in conditional evaluation and option `pipefail` and recommends own error handling instead.
@@ -149,6 +157,8 @@ To release resources, use bash exit traps. http://redsymbol.net/articles/bash-ex
 
 ## git
 
+* [Easy access to gitignore boilerplates from https://github.com/github/gitignore](https://github.com/simonwhitaker/gibo)
+* [Reliable 'git bisect run' recipes in a few lines of Python.](https://github.com/martinus/git_bisectlib) with https://martin.ankerl.com/2026/07/08/broken-build-is-not-a-bad-commit/
 * https://github.com/gitleaks/gitleaks Protect and discover secrets using Gitleaks 🔑
 * https://github.com/stevearc/dotfiles/blob/master/.githelpers
 * https://github.com/mathiasbynens/dotfiles/blob/main/.gitconfig
@@ -195,11 +205,16 @@ make -j$(nproc) && sudo make install
 `tmux new -s tmux`
 
 .tmux.conf:
+* https://github.com/fenetikm/dotfiles/blob/master/.tmux.conf
 * [Toggle-able Terminal in Tmux](https://gist.github.com/pbnj/67c16c37918ba40bbb233b97f3e38456)
 * https://github.com/sunaku/home/blob/master/.tmux.conf.erb
 * https://github.com/doronbehar/.tmux/tree/master
 * https://gist.github.com/adibhanna/979461c5f7d906daf24925fbd9b255eb
 * https://github.com/mrnugget/dotfiles/blob/master/tmux.conf
+
+* [Tmux Popups - The Most Underrated Feature in Tmux. Cool sind: LLM, Musik player, interactive Python shell. numbat?](https://www.youtube.com/watch?v=7BP9iWiKx8Q)
+* [Make tmux powerful and pretty 🥊💅](https://github.com/2KAbhishek/tmux2k)
+* [Tmux AppImage build via Docker](https://github.com/nelsonenzo/tmux-appimage)
 
 ## cargo and rust
 
@@ -220,10 +235,9 @@ from https://github.com/junegunn/fzf/issues/477#issuecomment-444053054.
 
 Vim Integration: https://github.com/junegunn/fzf/blob/master/README-VIM.md
 
-## docker
+* A very fast, portable and hackable fuzzy finder.(https://github.com/alexpasmantier/television/)
 
-https://stackoverflow.com/questions/45023363/what-is-docker-io-in-relation-to-docker-ce-and-docker-ee-now-called-mirantis-k
-https://docs.docker.com/engine/install/ubuntu
+## docker
 
 ```bash
     # docker run not needed?
@@ -233,6 +247,10 @@ https://docs.docker.com/engine/install/ubuntu
     docker exec -it <name> /bin/bash # attach interactively
     docker stop name # to stop
 ```
+
+* [Docker image to compile C++ projects with recent Clang and GCC compilers](https://github.com/wichtounet/cpp)
+https://stackoverflow.com/questions/45023363/what-is-docker-io-in-relation-to-docker-ce-and-docker-ee-now-called-mirantis-k
+https://docs.docker.com/engine/install/ubuntu
 
 * https://devopscube.com/reduce-docker-image-size/
 
@@ -258,6 +276,7 @@ https://docs.docker.com/engine/install/ubuntu
 * https://learnvimscriptthehardway.stevelosh.com/
 * https://github.com/mattmc3/neovim-cheatsheet
 
+* https://its.mw/tags/vim/
 * https://www.youtube.com/playlist?list=PLrU0uga7kmr0dsc3wWS4TS9mRX0Ue7kn Vim Universe Playlist
 * https://swedishembedded.com/developers/vim-in-minutes Awesome Vim: Modern Guide To A Fully Featured Vim IDE
 * https://bluz71.github.io/2021/09/10/vim-tips-revisited.html
@@ -272,6 +291,8 @@ Important infos about editing .vimrc: https://vi.stackexchange.com/a/7723/30978
 
 * [Linting your code, the vanilla way](https://gist.github.com/romainl/ce55ce6fdc1659c5fbc0f4224fd6ad29)
 
+* https://github.com/coderabbitai/dotfiles/blob/72e660f2e457b5079d891a53a4c7ad1bc5801594/dot_vimrc#L346
+* [additional providers for fuzzy finder/selector vim-clap](https://github.com/muellan/vim-clap-more)
 * https://github.com/pbnj/.vim
 * https://github.com/tbouquet/vimconf/blob/master/.vimrc all settings commented
 * https://github.com/sunaku/.vim/tree/master
@@ -312,12 +333,16 @@ https://github.com/dpetersen/dev-container-base
 
 ### linter
 
-https://github.com/caramelomartins/awesome-linters
+* [A linter for Zsh scripting language.](https://github.com/z-shell/zsh-lint)
+* https://github.com/caramelomartins/awesome-linters
 
 https://github.com/iamcco/diagnostic-languageserver/wiki/Linters
 All of them are configured via coc-diagnostic. Activate them by mapping the
 linter to the desired filetype in `coc-settings.json`.
 https://github.com/iamcco/coc-diagnostic/blob/master/src/config.ts
+
+#### cmake
+* [A formatter to make your CMake code the real treasure](https://github.com/BlankSpruce/gersemi)
 
 #### bash-language-server
 
@@ -336,17 +361,19 @@ https://github.com/hadolint/hadolint
 
 ### resources
 
-* [Reintroduction to Generic Programming for C++ Engineers - Nick DeMarco - C++Now 2024](https:
-    //www.youtube.com/watch?v=tt0-7athgrE)
-* [Developing Better C++ Code by Isolating Decisions - Michael Okyen - C++Now 2024](https:
-    //www.youtube.com/watch?v=UTgxuT2hZY0)
+* https://iscinumpy.dev/post/cpp-23/
+* [Code auditing productivity multiplier.](https://github.com/trailofbits/multiplier)
+* [Modern C++ Error Handling - Phil Nash - CppCon 2024](https://www.youtube.com/watch?v=n1sJtsjbkKo)
+* [Reintroduction to Generic Programming for C++ Engineers - Nick DeMarco - C++Now 2024](https://www.youtube.com/watch?v=tt0-7athgrE)
+* [Developing Better C++ Code by Isolating Decisions - Michael Okyen - C++Now 2024](https://www.youtube.com/watch?v=UTgxuT2hZY0)
 * https://cppcheatsheet.com and https://github.com/crazyguitar/cppcheatsheet Modern C and C++ programming, suited for LLM
 * [A collection of resources on modern C++.](https://awesomecpp.com/)
-* https://github.com/HappyCerberus/daily-bite-cpp (especially Modern-only C++ Course)
+* https://github.com/HappyCerberus/daily-bite-cpp (especially Modern-only C++ Course) and https://github.com/HappyCerberus
 * [Playlist: Modern C++ Series - Mike Shah](https://www.youtube.com/playlist?list=PLvv0ScY6vfd8j-tlhYVPYgiIyXduu6m-L)
 * [C++performance guidelines ](https://fekir.info/post/cpp-performance-guidelines/)
 
 blogs
+* https://juntao.substack.com/ The pragmatic developer
 * https://fekir.info/
 * https://www.meetingcpp.com/blog/blogroll/
 * https://lemire.me/blog/ with https://github.com/lemire/Code-used-on-Daniel-Lemire-s-blog
@@ -386,6 +413,11 @@ LDFLAGS = -Wl,-z,relro \
 ```
 
 ### Projects
+
+* [CLI11 is a command line parser for C++11 and beyond that provides a rich feature set with a simple and intuitive interface.](https://github.com/CLIUtils/CLI11)
+* https://terminaltrove.com/language/cpp/
+* [Simple, fast, accurate single-header microbenchmarking functionality for C++11/14/17/20](https://github.com/martinus/nanobench)
+* [C++20 and later BLAKE3 implementation using std::simd, std::execution, multi-architecture SIMD kernels compiled into a single binary with zero-overhead runtime dispatch, and OS-native direct I/O behind a unified interface](https://github.com/pysco68/blake3pp)
 * [WHATWG-compliant and fast URL parser written in modern C++, part of Internet Archive, Node.js, Clickhouse,Redpanda, Kong, Telegram, Adguard, Datadog and Cloudflare Workers](https://github.com/ada-url/ada)
 * https://github.com/stephenberry/glaze Extremely fast, in memory, JSON and interface library for modern C++
 * https://github.com/acts-project/acts  Experiment-independent toolkit for (charged) particle track reconstruction in (high energy) physics experiments implemented in modern C++ (C++23)
@@ -407,10 +439,12 @@ C++ API Documentation (Doxygen / Breathe / Exhale)
 * https://sphinx-needs.readthedocs.io/
 * Sphinx-Needs: Generates html, pdf etc. from reStructured text. reStructured text: simple, unobtrusive markup language
 
-### unit tests [googletest](https://google.github.io/googletest/)
+### unit tests gtest [googletest](https://google.github.io/googletest/)
 
+* [GUnit - Google.Test/Google.Mock/Cucumber on steroids](https://github.com/cpp-testing/GUnit)
 * https://shenxianpeng.dev/posts/2021/gcov-example/
 * https://danielsieger.com/blog/2024/08/03/code-coverage-with-cmake.html
+* https://github.com/tstack/lnav/blob/master/cmake/coverage.cmake - custom target to generate coverage report
 
 Reduce execution times of unit tests:
 * run CTest in parallel `ctest --parallel`
@@ -428,11 +462,17 @@ https://blog.feabhas.com/category/build-systems/
 with https://github.com/feabhas/cmake-presets-blog
 
 TOP
+* https://cliutils.gitlab.io/modern-cmake/
+* [More Modern CMake](https://hsf-training.github.io/hsf-training-cmake-webpage/aio/index.html) and https://github.com/hsf-training/hsf-training-cmake-webpage
+* https://hsf-training.github.io/hsf-training-cmake-webpage/
 * https://github.com/TheLartians/ModernCppStarter
 * https://hsf-training.github.io/hsf-training-cmake-webpage/aio/index.html
 * https://github.com/onqtam/awesome-cmake
 * https://cmake.org/cmake/help/book/mastering-cmake/index.html and https://cmake.org/cmake/help/latest/guide/tutorial/index.html
 
+* unit testing for CMake: https://github.com/cpm-cmake/CPM.cmake/blob/master/cmake/testing.cmake and https://github.com/cpm-cmake/CPM.cmake/blob/master/test/unit/version_from_git_tag.cmake
+* https://github.com/pysco68/blake3pp/tree/main/cmake/toolchains
+* [A formatter to make your CMake code the real treasure](https://github.com/BlankSpruce/gersemi)
 * https://www.youtube.com/watch?v=UH6F6ypdYbw CMake - the essential package
 * https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1 effective_modern_cmake.md
 * https://github.com/bemanproject/exemplar Modern CMake best practices as project and https://github.com/bemanproject/beman/blob/main/docs/beman_standard.md#cmake
@@ -467,16 +507,20 @@ set_compiler_flag(
 
 Determine the minimal required CMake version of a project: [cmake_min_version](https://github.com/nlohmann/cmake_min_version)
 
-### Online Compiler
+### Online Compiler, Online performance, Online benchmarking, Online Codebrowser
 
-* https://build-bench.com/
+* [Code Browser for C, C++, Rust & Dart by KDAB](https://codebrowser.dev/)
 * https://godbolt.org/
 * https://cppinsights.io/
 * https://www.perfbench.com/
 * https://quick-bench.com/
+* https://www.onlinegdb.com/
 
-### Optimization, performance, profiling, dependencies
+### Optimization, performance, profiling, dependencies, benchmarking
 
+* [Home of the Renovate CLI: Cross-platform Dependency Automation by Mend.io](https://github.com/renovatebot/renovate)
+* [Keynote: Benchmarking - It's About Time - Matt Godbolt - C++Now 2026](https://www.youtube.com/watch?v=EU_nQh8wg5A)
+* [Simple, fast, accurate single-header microbenchmarking functionality for C++11/14/17/20](https://github.com/martinus/nanobench)
 * https://jotavare.github.io/valgrind_cheatsheet/
 * [An open-source benchmark and tracking library for C++ projects, designed to provide deep insights into
     function performance with minimal overhead.](https://github.com/Compaile/ctrack)
@@ -491,6 +535,7 @@ Determine the minimal required CMake version of a project: [cmake_min_version](h
 
 ### _LLVM_, `clang`, `clangd`
 
+* https://github.com/jmpfar/clangd-wheel and https://realpython.com/python-wheels/
 * https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html
 * https://github.com/google/sanitizers/wiki/AddressSanitizerFlags
 ```cmake
@@ -521,6 +566,7 @@ chmod +x llvm.sh
 sudo ./llvm.sh <version number> all
 ```
 needed to also install clang-tidy etc.
+Update alternatives with --slave like [here](https://github.com/pysco68/blake3pp/blob/8404502a9577dd0639977333829969ad848895a7/docker/clang.Dockerfile#L41)
 
 Need to update alternatives for llvm tools, e.g. clang-format, clangd, clang-tidy, lld.
 ```bash
@@ -563,8 +609,11 @@ https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html
 * https://github.com/voldikss/coc-extensions/tree/main/packages/coc-tasks
 * https://github.com/EthanJWright/vs-tasks.nvim
 
-## dotfiles management
+## dotfiles management, dotfiles
 
+* [🔮 Beautiful dots for Arch hyprland and bspwm](https://github.com/meowrch/meowrch)
+* https://github.com/2KAbhishek/dots2k
+* https://github.com/meain/dotfiles
 * https://github.com/2KAbhishek/dots2k Passionately Crafted CLI Setup 🐧❤️
 * https://github.com/yous/dotfiles
 * https://github.com/sunaku/home
@@ -576,7 +625,9 @@ https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html
 * https://dotfiles.github.io/
 * https://github.com/rhysd/dotfiles
 
-## mold
+## linker, wild, mold
+
+* Benchmark comparison of open-source linkers on Linux https://github.com/sicherha/linker-benchmarks
 
 ```sh
 CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
@@ -584,6 +635,8 @@ CC="clang" CXX="clang++" LDFLAGS="{LDFLAGS} -fuse-ld=mold" cmake ...
 
 ## neovim nvim
 
+[Most Beautiful Typing practice plugin for Neovim with dashboard](https://github.com/nvzone/typr)
+[Code Intelligence in Neovim - The LSP Setup that grants you IDE Powers | Neovim from Scratch Part 4](https://www.youtube.com/watch?v=b17g20II6SQ)
 [The Laziest Neovim (NeovimConf 2023) | Speed Up Neovim](https://www.youtube.com/watch?v=FMa3eURbgQ8)
 [Neovim for Newbs. FREE COURSE](https://youtube.com/playlist?list=PLsz00TDipIffreIaUNk64KxTIkQaGguqn&si=rAgKT6KALr0KLg-J)
 [The Only Video You Need to Get Started with Neovim](https://youtube.com/watch?v=m8C0Cq9Uv9o&si=vBLbYpfQiMMLgm4d)
@@ -627,26 +680,54 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 * https://cukic.co/2022/04/02/fuzzy-search-documentation/
 * https://gitlab.com/ivan-cukic/zeal-lynx-cli
 
-## Second Brain, PKM, Personal Knowledge Management, Obsidian
+## Second Brain, PKM, Personal Knowledge Management, Obsidian, TODO, notebook
 
+* [Your AI second brain. Self-hostable. Get answers from the web or your docs. Build custom agents, schedule automations, do deep research. Turn any online or local LLM into your personal, autonomous AI (gpt, claude, gemini, llama, qwen, mistral). Get started - free.](https://github.com/khoj-ai/khoj)
+* [CLI and local web plain text note‑taking, bookmarking, and archiving with linking, tagging, filtering,search, Git versioning & syncing, Pandoc conversion, + more, in a single portable script.](https://github.com/xwmx/nb)
+* [Obsidian for Learning Part I: Capture -- no boilerplate](https://www.youtube.com/watch?v=i8h4eTcxF9E)
+* https://www.namtao.com/obsidian-for-learning/
+* [mini cli search engine for your docs, knowledge bases, meeting notes, whatever. Tracking current sota approaches while being all local](https://github.com/tobi/qmd)
+* [CLI and local web plain text note‑taking, bookmarking, and archiving with linking, tagging, filtering, search, Git versioning & syncing, Pandoc conversion, + more, in a single portable script.](https://github.com/xwmx/nb) with https://github.com/z-shell/nb
+* [A fast, keyboard-driven terminal UI for todo.txt.](https://github.com/webstonehq/tuxedo/)
 * https://www.ssp.sh/blog/obsidian-note-taking-workflow/
 * https://www.ssp.sh/brain/
 * https://www.ssp.sh/blog/pkm-workflow-for-a-deeper-life/
 
 ## Learning Notes
 
-### software engineering, coding, programming
+### software engineering, coding, programming, computer science
 
+* [Mistakes to Avoid When Writing C++ Projects - Bret Brown - C++Now 2024](https://www.youtube.com/watch?v=UrU8O1mMyNE)
+* [Keynote: There Is No Silver Bullet to Solve All C++ Software Problems - Klaus Iglberger - C++ on Sea](https://www.youtube.com/watch?v=m3UmABVf55g)
+* [Back to Basics: Functional Programming and Monads in C++ - Jonathan Müller - CppCon 2024](https:
+    //www.youtube.com/watch?v=-dXFmWXMrm0)
 * [Driving compilers - A 5-part series on how compiler drivers, preprocessors, compilers, linkers, and loaders turn source code into executables](https://fabiensanglard.net/dc/index.php)
 * https://godbolt.org/z/a4ooYbd1P from [Evolution of a Median Algorithm in C++ - Pete Isensee - CppCon 2023](https://www.youtube.com/watch?v=izxuLq_HZHA&pp=ygUcY3BwIGV2b2x1dGlvbiBtZWFuIGFsZ29yaXRobQ%3D%3D)
-* https://www.codesmells.org/ A Curated Catalog of Code Smells. Every named code smell in one place — classified, connected, and fixable.
+* https://www.codesmells.org/ A Curated Catalog of Code Smells. Every named code smell in one place — classified, connected, and fixable. TOP
 
-### sw architecture, sw design
+### software architecture, software design, API design
 
+TOP
+* https://bytebytego.com/guides/ Engineering visual guides, visual cheat sheets like hackingcpp.
+with
+* [Explain complex systems using visuals and simple terms. Help you prepare for system design interviews.](https://github.com/ByteByteGoHq/system-design-101)
 * https://refactoring.guru/design-patterns/
+* https://hackingcpp.com/dev/command_line_tools.html
 
-### collaboration, code review
+* https://martinfowler.com/tags/API%20design.html
+* https://deviq.com/principles/
 
+### collaboration, code review, pull request, presentation, CI, continuous integration
+
+* [📝 Today I Learned](https://github.com/jbranchaud/til)
+* [How principled coders outperform the competition](https://www.youtube.com/watch?v=q1qKv5TBaOA)
+* https://martinfowler.com/articles/continuousIntegration.html?ref=techmanagerweekly.com
+* [Lessons Learned - 30 Years of Programming](https://theprogrammersparadox.blogspot.com/2024/01/lessons-learned.html)
+* [40 years of programming](https://liw.fi/40/)
+* [Growing Pains: Lessons from seeing C++ codebases mature](https://docs.google.com/presentation/d/1a01QDB* LndO11i3J83w6-OwUgnJJ-mS8TOQFzBQ1sk/edit?slide=id.p#slide=id.p) and https://www.youtube.com/watch?v=HTnUS2Zv34Y
+* [A markdown terminal slideshow tool](https://github.com/mfontanini/presenterm)
+* [How I use C++: a line-by-line code review](https://youtube.com/watch?v=W8-G_PL6p-0&si=-q8hHNXrILckyH0s)
+* [Pull Requests and Code Review: Best Practices for Developers, from Junior to Team Lead.](https://github.com/scastiel/book-pr/blob/main/manuscript.md)
 * [Code review skills for emotionally intelligent developers](https://www.oreilly.com/videos/code-review-skills/0636920335535/0636920335535-video327095/)
 
 ### Resources
@@ -678,3 +759,39 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 ### Presentations
 
 * https://tidyfirst.substack.com/p/start-presentations-on-the-second
+
+### Spelling
+
+* [Source code spell checker. Rust, fast, low false positive rate](https://github.com/crate-ci/typos)
+
+### CV, resume, job search
+
+* [Open-source AI job search agent and job finder: scan job boards, score each job 1-5 against your CV before you apply, tailor an ATS-friendly resume and cover letter, get interview prep and a job application tracker. It helps you fill in each application; you press Submit. Runs locally in your AI coding CLI (Claude Code, Codex, OpenCode and more).](https://github.com/career-ops-hq/career-ops)
+* [A one-of-a-kind resume builder that keeps your privacy in mind. Completely secure, customizable, portable, open-source and free forever.](https://github.com/reactive-resume/reactive-resume)
+
+### LLM
+
+* [🤯 LobeHub is your Chief Agent Operator, organizing your agents into 7×24 operations by hiring, scheduling,and reporting on your entire AI team.](https://github.com/lobehub/lobehub)
+* [Turn any codebase, with its docs, SQL schemas, configs, and PDFs, into a queryable knowledge graph. A /graphify skill for Claude Code, Cursor, Codex, and Gemini CLI: local deterministic AST parsing, every edge explained, no vector store.](https://github.com/Graphify-Labs/graphify)
+
+### regex
+
+* https://regexone.com/ Learn Regular Expressions with simple, interactive exercises.
+* [A command-line tool and Rust library with Python bindings for generating regular expressions from user-provided test cases](https://github.com/pemistahl/grex)
+
+### security
+
+* [Implementing DevSecOps (LFS262)](https://training.linuxfoundation.org/training/implementing-devsecops-lfs262/)
+
+### CLI, terminal, TUI
+
+* [GitHub code searching with 'fzf'](https://github.com/LangLangBart/gh-find-code)
+* [Television is a fast, portable fuzzy finder for the terminal. It lets you search in real-time through any kind of data source such as files, text, git repositories, environment variables, docker containers, and more.](https://github.com/alexpasmantier/television)
+* [Render markdown on the CLI, with pizzazz! 💅🏻](https://github.com/charmbracelet/glow)
+* [apt-fast: A shellscript wrapper for apt that speeds up downloading of packages.](https://github.com/ilikenwf/apt-fast)
+* [The smartest way to learn touch typing and improve your typing speed.](https://github.com/aradzie/keybr.com)
+* [Minimalistic Keyboard Driven Browser 🌐🎀](https://github.com/2kabhishek/qute2k)
+* https://useplaintext.email/
+* https://github.com/jlevy/the-art-of-command-line 3 yrs old
+* [DuckDuckGo from the terminal](https://github.com/jarun/ddgr)
+* https://terminaltrove.com/ and https://terminaltrove.com/categories/

@@ -982,12 +982,14 @@ let g:slime_vimterminal_cmd = 'python'
 " vim indentLine
 let g:indentLine_char = '▏'
 " exclude filetypes
-let g:indentLine_fileTypeExclude = ['coc-explorer', 'man', 'gitcommit']
+let g:indentLine_fileTypeExclude = ['coc-explorer', 'startify', 'floaterm', 'coc-explorer', 'coctree', 'json', 'man', 'gitcommit']
 let g:indentLine_bufTypeExclude = ['help', 'terminal']
 " (default: 2)
 let g:indentLine_color_dark = 1
 " Don't override conceallevel and concealcursor
 let g:indentLine_setConceal = 0
+" avoid for markdown as it sets the conceallevel to 2
+AutocmdFT markdown let g:indentLine_enabled=0
 
 " coc-fzf
 let g:coc_fzf_preview = 'right:40%'
