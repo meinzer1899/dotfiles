@@ -2,6 +2,48 @@
 
 My Linux dotfiles.
 
+# TODO
+
+https://github.com/AnthonyCalandra/modern-cpp-features
+https://www.modernescpp.com/index.php/blog/
+https://google.github.io/styleguide/cppguide.html
+https://github.com/cpp-best-practices/cppbestpractices
+https://isocpp.org/wiki/faq
+https://isocpp.github.io/CppCoreGuidelines/CppCoreGuidelines
+https://learn.microsoft.com/en-us/cpp/cpp/?view=msvc-160
+https://www.cppstories.com/2018/08/init-string-member/
+https://clang.llvm.org/extra/clang-tidy/checks/list.html
+https://stackoverflow.com/questions/388242/the-definitive-c-book-guide-and-list
+https://cpppatterns.com/
+https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html
+https://linux.die.net/man/1/gcc
+https://github.com/isocpp/CppCoreGuidelines/blob/master/CppCoreGuidelines.md
+https://stackoverflow.com/questions/5088460/flags-to-enable-thorough-and-verbose-g-warnings/9862800#9862800
+https://clang.llvm.org/docs/DiagnosticsReference.html
+https://code-examples.net/en/tagged/c++?sort=votes
+https://en.wikibooks.org/wiki/More_C%2B%2B_Idioms
+https://llvm.org/docs/CodingStandards.html
+https://cpp-optimizations.netlify.app/
+https://brevzin.github.io/
+https://github.com/lmapii/run-clang-tidy
+https://github.com/lmapii/run-clang-format
+https://github.com/microsoft/GSL
+https://github.com/rturrado/the_modern_cpp_challenge
+https://embeddedartistry.com/fieldatlas/design-pattern-catalogue/
+https://developers.redhat.com/articles/2021/10/13/printf-style-debugging-using-gdb-part-2
+https://developers.redhat.com/articles/2021/10/05/printf-style-debugging-using-gdb-part-1#
+https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+https://www.w3computing.com/articles/programming-languages/cplusplus/#gsc.tab=0
+https://github.com/lefticus/cpp_weekly/issues/175
+https://github.com/cpp-best-practices/cmake_template
+https://github.com/google/fuzzing
+https://github.com/cpp-best-practices/cmake_template/blob/main/cmake/CompilerWarnings.cmake
+https://github.com/intel/cicd-repo-infrastructure
+https://github.com/HappyCerberus/daily-bite-cpp
+https://www.youtube.com/playlist?list=PLvv0ScY6vfd8j-tlhYVPYgiIyXduu6m-L
+https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html#SEC_Contents
+https://tamara-schmitz-devel.de/posts/gdb-reference/
+
 ```bash
 ▶ zsh-bench
 ==> benchmarking login shell of user meinzer1899...
