@@ -494,7 +494,6 @@ set_compiler_flag(
     "/std:c++23"  # this should work with MSVC
     )
 ```
-* http://cliutils.gitlab.io/modern-cmake/ An Introduction to Modern CMake with https://gitlab.com/CLIUtils/modern-cmake
 * https://github.com/schweitzer/modern-cmake-tutorial
 * debug generator expressions: https://cmake.org/cmake/help/latest/manual/cmake-generator-expressions.7.html#debugging
 
@@ -699,8 +698,7 @@ https://github.com/NoahTheDuke/vim-just (Plug 'NoahTheDuke/vim-just', { 'for':
 
 * [Mistakes to Avoid When Writing C++ Projects - Bret Brown - C++Now 2024](https://www.youtube.com/watch?v=UrU8O1mMyNE)
 * [Keynote: There Is No Silver Bullet to Solve All C++ Software Problems - Klaus Iglberger - C++ on Sea](https://www.youtube.com/watch?v=m3UmABVf55g)
-* [Back to Basics: Functional Programming and Monads in C++ - Jonathan Müller - CppCon 2024](https:
-    //www.youtube.com/watch?v=-dXFmWXMrm0)
+* [Back to Basics: Functional Programming and Monads in C++ - Jonathan Müller - CppCon 2024](https://www.youtube.com/watch?v=-dXFmWXMrm0)
 * [Driving compilers - A 5-part series on how compiler drivers, preprocessors, compilers, linkers, and loaders turn source code into executables](https://fabiensanglard.net/dc/index.php)
 * https://godbolt.org/z/a4ooYbd1P from [Evolution of a Median Algorithm in C++ - Pete Isensee - CppCon 2023](https://www.youtube.com/watch?v=izxuLq_HZHA&pp=ygUcY3BwIGV2b2x1dGlvbiBtZWFuIGFsZ29yaXRobQ%3D%3D)
 * https://www.codesmells.org/ A Curated Catalog of Code Smells. Every named code smell in one place — classified, connected, and fixable. TOP
