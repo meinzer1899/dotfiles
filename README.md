@@ -781,6 +781,10 @@ with
 
 * [Implementing DevSecOps (LFS262)](https://training.linuxfoundation.org/training/implementing-devsecops-lfs262/)
 
+### Gear, desk, chair, computer, laptop, video
+
+* https://matthewsanabria.com/gear/
+
 ### CLI, terminal, TUI
 
 * [GitHub code searching with 'fzf'](https://github.com/LangLangBart/gh-find-code)
