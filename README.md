@@ -43,6 +43,8 @@ https://github.com/HappyCerberus/daily-bite-cpp
 https://www.youtube.com/playlist?list=PLvv0ScY6vfd8j-tlhYVPYgiIyXduu6m-L
 https://sourceware.org/gdb/current/onlinedocs/gdb.html/index.html#SEC_Contents
 https://tamara-schmitz-devel.de/posts/gdb-reference/
+https://simplifycpp.org/articles/a0987/inheritance-in-cpp-why-it-evolved-from-a-central-oop-tool-into-a-feature-that-should-be-used-car/
+https://github.com/vale-cli/vale
 
 ```bash
 ▶ zsh-bench
