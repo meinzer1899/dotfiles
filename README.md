@@ -111,13 +111,6 @@ setxkbmap -option ctrl:nocaps
 
 https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10
 
-## VirtualBox
-
-Update GuestAdditions after updating VirtualBox via https://help.ubuntu.com/community/VirtualBox/GuestAdditions.
-```bash
-sudo apt-get install virtualbox-guest-additions-iso
-```
-
 ## wsl
 
 * Install nerd font
