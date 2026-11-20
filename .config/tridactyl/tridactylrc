@@ -16,14 +16,20 @@ set editorcmd terminal -e tmux -u new vim -S /home/andrew/.vim/tridactyl.vim
 unbind <C-f>
 
 " But also support Tridactyl search too.
+set findcase smart
 bind / fillcmdline find
 bind ? fillcmdline find -?
 bind n findnext 1
 bind N findnext -1
 
+" unfocus fields on every site when switching tabs
+autocmd TabEnter .* unfocus
+" useful to exit insert mode, if websites steal focus (e.g. directly enter insert mode by focussing on textbox)
+bind --mode=insert <C-c> composite unfocus; mode normal
+bind --mode=hint <C-c> hint.reset
+
 " Remove search highlighting.
 bind ,<Space> nohlsearch
-set findcase smart
 
 " Smooth scrolling, yes please. This is still a bit janky in Tridactyl.
 set smoothscroll true
@@ -33,8 +39,8 @@ bind j scrollline 5
 bind k scrollline -5
 
 " K and J should move between tabs. x should close them.
-bind J tabprev
-bind K tabnext
+bind K tabprev
+bind J tabnext
 bind x tabclose
 
 " Make `gi` on GitHub take you to the search box
