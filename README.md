@@ -77,7 +77,8 @@ these are enabled.
 
 # Setup new machine
 
-1. Install git and pull dotfiles repository
+1. Install git, set up ~/.ssh/config (AddKeysToAgent, see #git in this readme)
+1. pull dotfiles repository
 1. Setup WSL
 1. `mkdir -p $HOME/.config` (otherwise, `.config` is a symlink to `$HOME/dotfiles/.config`).
 1. Install zsh and zi
@@ -127,15 +128,20 @@ https://superuser.com/questions/949385/map-capslock-to-control-in-windows-10
 ## zsh and zi
 
 https://github.com/zsh-users/zsh/blob/master/INSTALL
-
 `$ZPFX`: https://wiki.zshell.dev/docs/guides/customization#ZPFX
 
-Install zsh to $HOME/.zi/polaris, where no sudo is needed.
-
+1. Check diff to loader from .config/zi/init.zsh to main@https://raw.githubusercontent.com/z-shell/src/main/public/zsh/init.zsh. zinit loader gets called in .zshrc.
+1. Install zsh:
 ```bash
-mkdir -p $HOME/.zi/polaris
-./configure --prefix=$HOME/.zi/polaris
+cd ~/zsh
+# Install zsh to $ZPFX, where no sudo is needed.
+./configure --prefix=$ZPFX
 ```
+1.
+```bash
+update-alternatives --install /usr/bin/zsh zsh $ZPFX/bin/zsh 100` # alacritty could not find "zsh" (config file [program] otherwise, dekstop launcher did not start
+```
+1. Do the post-install instructions at https://wiki.zshell.dev/docs/getting_started/installation#post-install.
 
 zi loader is included in dotfiles (.config/zi)
 Additional information https://wiki.zshell.dev/docs/getting_started/installation => loader.
@@ -204,8 +210,6 @@ For Ubuntu, this PPA provides the latest stable upstream Git version: https://gi
 
 Add .gitconfig.local for user private global entries
 https://git-scm.com/docs/user-manual.html#telling-git-your-name
-
-Add ssh key so that you can push to dotfiles repository with correct user.
 
 In dotfiles repository, change local email to noreply email from Github (preferences, email)
 https://docs.github.com/en/account-and-profile/setting-up-and-managing-your-personal-account-on-github/managing-email-preferences/setting-your-commit-email-address#setting-your-email-address-for-a-single-repository
