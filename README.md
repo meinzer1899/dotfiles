@@ -100,7 +100,8 @@ Don't upgrade system to use other python version than that available in apt. Can
 ## clipboard
 
 ```bash
-apt install xclip
+apt install xclip #wsl
+apt install wl-clipboard # ubuntu
 ```
 
 ## Remap CAPSLOCK to ctrl

@@ -199,7 +199,7 @@ export FZF_CTRL_R_OPTS="
 --preview 'echo {}' --preview-window up:3:hidden:wrap
 --bind 'ctrl-p:toggle-preview'
 --bind 'ctrl-t:track+clear-query'
---bind 'ctrl-y:execute-silent(echo -n {2..} | xclip -i -selection clipboard)+abort'
+--bind 'ctrl-y:execute-silent(echo -n {2..} | wl-copy)+abort'
 --color header:italic
 --header 'Press CTRL-Y to copy command into clipboard | CTRL-p to toggle full command preview'
 "

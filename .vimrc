@@ -625,6 +625,15 @@ if &term =~? '256color'
   set t_ut=
 endif
 
+""" COPY
+" https://linuxize.com/post/how-to-copy-cut-paste-in-vim/
+" copying over SSH
+" packadd osc52
+" set clipmethod+=osc52
+
+" I cannot activate +clipboard support so I use this workaround
+xnoremap <silent> <leader>y :<C-U>silent '<,'>w !wl-copy<CR>
+
 if has('unnamedplus')
   " unnamedplus only available with gui support
   set clipboard& clipboard+=unnamedplus
