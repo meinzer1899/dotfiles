@@ -312,6 +312,13 @@ zi ice wait'0b' lucid as'program' atclone'cmake . -B build-ninja -G "Ninja" -DCM
   atpull'%atclone' pick'$ZPFX/bin/tmux-mem-cpu-load'
 zi light thewtex/tmux-mem-cpu-load
 
+zi wait'0b' lucid from'gh-r' for \
+  sbin'vale' \
+  @vale-cli/vale
+zi wait'0b' lucid from'gh-r' has'vale' for \
+  sbin'vale-ls' \
+  @vale-cli/vale-ls
+
 ## completions
 # https://zsh.sourceforge.io/Guide/zshguide06.html
 # https://wiki.zshell.dev/community/gallery/collection/snippets

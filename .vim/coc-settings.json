@@ -2,6 +2,11 @@
 {
   // https://github.com/neoclide/coc.nvim/wiki/Debug-language-server
   "languageserver": {
+    "vale": {
+      "command": "vale-ls",
+      "filetypes": ["markdown", "text", "rst", "asciidoc"],
+      "rootPatterns": [".vale.ini", ".git"]
+    },
     "bash": {
       "command": "bash-language-server",
       "args": ["start"],
