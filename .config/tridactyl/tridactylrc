@@ -22,6 +22,9 @@ bind ? fillcmdline find -?
 bind n findnext 1
 bind N findnext -1
 
+" toggle tabs
+bind g; tab #
+
 " unfocus fields on every site when switching tabs
 autocmd TabEnter .* unfocus
 " useful to exit insert mode, if websites steal focus (e.g. directly enter insert mode by focussing on textbox)
