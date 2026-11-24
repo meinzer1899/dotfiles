@@ -13,6 +13,9 @@ if [[ -r "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" ]]; then
   source "${XDG_CONFIG_HOME:-${HOME}/.config}/zi/init.zsh" && zzinit
 fi
 
+# keeps only the first occurrence of each exactly identical entry
+typeset -U path
+
 # https://wiki.zshell.dev/community/gallery/collection/themes
 [[ $COLORTERM = *(24bit|truecolor)* ]] || zmodload zsh/nearcolor
 
@@ -54,6 +57,7 @@ zi wait'0b' lucid for \
 zi wait'0b' lucid for \
   atload'zstyle :omz:plugins:ssh-agent agent-forwarding yes; \
   zstyle :omz:plugins:ssh-agent lazy yes; \
+  zstyle :omz:plugins:ssh-agent honor-existing yes; \
   zstyle :omz:plugins:ssh-agent quiet yes;' \
   if'[[ -d ~/.ssh ]]' \
   OMZP::ssh-agent \
@@ -61,7 +65,7 @@ zi wait'0b' lucid for \
   OMZP::gpg-agent
 
 zi wait'0b' lucid for \
-  as'program' pick'neofetch' depth'1' \
+  sbin'neofetch' depth'1' \
   atclone'cp neofetch.1 $ZI[MAN_DIR]/man1' atpull'%atclone' \
   dylanaraps/neofetch
 
@@ -71,7 +75,7 @@ zi wait'0b' lucid for \
  @djui/alias-tips
 
 ### programs
-zi wait lucid as'program' from'gh-r' for \
+zi wait lucid from'gh-r' for \
   mv'hadolint* hadolint' \
   sbin'hadolint' \
   @hadolint/hadolint
@@ -85,26 +89,40 @@ zi id-as'rust' wait=1 as=null sbin='bin/*' lucid rustup nocompile \
   z-shell/0
 
 zi ice wait lucid as'completion' blockf has'cargo'
-zi snippet https://github.com/rust-lang/cargo/blob/master/src/etc/_cargo
+zi snippet https://github.com/rust-lang/cargo/blob/master/etc/_cargo
 zi ice wait lucid as'completion' blockf has'rustc'
 zi snippet https://github.com/ohmyzsh/ohmyzsh/blob/master/plugins/rust/_rustc
+zi ice wait lucid as'completion' blockf has'alacritty'
+zi snippet ${HOME}/alacritty/extra/completions/_alacritty
 
-zi wait lucid as'program' from'gh-r' for \
+zi wait lucid from'gh-r' for \
   atclone'ln -sf bat/autocomplete/bat.zsh _bat; cp -vf bat/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' depth'1' \
   mv'bat* bat' sbin'**/bat(.exe|) bat' \
   @sharkdp/bat
 
-zi wait lucid as'program' from'gh' has'bat' pick'src/*' for \
-  @eth-p/bat-extras
+zi ice has'bat' as'null' \
+  atclone'./build.sh --minify=none --no-manuals' \
+  atpull'%atclone' \
+  sbin'bin/*' \
+  atinit'LESSOPEN="|/home/sebastian/.local/share/zi/plugins/eth-p---bat-extras/bin/batpipe %s";\
+        export LESSOPEN;\
+        unset LESSCLOSE;\
+        # The following will enable colors when using batpipe with less:\
+        LESS="$LESS -R";\
+        BATPIPE="color";\
+        export LESS;\
+        export BATPIPE;'
+zi light eth-p/bat-extras
 
-zi wait lucid as'program' from'gh-r' for \
+
+zi wait lucid from'gh-r' for \
   atclone'ln -sf fd/autocomplete/_fd _fd; cp -vf fd/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' depth'1' \
   mv'fd* fd' sbin'**/fd(.exe|) fd' \
   @sharkdp/fd
 
-zi wait lucid as'program' from'gh' for \
+zi wait lucid from'gh' for \
   atclone'export NUMBAT_SYSTEM_MODULE_PATH=$ZI[PLUGINS_DIR]/sharkdp---numbat/numbat/modules; \
     cargo install -f --path numbat-cli; \
   ' \
@@ -112,18 +130,18 @@ zi wait lucid as'program' from'gh' for \
   sbin'target/release/numbat numbat' \
   @sharkdp/numbat
 
-zi wait lucid as'program' from'gh-r' for \
+zi wait lucid from'gh-r' for \
   mv'delta* delta' \
   sbin'**/delta delta' \
   atpull'%atclone' depth'1' \
   atclone'./delta/delta --generate-completion zsh > _delta' \
   @dandavison/delta
 
-zi ice as"program" pick"bin/git-fuzzy"
+zi ice sbin"bin/git-fuzzy"
 zi light bigH/git-fuzzy
 
 # gh, because of completions and man pages
-zi wait lucid as'program' from'gh' for \
+zi wait lucid from'gh' for \
   atclone'cargo build --release; \
 	  ln -sf completions/zsh/_eza _eza; \
 	  cp -vf man/*.1.* $ZI[MAN_DIR]/man1; cp -vf man/*.5.* $ZI[MAN_DIR]/man5' \
@@ -150,13 +168,13 @@ zi wait lucid for \
 # see dandavison/delta how to add completions when installed via binary
 # [rga: ripgrep, but also search in PDFs, E-Books, Office documents, zip, tar.gz, etc.](https:
 # //github.com/phiresky/ripgrep-all)
-zi wait lucid as'program' from'gh-r' for \
+zi wait lucid from'gh-r' for \
   atclone'ln -sf ripgrep/complete/_rg _rg; cp -vf ripgrep/doc/*.1 $ZI[MAN_DIR]/man1' \
   atpull'%atclone' depth'1' \
   mv'ripgrep* ripgrep' sbin'**/rg(.exe|) rg' \
   @BurntSushi/ripgrep
 
-zi wait lucid as'program' from'gh-r' for \
+zi wait lucid from'gh-r' for \
   mv'tealdeer* tldr' \
   sbin'tldr' \
   @tealdeer-rs/tealdeer
@@ -164,7 +182,7 @@ zi wait lucid as'program' from'gh-r' for \
 zi ice wait lucid as'completion' blockf has'tldr' mv'zsh_tealdeer _tldr'
 zi snippet https://github.com/dbrgn/tealdeer/blob/main/completion/zsh_tealdeer
 
-zi wait lucid as'program' from'gh-r' for \
+zi wait lucid from'gh-r' for \
   mv'neocmakelsp* neocmakelsp' \
   sbin'**/neocmakelsp' \
   @neocmakelsp/neocmakelsp
@@ -253,7 +271,7 @@ zi load z-shell/0
 # --cmd x is important as zoxide uses z _and_ zi.
 # zi is used for zsh zi
 # if remapped, source this file ~/.zi/bin/zi.zsh
-# zi ice as'program' from'gh-r' pick'zoxide' \
+# zi ice from'gh-r' pick'zoxide' \
 #   atclone'ln -sf completions/_zoxide _zoxide;
 #   cp man/man1/*.1 $ZI[MAN_DIR]/man1; ./zoxide init zsh --cmd x > init.zsh' \
 #   atpull'%atclone' src'init.zsh' nocompile'!'
@@ -275,26 +293,28 @@ zi ice as'program' atclone'rm -f src/auto/config.cache; \
   atpull'%atclone' make'--quiet -j1 all install' pick'$ZPFX/bin/vim'
 zi light vim/vim
 
-zi wait lucid as'program' from'gh-r' for \
+zi wait lucid from'gh-r' for \
   mv'shellcheck* shellcheck' \
   sbin'**/shellcheck shellcheck' \
   @koalaman/shellcheck
 
 # grex generates regular expressions from user-provided test cases
-zi wait'0b' lucid as'command' from'gh-r' for \
+zi wait'0b' lucid from'gh-r' for \
   sbin'grex' \
   @pemistahl/grex
 
-zi wait'0b' lucid as'command' from'gh-r' for \
+zi wait'0b' lucid from'gh-r' for \
   sbin'ninja' \
   @ninja-build/ninja
 
-# Use fzf to quickly browse Zsh manuals
-zi wait'0b' lucid as'command' src'zman.zsh' for \
-  @mattmc3/zman
+zi ice wait'0b' lucid blockf
+zi light @mattmc3/zman
 
-zi wait'0b' lucid as'command' pick'zsh-bench' for \
-  @romkatv/zsh-bench
+zi ice wait'0b' lucid blockf nocompile sbin'zsh-bench'
+zi light @romkatv/zsh-bench
+
+# zi wait'0b' lucid as'command' pick'zsh-bench' for \
+#   @romkatv/zsh-bench
 
 # TODO: migrate to https://mise.jdx.dev/
 # or use this maintained fork
@@ -302,14 +322,13 @@ zi wait'0b' lucid as'command' pick'zsh-bench' for \
 # so that the binaries from this fork are used
 # or symlink:
 # atclone'for f in "$PWD"/volta*(N); do ln -sf "$f" "$HOME/.volta/bin/"; done' \
-zi wait'0b' lucid as'program' from'gh-r' for \
-  mv'volta* volta' \
-  sbin'volta' \
+zi wait'0b' lucid from'gh-r' for \
+  sbin'volta*' \
   @chawyehsu/volta
 
 # https://wiki.zshell.dev/docs/guides/syntax/standard#as'program'
 zi ice wait'0b' lucid as'program' atclone'cmake . -B build-ninja -G "Ninja" -DCMAKE_INSTALL_PREFIX=$ZPFX; cmake --build build-ninja' \
-  atpull'%atclone' pick'$ZPFX/bin/tmux-mem-cpu-load'
+  atpull'%atclone' sbin'build-ninja/tmux-mem-cpu-load'
 zi light thewtex/tmux-mem-cpu-load
 
 zi wait'0b' lucid from'gh-r' for \

@@ -47,6 +47,15 @@ https://simplifycpp.org/articles/a0987/inheritance-in-cpp-why-it-evolved-from-a-
 https://github.com/vale-cli/vale
 
 ```bash
+date: 2026-11-16
+▶ zi zstatus
+Loaded plugins: 37
+Light loaded: 15
+Downloaded plugins: 37
+Compiled plugins: 14
+Enabled completions: 208
+Disabled completions: 0
+Completions available overall: 233
 ▶ zsh-bench
 ==> benchmarking login shell of user meinzer1899...
 creates_tty=0
@@ -54,11 +63,11 @@ has_compsys=0
 has_syntax_highlighting=0
 has_autosuggestions=0
 has_git_prompt=0
-first_prompt_lag_ms=26.536
-first_command_lag_ms=115.626
-command_lag_ms=2.363
-input_lag_ms=4.038
-exit_time_ms=101.818
+first_prompt_lag_ms=5.776
+first_command_lag_ms=75.422
+command_lag_ms=2.344
+input_lag_ms=8.028
+exit_time_ms=65.147
 ```
 
 Is this fast? From https://github.com/romkatv/zsh-bench#how-fast-is-fast
