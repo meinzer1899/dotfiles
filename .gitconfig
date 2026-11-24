@@ -1,3 +1,6 @@
+[user]
+    name = meinzer1899
+    email = 44314956+meinzer1899@users.noreply.github.com
 [core]
 	editor = vim
 	pager = delta --dark
